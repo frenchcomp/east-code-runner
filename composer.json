@@ -14,12 +14,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Teknoo\\East\\CodeRunner\\": "src/"
+            "Teknoo\\East\\CodeRunnerBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Teknoo\\Tests\\East\\CodeRunner\\": "tests/"
+            "Teknoo\\Tests\\East\\CodeRunnerBundle\\": "tests/"
         }
     },
     "require": {
