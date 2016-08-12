@@ -1,0 +1,38 @@
+{
+    "name": "teknoo/east-code-runner",
+    "description": "East Symfony bundle to run PHP code from request in secure environment",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "keywords": ["states","class","symfony","bundle","state pattern","pattern","behavioral software design pattern"],
+    "homepage": "http://teknoo.software/states",
+    "authors": [
+        {
+            "name": "Richard Déloge",
+            "email": "richarddeloge@gmail.com",
+            "role":"Software architect, Lead developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Teknoo\\East\\CodeRunner\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Teknoo\\Tests\\East\\CodeRunner\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.0",
+        "symfony/symfony": "^3.0.0",
+        "teknoo/immutable": "^0.0.1",
+        "teknoo/east-framework": "^0.0.1",
+        "teknoo/states": "^2.0.6",
+        "teknoo/states-bundle": "^2.2.2",
+        "teknoo/states-life-cycle": "^1.0.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.4"
+    },
+    "minimum-stability": "stable"
+}
