@@ -25,11 +25,31 @@ use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
 interface TaskManagerInterface
 {
+    /**
+     * To persist a task to execute and sent it to a register
+     * @param TaskInterface $task
+     * @return TaskManagerInterface
+     */
     public function executeMe(TaskInterface $task): TaskManagerInterface;
 
+    /**
+     * To update in the persistent database the status of a task from runner push
+     * @param TaskInterface $task
+     * @return TaskManagerInterface
+     */
     public function updateMyExecutionStatus(TaskInterface $task): TaskManagerInterface;
 
+    /**
+     * To register in the persistent database the status of a task from runner push
+     * @param TaskInterface $task
+     * @return TaskManagerInterface
+     */
     public function setMyExecutionResult(TaskInterface $task): TaskManagerInterface;
 
+    /**
+     * To close a task to execute
+     * @param TaskInterface $task
+     * @return TaskManagerInterface
+     */
     public function goodBye(TaskInterface $task): TaskManagerInterface;
 }

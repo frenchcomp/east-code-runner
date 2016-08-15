@@ -23,6 +23,44 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 
 use Teknoo\Immutable\ImmutableInterface;
 
+/**
+ * Interface to define, as value object, the result for task
+ * @package Teknoo\East\CodeRunnerBundle\Task
+ */
 interface ResultInterface extends ImmutableInterface
 {
+    /**
+     * Standard output of the task
+     *
+     * @return string
+     */
+    public function getOutput(): string;
+
+    /**
+     * Error output of the task
+     *
+     * @return string
+     */
+    public function getErrors(): string;
+
+    /**
+     * To know runner's version where the task has been executed
+     *
+     * @return string
+     */
+    public function getVersion(): string;
+
+    /**
+     * To know the memory size used to execute the task, in octet. Ignore compilation usage for compiled language
+     *
+     * @return int
+     */
+    public function getMemorySize(): int;
+
+    /**
+     * To know the time needed to execute the task, in second. Ignore compilation time for compiled language
+     *
+     * @return int
+     */
+    public function getTimeExecution(): int;
 }
