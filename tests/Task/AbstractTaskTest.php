@@ -21,6 +21,9 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 
+use Teknoo\East\CodeRunnerBundle\Manager\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\CodeInterface;
+use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
 abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
@@ -30,4 +33,154 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
      * @return TaskInterface
      */
     abstract public function buildTask(): TaskInterface;
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testSetCodeExceptionOnBadInput()
+    {
+        $this->buildTask()->setCode(new \stdClass());
+    }
+
+    public function testGetSetCodeBehavior()
+    {
+        $code = $this->createMock(CodeInterface::class);
+        $task = $this->buildTask();
+
+        self::assertInstanceOf(
+            TaskInterface::class,
+            $task->setCode($code)
+        );
+
+        self::assertInstanceOf(
+            CodeInterface::class,
+            $task->getCode()
+        );
+
+        self::assertEquals(
+            $code,
+            $task->getCode()
+        );
+    }
+
+    /**
+     * @exceptedException \UnexpectedValueException
+     */
+    public function testGetCodeExceptionOnCodeMissing()
+    {
+        $this->buildTask()->getCode();
+    }
+
+    /**
+     * @exceptedException \UnexpectedValueException
+     */
+    public function testGetUrlExceptionOnUrlMissing()
+    {
+        $this->buildTask()->getUrl();
+    }
+
+    /**
+     * @exceptedException \UnexpectedValueException
+     */
+    public function testGetStatusExceptionOnStatusMissing()
+    {
+        $this->buildTask()->getStatus();
+    }
+
+    /**
+     * @exceptedException \UnexpectedValueException
+     */
+    public function testGetResultExceptionOnResultMissing()
+    {
+        $this->buildTask()->getResult();
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testRegisterTaskManagerExecutingExceptionOnBadUrl()
+    {
+        $this->buildTask()->registerTaskManagerExecuting(
+            new \stdClass(),
+            $this->createMock(TaskManagerInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testRegisterTaskManagerExecutingExceptionOnBadManager()
+    {
+        $this->buildTask()->registerTaskManagerExecuting(
+            '/hello/world',
+            new \stdClass()
+        );
+    }
+
+    public function testRegisterTaskManagerBehavior()
+    {
+        $task = $this->buildTask();
+        self::assertInstanceOf(
+            TaskInterface::class,
+            $task->registerTaskManagerExecuting(
+                '/hello/world',
+                $this->createMock(TaskManagerInterface::class)
+            )
+        );
+
+        self::assertInternalType(
+            'string',
+            $task->getUrl()
+        );
+
+        self::assertEquals(
+            '/hello/world',
+            $task->getUrl()
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testRegisterResultExecutingExceptionOnBadManager()
+    {
+        $this->buildTask()->registerResultExecuting(
+            new \stdClass(),
+            $this->createMock(ResultInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testRegisterResultExecutingExceptionOnBadResult()
+    {
+        $this->buildTask()->registerResultExecuting(
+            $this->createMock(TaskManagerInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testRegisterResultBehavior()
+    {
+        $task = $this->buildTask();
+        $result = $this->createMock(ResultInterface::class);
+        self::assertInstanceOf(
+            TaskInterface::class,
+            $task->registerResultExecuting(
+                $this->createMock(TaskManagerInterface::class),
+                $result
+            )
+        );
+
+        self::assertInternalType(
+            ResultInterface::class,
+            $task->getResult()
+        );
+
+        self::assertEquals(
+            $result,
+            $task->getResult()
+        );
+    }
 }
