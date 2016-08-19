@@ -63,6 +63,8 @@ interface RunnerInterface
      * @param RunnerManagerInterface $manager
      * @param TaskInterface $task
      * @return RunnerInterface
+     * @throws \DomainException if the task is not executable by the runner
+     * @throws \LogicException if the task's code is invalid
      */
     public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface;
 }

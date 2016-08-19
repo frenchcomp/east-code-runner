@@ -52,6 +52,7 @@ interface RunnerManagerInterface
      * @param RunnerInterface $runner
      * @param ResultInterface $result
      * @return RunnerManagerInterface
+     * @throws \DomainException if the result is not valid for a task registered in the manager
      */
     public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface;
 
@@ -61,6 +62,7 @@ interface RunnerManagerInterface
      * @param TaskManagerInterface $taskManager
      * @param TaskInterface $task
      * @return RunnerManagerInterface
+     * @throws \DomainException if the task is not executable by the runner
      */
     public function executeForMeThisTask(TaskManagerInterface $taskManager, TaskInterface $task): RunnerManagerInterface;
 }

@@ -39,6 +39,7 @@ interface TaskInterface
      * Getter to get the code to execute in a runner
      *
      * @return CodeInterface
+     * @throws \UnexpectedValueException if the code missing
      */
     public function getCode(): CodeInterface;
 
@@ -46,6 +47,7 @@ interface TaskInterface
      * Url to identify the task to execute
      *
      * @return string
+     * @throws \UnexpectedValueException if the url missing
      */
     public function getUrl(): string;
 
@@ -60,6 +62,7 @@ interface TaskInterface
      * Result of the task, as value object
      *
      * @return ResultInterface
+     * @throws \UnexpectedValueException if the result missing
      */
     public function getResult(): ResultInterface;
 
