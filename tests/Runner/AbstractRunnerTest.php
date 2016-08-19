@@ -21,7 +21,9 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
 
+use Teknoo\East\CodeRunnerBundle\Manager\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
 abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,4 +32,80 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
      * @return RunnerInterface
      */
     abstract public function buildRunner(): RunnerInterface;
+
+    public function testGetNameReturn()
+    {
+        self::assertInternalType(
+            'string',
+            $this->buildRunner()->getName()
+        );
+    }
+
+    public function testGetVersion()
+    {
+        self::assertInternalType(
+            'string',
+            $this->buildRunner()->getVersion()
+        );
+    }
+
+    public function testGetCapabilitiesReturn()
+    {
+        self::assertInternalType(
+            'array',
+            $this->buildRunner()->getCapabilities()
+        );
+    }
+
+    public function testResetReturn()
+    {
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $this->buildRunner()->reset()
+        );
+    }
+    
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testExecuteExceptionOnBadManager()
+    {
+        $this->buildRunner()->execute(
+            new \stdClass(),
+            $this->createMock(TaskInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testExecuteExceptionOnBadResult()
+    {
+        $this->buildRunner()->execute(
+            $this->createMock(RunnerManagerInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testRegisterResultBehavior()
+    {
+        $runner = $this->buildRunner();
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $runner->execute(
+                $this->createMock(RunnerManagerInterface::class),
+                $this->createMock(TaskInterface::class)
+            )
+        );
+    }
+
+    /**
+     * @exceptedException \DomainException
+     */
+    abstract public function testExecuteCodeNotRunnableByTHisRunner();
+
+    /**
+     * @exceptedException \LogicException
+     */
+    abstract public function testExecuteCodeInvalid();
 }

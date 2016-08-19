@@ -22,6 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
 abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,4 +31,78 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
      * @return TaskManagerInterface
      */
     abstract public function buildManager(): TaskManagerInterface;
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testExecuteMeBadTask()
+    {
+        $this->buildManager()->executeMe(new \stdClass());
+    }
+
+    public function testExecuteMeReturn()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->executeMe($this->createMock(TaskInterface::class))
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testUpdateMyExecutionStatusBadTask()
+    {
+        $this->buildManager()->updateMyExecutionStatus(new \stdClass());
+    }
+
+    /**
+     * @exceptedException \DomainException
+     */
+    abstract public function testUpdateMyExecutionStatusExceptionWithUnknownTask();
+
+    public function testUpdateMyExecutionStatusReturn()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->updateMyExecutionStatus($this->createMock(TaskInterface::class))
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testSetMyExecutionResultBadTask()
+    {
+        $this->buildManager()->setMyExecutionResult(new \stdClass());
+    }
+
+    /**
+     * @exceptedException \DomainException
+     */
+    abstract public function testSetMyExecutionResultExceptionWithUnknownTask();
+
+    public function testSetMyExecutionResultReturn()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->setMyExecutionResult($this->createMock(TaskInterface::class))
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testForgetMeBadTask()
+    {
+        $this->buildManager()->forgetMe(new \stdClass());
+    }
+
+    public function testForgetMeReturn()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->forgetMe($this->createMock(TaskInterface::class))
+        );
+    }
 }
