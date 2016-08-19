@@ -21,6 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager;
 
+use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
@@ -42,6 +43,15 @@ interface TaskManagerInterface
      * @return TaskManagerInterface
      */
     public function taskStatusIsUpdated(TaskInterface $task, StatusInterface $status): TaskManagerInterface;
+
+    /**
+     * Called by the runner manager to inform the task manager an task's result.
+     *
+     * @param TaskInterface $task
+     * @param ResultInterface $result
+     * @return TaskManagerInterface
+     */
+    public function taskResultIsUpdated(TaskInterface $task, ResultInterface $result): TaskManagerInterface;
 
     /**
      * To update in the persistent database the status of a task from runner push.

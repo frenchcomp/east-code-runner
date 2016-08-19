@@ -22,6 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
 abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
@@ -172,6 +173,55 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     {
         $manager = $this->buildManager();
         $task = $this->createMock(TaskInterface::class);
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->executeMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->setMyExecutionResult($task)
+        );
+    }
+
+    public function testSetMyExecutionResultMustCallRegisterResultIfThereAreResult()
+    {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+        $result = $this->createMock(ResultInterface::class);
+
+        $task->expects(self::once())
+            ->method('setMyExecutionResult')
+            ->with($manager, $result)
+            ->willReturnSelf();
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->executeMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->taskResultIsUpdated($task, $result)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->setMyExecutionResult($task)
+        );
+    }
+
+    public function testSetMyExecutionResultMustNotCallRegisterResultIfThereAreNotResult()
+    {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+        $result = $this->createMock(ResultInterface::class);
+
+        $task->expects(self::never())
+            ->method('setMyExecutionResult')
+            ->with($manager, $result)
+            ->willReturnSelf();
 
         self::assertInstanceOf(
             TaskManagerInterface::class,
