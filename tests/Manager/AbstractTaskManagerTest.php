@@ -48,6 +48,22 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testExecuteMeMustCallRegisterTaskManagerExecuting()
+    {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+
+        $task->expects(self::once())
+            ->method('registerTaskManagerExecuting')
+            ->with(new \PHPUnit_Framework_Constraint_Not(self::isEmpty()), $manager)
+            ->willReturnSelf();
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->executeMe($task)
+        );
+    }
+
     /**
      * @exceptedException \Throwable
      */
@@ -59,13 +75,50 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \DomainException
      */
-    abstract public function testUpdateMyExecutionStatusExceptionWithUnknownTask();
+    public function testUpdateMyExecutionStatusExceptionWithUnknownTask()
+    {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->updateMyExecutionStatus($task)
+        );
+    }
+    public function testUpdateMyExecutionStatusExceptionWithUnknownTaskAfterForget()
+    {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->executeMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->forgetMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->updateMyExecutionStatus($task)
+        );
+    }
 
     public function testUpdateMyExecutionStatusReturn()
     {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+
         self::assertInstanceOf(
             TaskManagerInterface::class,
-            $this->buildManager()->updateMyExecutionStatus($this->createMock(TaskInterface::class))
+            $manager->executeMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->updateMyExecutionStatus($task)
         );
     }
 
@@ -80,13 +133,54 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \DomainException
      */
-    abstract public function testSetMyExecutionResultExceptionWithUnknownTask();
+    public function testSetMyExecutionResultExceptionWithUnknownTask()
+    {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->setMyExecutionResult($task)
+        );
+    }
+
+    /**
+     * @exceptedException \DomainException
+     */
+    public function testSetMyExecutionResultExceptionWithUnknownTaskAfterForget()
+    {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->executeMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->forgetMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->setMyExecutionResult($task)
+        );
+    }
 
     public function testSetMyExecutionResultReturn()
     {
+        $manager = $this->buildManager();
+        $task = $this->createMock(TaskInterface::class);
+
         self::assertInstanceOf(
             TaskManagerInterface::class,
-            $this->buildManager()->setMyExecutionResult($this->createMock(TaskInterface::class))
+            $manager->executeMe($task)
+        );
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->setMyExecutionResult($task)
         );
     }
 
