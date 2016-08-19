@@ -59,7 +59,7 @@ interface RunnerInterface
     public function reset(): RunnerInterface;
 
     /**
-     * To execute a new task on the runner.
+     * To execute a new task on the runner, the runner must recall to the manager the method accept or reject
      *
      * @param RunnerManagerInterface $manager
      * @param TaskInterface $task
@@ -67,5 +67,5 @@ interface RunnerInterface
      * @throws \DomainException if the task is not executable by the runner
      * @throws \LogicException if the task's code is invalid
      */
-    public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface;
+    public function canYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface;
 }
