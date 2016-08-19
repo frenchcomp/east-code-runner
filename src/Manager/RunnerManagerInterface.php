@@ -64,6 +64,7 @@ interface RunnerManagerInterface
      * @param RunnerInterface $runner
      * @param TaskInterface $task
      * @return RunnerManagerInterface
+     * @throws \DomainException if the result is not valid for a task registered in the manager
      */
     public function taskAccepted(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface;
 
@@ -73,6 +74,7 @@ interface RunnerManagerInterface
      * @param RunnerInterface $runner
      * @param TaskInterface $task
      * @return RunnerManagerInterface
+     * @throws \DomainException if the result is not valid for a task registered in the manager
      */
     public function taskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface;
 

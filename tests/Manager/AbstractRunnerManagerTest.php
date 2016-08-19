@@ -108,6 +108,77 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \Throwable
      */
+    public function testTaskAcceptedBadRunner()
+    {
+        $this->buildManager()->taskAccepted(
+            new \stdClass(),
+            $this->createMock(TaskInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testTaskAcceptedBadTask()
+    {
+        $this->buildManager()->taskAccepted(
+            $this->createMock(RunnerInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testTaskAcceptedReturn()
+    {
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $this->buildManager()->taskAccepted(
+                $this->createMock(RunnerInterface::class),
+                $this->createMock(TaskInterface::class)
+            )
+        );
+    }
+    
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testTaskRejectedBadRunner()
+    {
+        $this->buildManager()->taskRejected(
+            new \stdClass(),
+            $this->createMock(TaskInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testTaskRejectedBadTask()
+    {
+        $this->buildManager()->taskRejected(
+            $this->createMock(RunnerInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testTaskRejectedReturn()
+    {
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $this->buildManager()->taskRejected(
+                $this->createMock(RunnerInterface::class),
+                $this->createMock(TaskInterface::class)
+            )
+        );
+    }
+
+    /**
+     * @exceptedException \DomainException
+     */
+    abstract public function testTaskAcceptedExceptionTaskUnknown();
+
+    /**
+     * @exceptedException \Throwable
+     */
     public function testExecuteForMeThisTaskBadManager()
     {
         $this->buildManager()->executeForMeThisTask(
