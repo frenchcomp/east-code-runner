@@ -30,20 +30,21 @@ use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 interface RunnerInterface
 {
     /**
-     * To identify the runner
+     * To identify the runner.
      *
      * @return string
      */
     public function getName(): string;
 
     /**
-     * To know the version used for the VM (or libc) to execute tasks
+     * To know the version used for the VM (or libc) to execute tasks.
+     *
      * @return string
      */
     public function getVersion(): string;
 
     /**
-     * To know capabilities provided by runner, as array of CapabilityInterface objects
+     * To know capabilities provided by runner, as array of CapabilityInterface objects.
      *
      * @return array
      */
@@ -58,7 +59,7 @@ interface RunnerInterface
     public function reset(): RunnerInterface;
 
     /**
-     * To execute a new task on the runner
+     * To execute a new task on the runner.
      *
      * @param RunnerManagerInterface $manager
      * @param TaskInterface $task

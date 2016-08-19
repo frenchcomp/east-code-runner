@@ -30,7 +30,7 @@ use Teknoo\Immutable\ImmutableInterface;
 interface CodeInterface extends ImmutableInterface
 {
     /**
-     * Return the list of composer package or php extensions, like under the field "require" of composer.json file
+     * Return the list of composer package or php extensions, like under the field "require" of composer.json file.
      *
      * @return array, name of package as key, version as value, support composer's syntax
      */

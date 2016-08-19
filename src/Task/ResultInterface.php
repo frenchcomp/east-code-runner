@@ -29,35 +29,35 @@ use Teknoo\Immutable\ImmutableInterface;
 interface ResultInterface extends ImmutableInterface
 {
     /**
-     * Standard output of the task
+     * Standard output of the task.
      *
      * @return string
      */
     public function getOutput(): string;
 
     /**
-     * Error output of the task
+     * Error output of the task.
      *
      * @return string
      */
     public function getErrors(): string;
 
     /**
-     * To know runner's version where the task has been executed
+     * To know runner's version where the task has been executed.
      *
      * @return string
      */
     public function getVersion(): string;
 
     /**
-     * To know the memory size used to execute the task, in octet. Ignore compilation usage for compiled language
+     * To know the memory size used to execute the task, in octet. Ignore compilation usage for compiled language.
      *
      * @return int
      */
     public function getMemorySize(): int;
 
     /**
-     * To know the time needed to execute the task, in second. Ignore compilation time for compiled language
+     * To know the time needed to execute the task, in second. Ignore compilation time for compiled language.
      *
      * @return int
      */

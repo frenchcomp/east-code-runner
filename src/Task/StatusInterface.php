@@ -24,12 +24,12 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 use Teknoo\Immutable\ImmutableInterface;
 
 /**
- * Interface to define value object to define a status of a task
+ * Interface to define value object to define a status of a task.
  */
 interface StatusInterface extends ImmutableInterface
 {
     /**
-     * Name of the status
+     * Name of the status.
      *
      * @return string
      */

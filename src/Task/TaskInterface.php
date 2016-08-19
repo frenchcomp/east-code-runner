@@ -29,14 +29,15 @@ use Teknoo\East\CodeRunnerBundle\Manager\TaskManagerInterface;
 interface TaskInterface
 {
     /**
-     * To register the code, as value object, to execute
+     * To register the code, as value object, to execute.
+     *
      * @param CodeInterface $code
      * @return TaskInterface
      */
     public function setCode(CodeInterface $code): TaskInterface;
 
     /**
-     * Getter to get the code to execute in a runner
+     * Getter to get the code to execute in a runner.
      *
      * @return CodeInterface
      * @throws \UnexpectedValueException if the code missing
@@ -44,7 +45,7 @@ interface TaskInterface
     public function getCode(): CodeInterface;
 
     /**
-     * Url to identify the task to execute
+     * Url to identify the task to execute.
      *
      * @return string
      * @throws \UnexpectedValueException if the url missing
@@ -52,14 +53,14 @@ interface TaskInterface
     public function getUrl(): string;
 
     /**
-     * Status of the task, as value object
+     * Status of the task, as value object.
      *
      * @return StatusInterface
      */
     public function getStatus(): StatusInterface;
 
     /**
-     * Result of the task, as value object
+     * Result of the task, as value object.
      *
      * @return ResultInterface
      * @throws \UnexpectedValueException if the result missing
@@ -67,7 +68,8 @@ interface TaskInterface
     public function getResult(): ResultInterface;
 
     /**
-     * To save the task manager whom execute this task
+     * To save the task manager whom execute this task. It must update it's url value, available via the method getUrl.
+     *
      * @param string $taskUrl
      * @param TaskManagerInterface $taskManager
      * @return TaskInterface
@@ -75,7 +77,9 @@ interface TaskInterface
     public function registerTaskManagerExecuting(string $taskUrl, TaskManagerInterface $taskManager): TaskInterface;
 
     /**
-     * To register a result of this task from a task manager
+     * To register a result of this task from a task manager. It must update it's result value,
+     * available via the method getResult.
+     *
      * @param TaskManagerInterface $taskManager
      * @param ResultInterface $result
      * @return TaskInterface

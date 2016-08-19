@@ -21,19 +21,31 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager;
 
+use Teknoo\East\CodeRunnerBundle\Task\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
 interface TaskManagerInterface
 {
     /**
-     * To persist a task to execute and sent it to a register
+     * To persist a task to execute and sent it to a register.
+     *
      * @param TaskInterface $task
      * @return TaskManagerInterface
      */
     public function executeMe(TaskInterface $task): TaskManagerInterface;
 
     /**
-     * To update in the persistent database the status of a task from runner push
+     * Called by the runner manager to inform the task manager an update about a task.
+     *
+     * @param TaskInterface $task
+     * @param StatusInterface $status
+     * @return TaskManagerInterface
+     */
+    public function taskStatusIsUpdated(TaskInterface $task, StatusInterface $status): TaskManagerInterface;
+
+    /**
+     * To update in the persistent database the status of a task from runner push.
+     *
      * @param TaskInterface $task
      * @return TaskManagerInterface
      * @throws \DomainException if the task is unknown for the manager
@@ -41,7 +53,8 @@ interface TaskManagerInterface
     public function updateMyExecutionStatus(TaskInterface $task): TaskManagerInterface;
 
     /**
-     * To register in the persistent database the status of a task from runner push
+     * To register in the persistent database the status of a task from runner push.
+     *
      * @param TaskInterface $task
      * @return TaskManagerInterface
      * @throws \DomainException if the task is unknown for the manager
@@ -49,7 +62,8 @@ interface TaskManagerInterface
     public function setMyExecutionResult(TaskInterface $task): TaskManagerInterface;
 
     /**
-     * To close a task to execute
+     * To close a task to execute.
+     *
      * @param TaskInterface $task
      * @return TaskManagerInterface
      */

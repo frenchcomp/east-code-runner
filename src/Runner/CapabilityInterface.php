@@ -29,14 +29,14 @@ use Teknoo\Immutable\ImmutableInterface;
 interface CapabilityInterface extends ImmutableInterface
 {
     /**
-     * Type/identifier of the capability, like the language provided by the runner, its versions, its extensions
+     * Type/identifier of the capability, like the language provided by the runner, its versions, its extensions.
      *
      * @return string
      */
     public function getType(): string;
 
     /**
-     * Value of the capability, can be a string, int, boolean or all other needed value
+     * Value of the capability, can be a string, int, boolean or all other needed value.
      *
      * @return mixed
      */
