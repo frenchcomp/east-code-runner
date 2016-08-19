@@ -26,8 +26,6 @@ use Teknoo\Immutable\ImmutableInterface;
 /**
  * Interface to define values objects to store PHP code to execute. These value object can also required several PHP
  * composer packages, or PHP extensions, returned by the method getNeededPackages
- *
- * @package Teknoo\East\CodeRunnerBundle\Task
  */
 interface CodeInterface extends ImmutableInterface
 {

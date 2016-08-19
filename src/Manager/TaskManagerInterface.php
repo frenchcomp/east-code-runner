@@ -51,5 +51,5 @@ interface TaskManagerInterface
      * @param TaskInterface $task
      * @return TaskManagerInterface
      */
-    public function goodBye(TaskInterface $task): TaskManagerInterface;
+    public function forgetMe(TaskInterface $task): TaskManagerInterface;
 }

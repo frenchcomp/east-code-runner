@@ -44,7 +44,7 @@ interface RunnerManagerInterface
      * @param RunnerInterface $runner
      * @return RunnerManagerInterface
      */
-    public function goodBye(RunnerInterface $runner): RunnerManagerInterface;
+    public function forgetMe(RunnerInterface $runner): RunnerManagerInterface;
 
     /**
      * To retrieve a result from an execution, pushed by a runner

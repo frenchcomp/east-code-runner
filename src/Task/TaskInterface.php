@@ -25,9 +25,6 @@ use Teknoo\East\CodeRunnerBundle\Manager\TaskManagerInterface;
 
 /**
  * Interface to define task class, able to trace the process under all service.
- *
- *
- * @package Teknoo\East\CodeRunnerBundle\Task
  */
 interface TaskInterface
 {

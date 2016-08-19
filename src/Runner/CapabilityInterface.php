@@ -23,8 +23,6 @@ namespace Teknoo\East\CodeRunnerBundle\Runner;
 
 /**
  * Interface to define as value object, capabilities of a runner
- *
- * @package Teknoo\East\CodeRunnerBundle\Runner
  */
 interface CapabilityInterface
 {

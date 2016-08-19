@@ -25,8 +25,6 @@ use Teknoo\Immutable\ImmutableInterface;
 
 /**
  * Interface to define value object to define a status of a task
- *
- * @package Teknoo\East\CodeRunnerBundle\Task
  */
 interface StatusInterface extends ImmutableInterface
 {

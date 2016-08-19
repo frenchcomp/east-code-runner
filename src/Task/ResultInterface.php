@@ -25,7 +25,6 @@ use Teknoo\Immutable\ImmutableInterface;
 
 /**
  * Interface to define, as value object, the result for task
- * @package Teknoo\East\CodeRunnerBundle\Task
  */
 interface ResultInterface extends ImmutableInterface
 {
