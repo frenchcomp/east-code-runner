@@ -21,10 +21,12 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner;
 
+use Teknoo\Immutable\ImmutableInterface;
+
 /**
  * Interface to define as value object, capabilities of a runner
  */
-interface CapabilityInterface
+interface CapabilityInterface extends ImmutableInterface
 {
     /**
      * Type/identifier of the capability, like the language provided by the runner, its versions, its extensions
