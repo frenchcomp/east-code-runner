@@ -68,9 +68,9 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \Throwable
      */
-    public function testExecuteExceptionOnBadManager()
+    public function testCanYouExecuteExceptionOnBadManager()
     {
-        $this->buildRunner()->execute(
+        $this->buildRunner()->canYouExecute(
             new \stdClass(),
             $this->createMock(TaskInterface::class)
         );
@@ -79,9 +79,9 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \Throwable
      */
-    public function testExecuteExceptionOnBadResult()
+    public function testCanYouExecuteExceptionOnBadResult()
     {
-        $this->buildRunner()->execute(
+        $this->buildRunner()->canYouExecute(
             $this->createMock(RunnerManagerInterface::class),
             new \stdClass()
         );
@@ -92,7 +92,7 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
         $runner = $this->buildRunner();
         self::assertInstanceOf(
             RunnerInterface::class,
-            $runner->execute(
+            $runner->canYouExecute(
                 $this->createMock(RunnerManagerInterface::class),
                 $this->createMock(TaskInterface::class)
             )
@@ -102,10 +102,56 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \DomainException
      */
-    abstract public function testExecuteCodeNotRunnableByTHisRunner();
+    abstract public function testCanYouExecuteCodeNotRunnableByTHisRunner();
 
     /**
      * @exceptedException \LogicException
      */
-    abstract public function testExecuteCodeInvalid();
+    abstract public function testCanYouExecuteCodeInvalid();
+
+    public function testCanYouExecuteAcceptBehaviorMustCallTaskAccepted()
+    {
+        $manager = $this->createMock(RunnerManagerInterface::class);
+        $runner = $this->buildRunner();
+        $task = $this->createMock(TaskInterface::class);
+
+        $manager->expects(self::once())
+            ->method('taskAccepted')
+            ->with($runner, $task)
+            ->willReturnSelf();
+
+        $manager->expects(self::never())
+            ->method('taskRejected');
+
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $runner->canYouExecute(
+                $manager,
+                $task
+            )
+        );
+    }
+
+    public function testCanYouExecuteRejectBehaviorMustCallTaskRejected()
+    {
+        $manager = $this->createMock(RunnerManagerInterface::class);
+        $runner = $this->buildRunner();
+        $task = $this->createMock(TaskInterface::class);
+
+        $manager->expects(self::once())
+            ->method('taskRejected')
+            ->with($runner, $task)
+            ->willReturnSelf();
+
+        $manager->expects(self::never())
+            ->method('taskAccepted');
+
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $runner->canYouExecute(
+                $manager,
+                $task
+            )
+        );
+    }
 }

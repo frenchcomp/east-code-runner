@@ -142,9 +142,9 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \Throwable
      */
-    public function testRegisterResultExecutingExceptionOnBadManager()
+    public function testRegisterResultExceptionOnBadManager()
     {
-        $this->buildTask()->registerResultExecuting(
+        $this->buildTask()->registerResult(
             new \stdClass(),
             $this->createMock(ResultInterface::class)
         );
@@ -153,9 +153,9 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \Throwable
      */
-    public function testRegisterResultExecutingExceptionOnBadResult()
+    public function testRegisterResultExceptionOnBadResult()
     {
-        $this->buildTask()->registerResultExecuting(
+        $this->buildTask()->registerResult(
             $this->createMock(TaskManagerInterface::class),
             new \stdClass()
         );
@@ -167,7 +167,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
         $result = $this->createMock(ResultInterface::class);
         self::assertInstanceOf(
             TaskInterface::class,
-            $task->registerResultExecuting(
+            $task->registerResult(
                 $this->createMock(TaskManagerInterface::class),
                 $result
             )
