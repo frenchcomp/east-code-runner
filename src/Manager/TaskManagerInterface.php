@@ -37,6 +37,7 @@ interface TaskManagerInterface
 
     /**
      * Called by the runner manager to inform the task manager an update about a task.
+     * Silent fail if the task is not managed by the instance
      *
      * @param TaskInterface $task
      * @param StatusInterface $status
@@ -46,6 +47,7 @@ interface TaskManagerInterface
 
     /**
      * Called by the runner manager to inform the task manager an task's result.
+     * Silent fail if the task is not managed by the instance
      *
      * @param TaskInterface $task
      * @param ResultInterface $result

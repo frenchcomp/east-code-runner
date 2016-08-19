@@ -23,6 +23,7 @@ namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
 abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
@@ -62,6 +63,72 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(
             TaskManagerInterface::class,
             $manager->executeMe($task)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testTaskStatusIsUpdatedBadTask()
+    {
+        $this->buildManager()->taskStatusIsUpdated(
+            new \stdClass(),
+            $this->createMock(StatusInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testTaskStatusIsUpdatedBadStatus()
+    {
+        $this->buildManager()->taskStatusIsUpdated(
+            $this->createMock(TaskInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testTaskStatusIsUpdatedReturn()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->taskStatusIsUpdated(
+                $this->createMock(TaskInterface::class),
+                $this->createMock(StatusInterface::class)
+            )
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testTaskResultIsUpdatedBadTask()
+    {
+        $this->buildManager()->taskResultIsUpdated(
+            new \stdClass(),
+            $this->createMock(ResultInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testTaskResultIsUpdatedBadResult()
+    {
+        $this->buildManager()->taskResultIsUpdated(
+            $this->createMock(TaskInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testTaskResultIsUpdatedReturn()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->taskResultIsUpdated(
+                $this->createMock(TaskInterface::class),
+                $this->createMock(ResultInterface::class)
+            )
         );
     }
 
