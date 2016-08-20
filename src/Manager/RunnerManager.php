@@ -21,7 +21,39 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager;
 
+use Teknoo\East\CodeRunnerBundle\Runner\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+
 class RunnerManager implements RunnerManagerInterface
 {
+    public function registerMe(RunnerInterface $runner): RunnerManagerInterface
+    {
+        // TODO: Implement registerMe() method.
+    }
 
+    public function forgetMe(RunnerInterface $runner): RunnerManagerInterface
+    {
+        // TODO: Implement forgetMe() method.
+    }
+
+    public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface
+    {
+        // TODO: Implement pushResult() method.
+    }
+
+    public function taskAccepted(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
+    {
+        // TODO: Implement taskAccepted() method.
+    }
+
+    public function taskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
+    {
+        // TODO: Implement taskRejected() method.
+    }
+
+    public function executeForMeThisTask(TaskManagerInterface $taskManager, TaskInterface $task): RunnerManagerInterface
+    {
+        // TODO: Implement executeForMeThisTask() method.
+    }
 }

@@ -21,7 +21,39 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager;
 
+use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\StatusInterface;
+use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+
 class TaskManager implements TaskManagerInterface
 {
+    public function executeMe(TaskInterface $task): TaskManagerInterface
+    {
+        // TODO: Implement executeMe() method.
+    }
 
+    public function taskStatusIsUpdated(TaskInterface $task, StatusInterface $status): TaskManagerInterface
+    {
+        // TODO: Implement taskStatusIsUpdated() method.
+    }
+
+    public function taskResultIsUpdated(TaskInterface $task, ResultInterface $result): TaskManagerInterface
+    {
+        // TODO: Implement taskResultIsUpdated() method.
+    }
+
+    public function updateMyExecutionStatus(TaskInterface $task): TaskManagerInterface
+    {
+        // TODO: Implement updateMyExecutionStatus() method.
+    }
+
+    public function setMyExecutionResult(TaskInterface $task): TaskManagerInterface
+    {
+        // TODO: Implement setMyExecutionResult() method.
+    }
+
+    public function forgetMe(TaskInterface $task): TaskManagerInterface
+    {
+        // TODO: Implement forgetMe() method.
+    }
 }
