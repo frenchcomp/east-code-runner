@@ -31,6 +31,11 @@ class RemoteDockerPHP7Runner implements RunnerInterface
     /**
      * @var string
      */
+    private $identifier;
+
+    /**
+     * @var string
+     */
     private $name;
 
     /**
@@ -52,6 +57,14 @@ class RemoteDockerPHP7Runner implements RunnerInterface
      * @var ResultInterface
      */
     private $currentResult;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
 
     /**
      * {@inheritdoc}

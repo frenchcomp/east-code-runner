@@ -25,36 +25,77 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
 
-class TaskManager implements TaskManagerInterface
+class TaskManager implements TaskManagerInterface, TaskUserInterface
 {
+    /**
+     * @var TaskInterface[]
+     */
+    private $tasks = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function registerTask(TaskInterface $task): TaskUserInterface
+    {
+        $this->tasks[\spl_object_hash($task)] = $task;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function executeMe(TaskInterface $task): TaskManagerInterface
     {
-        // TODO: Implement executeMe() method.
+        $this->registerTask($task);
+
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function taskStatusIsUpdated(TaskInterface $task, StatusInterface $status): TaskManagerInterface
     {
-        // TODO: Implement taskStatusIsUpdated() method.
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function taskResultIsUpdated(TaskInterface $task, ResultInterface $result): TaskManagerInterface
     {
-        // TODO: Implement taskResultIsUpdated() method.
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateMyExecutionStatus(TaskInterface $task): TaskManagerInterface
     {
-        // TODO: Implement updateMyExecutionStatus() method.
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setMyExecutionResult(TaskInterface $task): TaskManagerInterface
     {
-        // TODO: Implement setMyExecutionResult() method.
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function forgetMe(TaskInterface $task): TaskManagerInterface
     {
-        // TODO: Implement forgetMe() method.
+        $taskHash = \spl_object_hash($task);
+        if (isset($this->tasks[$taskHash])) {
+            unset($this->tasks[$taskHash]);
+        }
+
+        return $this;
     }
 }

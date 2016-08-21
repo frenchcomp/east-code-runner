@@ -30,6 +30,13 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 interface RunnerInterface
 {
     /**
+     * To know the unique identifier about a runner
+     *
+     * @return string
+     */
+    public function getIdentifier(): string;
+
+    /**
      * To identify the runner.
      *
      * @return string

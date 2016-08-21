@@ -33,6 +33,14 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
      */
     abstract public function buildRunner(): RunnerInterface;
 
+    public function testGetIdentifierReturn()
+    {
+        self::assertInternalType(
+            'string',
+            $this->buildRunner()->getIdentifier()
+        );
+    }
+
     public function testGetNameReturn()
     {
         self::assertInternalType(

@@ -29,33 +29,164 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 class RunnerManager implements RunnerManagerInterface
 {
+    /**
+     * @var RunnerInterface[]
+     */
+    private $runners = [];
+
+    /**
+     * @var array|TaskInterface[]
+     */
+    private $tasksByRunner = [];
+
+    /**
+     * @var array|TaskManagerInterface[]
+     */
+    private $tasksManagerByTasks = [];
+
+    /**
+     * @var bool
+     */
+    private $taskAcceptedByARunner = false;
+
+    /**
+     * @var RunnerInterface
+     */
+    private $runnerAccepted = null;
+
+    /**
+     * {@inheritdoc}
+     */
     public function registerMe(RunnerInterface $runner): RunnerManagerInterface
     {
-        // TODO: Implement registerMe() method.
+        $this->runners[$runner->getIdentifier()] = $runner;
+
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function forgetMe(RunnerInterface $runner): RunnerManagerInterface
     {
-        // TODO: Implement forgetMe() method.
+        $runnerIdentifier = $runner->getIdentifier();
+        if (isset($this->runners[$runnerIdentifier])) {
+            unset($this->runners[$runnerIdentifier]);
+        }
+
+        return $this;
     }
 
+    /**
+     * Method to clear a runner after its execution and free memory in this runner about this task.
+     *
+     * @param RunnerInterface $runner
+     * @param TaskInterface $task
+     */
+    private function clearRunner(RunnerInterface $runner, TaskInterface $task)
+    {
+        $runner->reset();
+        unset($this->tasksByRunner[$runner->getIdentifier()]);
+        unset($this->tasksManagerByTasks[$task->getUrl()]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface
     {
-        // TODO: Implement pushResult() method.
+        $runnerIdentifier = $runner->getIdentifier();
+        if (!isset($this->tasksByRunner[$runnerIdentifier])) {
+            throw new \DomainException('Error, the task was not found for this runner');
+        }
+
+        $task = $this->tasksByRunner[$runnerIdentifier];
+        if (!isset($this->tasksManagerByTasks[$task->getUrl()])) {
+            throw new \DomainException('Error, the task was not found for this runner');
+        }
+
+        $taskManager = $this->tasksManagerByTasks[$task->getUrl()];
+        $taskManager->taskResultIsUpdated($task, $result);
+
+        $this->clearRunner($runner, $task);
+
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function taskAccepted(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
     {
-        // TODO: Implement taskAccepted() method.
+        $this->taskAcceptedByARunner = true;
+        $this->runnerAccepted = $runner;
+
+        return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function taskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
     {
-        // TODO: Implement taskRejected() method.
+        $this->taskAcceptedByARunner = false;
+
+        return $this;
     }
 
+    /**
+     * Method to browse all available runner, until any runner has accepted
+     * @return \Generator
+     */
+    private function browseRunners()
+    {
+        foreach ($this->runners as $runner) {
+            yield $runner;
+
+            if (true === $this->taskAcceptedByARunner) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * To find and select the runner able to execute a task. If no runner found, the method throws the exception
+     * \DomainException
+     * @param TaskInterface $task
+     * @return RunnerInterface
+     * @throws \DomainException
+     */
+    private function selectRunnerToExecuteTask(TaskInterface $task): RunnerInterface
+    {
+        $this->taskAcceptedByARunner = false;
+
+        foreach ($this->browseRunners() as $runner) {
+            /**
+             * @var RunnerInterface $runner
+             */
+            $runner->canYouExecute($this, $task);
+        }
+
+        if (false === $this->taskAcceptedByARunner) {
+            throw new \DomainException('No runner available to execute the task');
+        }
+
+        return $this->runnerAccepted;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function executeForMeThisTask(TaskManagerInterface $taskManager, TaskInterface $task): RunnerManagerInterface
     {
-        // TODO: Implement executeForMeThisTask() method.
+        //Find and select the good runner to execute the task
+        $runnerManager = clone $this;
+        $runner = $runnerManager->selectRunnerToExecuteTask($task);
+
+        //No exception, so register the task with the good runner
+        $this->tasksByRunner[$runner->getIdentifier()] = $task;
+        $this->tasksManagerByTasks[$task->getUrl()] = $taskManager;
+
+        return $this;
     }
 }
