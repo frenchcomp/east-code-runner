@@ -22,7 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 
 use Teknoo\East\CodeRunnerBundle\Task\Status;
-use Teknoo\East\CodeRunnerBundle\Task\StatusInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 
 /**
  * @covers Teknoo\East\CodeRunnerBundle\Task\Status

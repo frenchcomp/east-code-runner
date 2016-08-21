@@ -21,9 +21,9 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
 
-use Teknoo\East\CodeRunnerBundle\Manager\RunnerManagerInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
 {

@@ -21,9 +21,10 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager;
 
-use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
-use Teknoo\East\CodeRunnerBundle\Task\StatusInterface;
-use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 class TaskManager implements TaskManagerInterface
 {

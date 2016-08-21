@@ -21,10 +21,10 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 
-use Teknoo\East\CodeRunnerBundle\Manager\TaskManagerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\CodeInterface;
-use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
-use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
 {

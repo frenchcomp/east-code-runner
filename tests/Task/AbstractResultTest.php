@@ -21,7 +21,7 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 
-use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 
 abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
 {

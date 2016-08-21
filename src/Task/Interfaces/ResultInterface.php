@@ -19,7 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Task;
+namespace Teknoo\East\CodeRunnerBundle\Task\Interfaces;
 
 use Teknoo\Immutable\ImmutableInterface;
 

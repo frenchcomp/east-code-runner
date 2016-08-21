@@ -21,6 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner;
 
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
 class Capability implements CapabilityInterface

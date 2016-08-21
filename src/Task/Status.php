@@ -21,6 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Task;
 
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
 class Status implements StatusInterface

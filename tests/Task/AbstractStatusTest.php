@@ -21,7 +21,7 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 
-use Teknoo\East\CodeRunnerBundle\Task\StatusInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 
 abstract class AbstractStatusTest extends \PHPUnit_Framework_TestCase
 {

@@ -22,7 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 
 use Teknoo\East\CodeRunnerBundle\Task\Task;
-use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 /**
  * @cover Teknoo\East\CodeRunnerBundle\Task\Task

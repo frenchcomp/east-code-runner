@@ -21,7 +21,7 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 
-use Teknoo\East\CodeRunnerBundle\Task\CodeInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 
 abstract class AbstractCodeTest extends \PHPUnit_Framework_TestCase
 {

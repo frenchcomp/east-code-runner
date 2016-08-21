@@ -19,10 +19,10 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner;
+namespace Teknoo\East\CodeRunnerBundle\Runner\Interfaces;
 
-use Teknoo\East\CodeRunnerBundle\Manager\RunnerManagerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 /**
  * To define a runner able to execute tasks

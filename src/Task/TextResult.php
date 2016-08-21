@@ -21,6 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Task;
 
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
 class TextResult implements ResultInterface

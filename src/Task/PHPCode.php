@@ -21,6 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Task;
 
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
 class PHPCode implements CodeInterface

@@ -21,7 +21,7 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
 
-use Teknoo\East\CodeRunnerBundle\Runner\CapabilityInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 
 /**
  * Base test for all capability class implementing CapabilityInterface

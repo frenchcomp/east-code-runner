@@ -19,21 +19,19 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
+namespace Teknoo\East\CodeRunnerBundle\Task\Interfaces;
 
-use Teknoo\East\CodeRunnerBundle\Runner\Capability;
-use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
+use Teknoo\Immutable\ImmutableInterface;
 
 /**
- * @covers Teknoo\East\CodeRunnerBundle\Runner\Capability
+ * Interface to define value object to define a status of a task.
  */
-class CapabilityTest extends AbstractCapabilityTest
+interface StatusInterface extends ImmutableInterface
 {
     /**
-     * @return CapabilityInterface|Capability
+     * Name of the status.
+     *
+     * @return string
      */
-    public function buildCapacity(): CapabilityInterface
-    {
-        return new Capability('foo', 'bar');
-    }
+    public function getName(): string;
 }

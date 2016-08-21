@@ -19,19 +19,10 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Task;
+namespace Teknoo\East\CodeRunnerBundle\Repository;
 
-use Teknoo\Immutable\ImmutableInterface;
+use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
 
-/**
- * Interface to define value object to define a status of a task.
- */
-interface StatusInterface extends ImmutableInterface
+interface TaskRepositoryInterface
 {
-    /**
-     * Name of the status.
-     *
-     * @return string
-     */
-    public function getName(): string;
 }

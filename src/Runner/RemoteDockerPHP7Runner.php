@@ -21,9 +21,10 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner;
 
-use Teknoo\East\CodeRunnerBundle\Manager\RunnerManagerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\ResultInterface;
-use Teknoo\East\CodeRunnerBundle\Task\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 class RemoteDockerPHP7Runner implements RunnerInterface
 {
