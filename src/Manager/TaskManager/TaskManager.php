@@ -19,15 +19,16 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Manager;
+namespace Teknoo\East\CodeRunnerBundle\Manager\TaskManager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
+use Teknoo\States\Proxy\Integrated;
 
-class TaskManager implements TaskManagerInterface, TaskUserInterface
+class TaskManager extends Integrated implements TaskManagerInterface, TaskUserInterface
 {
     /**
      * @var TaskInterface[]

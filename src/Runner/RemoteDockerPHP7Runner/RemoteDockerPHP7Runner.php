@@ -19,42 +19,86 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Task;
+namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner;
 
-use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Capability;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\States\Proxy\Integrated;
 
-class Task implements TaskInterface
+class RemoteDockerPHP7Runner extends Integrated implements RunnerInterface
 {
     /**
-     * @var CodeInterface
+     * @var string
      */
-    private $code;
+    private $identifier;
 
     /**
      * @var string
      */
-    private $url;
+    private $name;
 
     /**
-     * @var StatusInterface
+     * @var string
      */
-    private $status;
+    private $version;
+
+    /**
+     * @var Capability[]
+     */
+    private $capabilities;
+
+    /**
+     * @var TaskInterface
+     */
+    private $currentTask;
 
     /**
      * @var ResultInterface
      */
-    private $result;
+    private $currentResult;
 
     /**
      * {@inheritdoc}
      */
-    public function setCode(CodeInterface $code): TaskInterface
+    public function getIdentifier(): string
     {
-        $this->code = $code;
+        return $this->identifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCapabilities(): array
+    {
+        return $this->capabilities;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset(): RunnerInterface
+    {
+        $this->currentTask = null;
+        $this->currentResult = null;
 
         return $this;
     }
@@ -62,52 +106,8 @@ class Task implements TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function getCode(): CodeInterface
+    public function canYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
     {
-        return $this->code;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStatus(): StatusInterface
-    {
-        return $this->status;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getResult(): ResultInterface
-    {
-        return $this->result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function registerTaskManagerExecuting(string $taskUrl, TaskManagerInterface $taskManager): TaskInterface
-    {
-        $this->url = $taskUrl;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function registerResult(TaskManagerInterface $taskManager, ResultInterface $result): TaskInterface
-    {
-        $this->result = $result;
-
-        return $this;
+        // TODO: Implement canYouExecute() method.
     }
 }
