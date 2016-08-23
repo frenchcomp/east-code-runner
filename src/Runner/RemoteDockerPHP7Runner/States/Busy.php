@@ -22,8 +22,13 @@
 namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States;
 
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner;
 use Teknoo\States\State\AbstractState;
 
+/**
+ * State Busy
+ * @mixin RemoteDockerPHP7Runner
+ */
 class Busy extends AbstractState
 {
     /**

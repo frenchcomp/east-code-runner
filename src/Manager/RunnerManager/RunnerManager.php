@@ -27,10 +27,32 @@ use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
-use Teknoo\States\Proxy\Integrated;
+use Teknoo\States\Proxy\IntegratedInterface;
+use Teknoo\States\Proxy\IntegratedTrait;
+use Teknoo\States\Proxy\ProxyInterface;
+use Teknoo\States\Proxy\ProxyTrait;
 
-class RunnerManager extends Integrated implements RunnerManagerInterface
+/**
+ * @method RunnerManager doRegisterMe(RunnerInterface $runner)
+ * @method RunnerManager doForgetMe(RunnerInterface $runner)
+ * @method RunnerManager doPushResult(RunnerInterface $runner, ResultInterface $result)
+ * @method RunnerManager doTaskAccepted(RunnerInterface $runner, TaskInterface $task)
+ * @method RunnerManager doTaskRejected(RunnerInterface $runner, TaskInterface $task)
+ * @method RunnerInterface selectRunnerToExecuteTask(TaskInterface  $task)
+ * @method RunnerManager registerTask(RunnerInterface $runner, TaskInterface  $task, TaskManagerInterface $manager)
+ */
+class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManagerInterface
 {
+    use ProxyTrait,
+        IntegratedTrait;
+
+    /**
+     * Class name of the factory to use in set up to initialize this object in this construction.
+     *
+     * @var string
+     */
+    protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
+
     /**
      * @var RunnerInterface[]
      */
@@ -55,6 +77,18 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
      * @var RunnerInterface
      */
     private $runnerAccepted = null;
+
+    /**
+     * Manager constructor.
+     * Initialize States behavior.
+     */
+    public function __construct()
+    {
+        //Call the method of the trait to initialize local attributes of the proxy
+        $this->initializeProxy();
+        //Call the startup factory to initialize this proxy
+        $this->initializeObjectWithFactory();
+    }
 
     /**
      * {@inheritdoc}

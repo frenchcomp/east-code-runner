@@ -26,14 +26,39 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
-use Teknoo\States\Proxy\Integrated;
+use Teknoo\States\Proxy\IntegratedInterface;
+use Teknoo\States\Proxy\IntegratedTrait;
+use Teknoo\States\Proxy\ProxyInterface;
+use Teknoo\States\Proxy\ProxyTrait;
 
-class TaskManager extends Integrated implements TaskManagerInterface, TaskUserInterface
+class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInterface, TaskUserInterface
 {
+    use ProxyTrait,
+        IntegratedTrait;
+
+    /**
+     * Class name of the factory to use in set up to initialize this object in this construction.
+     *
+     * @var string
+     */
+    protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
+
     /**
      * @var TaskInterface[]
      */
     private $tasks = [];
+
+    /**
+     * Manager constructor.
+     * Initialize States behavior.
+     */
+    public function __construct()
+    {
+        //Call the method of the trait to initialize local attributes of the proxy
+        $this->initializeProxy();
+        //Call the startup factory to initialize this proxy
+        $this->initializeObjectWithFactory();
+    }
 
     /**
      * {@inheritdoc}

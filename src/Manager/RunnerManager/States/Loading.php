@@ -22,9 +22,15 @@
 namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\States\State\AbstractState;
 
+/**
+ * State Loading
+ * @property RunnerInterface[] $runners
+ * @mixin RunnerManager
+ */
 class Loading extends AbstractState
 {
     /**

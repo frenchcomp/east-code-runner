@@ -22,10 +22,19 @@
 namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
 
+/**
+ * Class Selecting
+ * @property RunnerInterface[] $runners
+ * @property bool $taskAcceptedByARunner
+ * @property RunnerInterface $runnerAccepted
+ * @mixin RunnerManager
+ */
 class Selecting extends AbstractState
 {
     /**

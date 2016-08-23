@@ -29,6 +29,12 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
 
+/**
+ * State Running
+ * @property array|TaskInterface[] $tasksByRunner
+ * @property array|TaskManagerInterface[] $tasksManagerByTasks
+ * @mixin RunnerManager
+ */
 class Running extends AbstractState
 {
     /**

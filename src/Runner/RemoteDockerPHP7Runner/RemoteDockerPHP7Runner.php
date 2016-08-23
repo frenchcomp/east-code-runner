@@ -26,10 +26,23 @@ use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
-use Teknoo\States\Proxy\Integrated;
+use Teknoo\States\Proxy\IntegratedInterface;
+use Teknoo\States\Proxy\IntegratedTrait;
+use Teknoo\States\Proxy\ProxyInterface;
+use Teknoo\States\Proxy\ProxyTrait;
 
-class RemoteDockerPHP7Runner extends Integrated implements RunnerInterface
+class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, RunnerInterface
 {
+    use ProxyTrait,
+        IntegratedTrait;
+
+    /**
+     * Class name of the factory to use in set up to initialize this object in this construction.
+     *
+     * @var string
+     */
+    protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
+
     /**
      * @var string
      */
@@ -59,6 +72,18 @@ class RemoteDockerPHP7Runner extends Integrated implements RunnerInterface
      * @var ResultInterface
      */
     private $currentResult;
+
+    /**
+     * Manager constructor.
+     * Initialize States behavior.
+     */
+    public function __construct()
+    {
+        //Call the method of the trait to initialize local attributes of the proxy
+        $this->initializeProxy();
+        //Call the startup factory to initialize this proxy
+        $this->initializeObjectWithFactory();
+    }
 
     /**
      * {@inheritdoc}
