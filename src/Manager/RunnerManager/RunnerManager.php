@@ -60,9 +60,7 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
      */
     public function registerMe(RunnerInterface $runner): RunnerManagerInterface
     {
-        $this->runners[$runner->getIdentifier()] = $runner;
-
-        return $this;
+        return $this->doRegisterMe($runner);
     }
 
     /**
@@ -70,25 +68,7 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
      */
     public function forgetMe(RunnerInterface $runner): RunnerManagerInterface
     {
-        $runnerIdentifier = $runner->getIdentifier();
-        if (isset($this->runners[$runnerIdentifier])) {
-            unset($this->runners[$runnerIdentifier]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Method to clear a runner after its execution and free memory in this runner about this task.
-     *
-     * @param RunnerInterface $runner
-     * @param TaskInterface $task
-     */
-    private function clearRunner(RunnerInterface $runner, TaskInterface $task)
-    {
-        $runner->reset();
-        unset($this->tasksByRunner[$runner->getIdentifier()]);
-        unset($this->tasksManagerByTasks[$task->getUrl()]);
+        return $this->doForgetMe($runner);
     }
 
     /**
@@ -96,22 +76,7 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
      */
     public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface
     {
-        $runnerIdentifier = $runner->getIdentifier();
-        if (!isset($this->tasksByRunner[$runnerIdentifier])) {
-            throw new \DomainException('Error, the task was not found for this runner');
-        }
-
-        $task = $this->tasksByRunner[$runnerIdentifier];
-        if (!isset($this->tasksManagerByTasks[$task->getUrl()])) {
-            throw new \DomainException('Error, the task was not found for this runner');
-        }
-
-        $taskManager = $this->tasksManagerByTasks[$task->getUrl()];
-        $taskManager->taskResultIsUpdated($task, $result);
-
-        $this->clearRunner($runner, $task);
-
-        return $this;
+        return $this->doPushResult($runner, $result);
     }
 
     /**
@@ -119,10 +84,7 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
      */
     public function taskAccepted(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
     {
-        $this->taskAcceptedByARunner = true;
-        $this->runnerAccepted = $runner;
-
-        return $this;
+        return $this->doTaskAccepted($runner, $task);
     }
 
     /**
@@ -130,49 +92,20 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
      */
     public function taskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
     {
-        $this->taskAcceptedByARunner = false;
+        return $this->doTaskRejected($runner, $task);
+    }
+
+    /**
+     * The runner can select a new runner only in selecting states, else useful methods to perform this operation are
+     * not available.
+     *
+     * @return RunnerManager
+     */
+    private function switchToSelectingTask(): RunnerManager
+    {
+        $this->switchState('Selecting');
 
         return $this;
-    }
-
-    /**
-     * Method to browse all available runner, until any runner has accepted
-     * @return \Generator
-     */
-    private function browseRunners()
-    {
-        foreach ($this->runners as $runner) {
-            yield $runner;
-
-            if (true === $this->taskAcceptedByARunner) {
-                break;
-            }
-        }
-    }
-
-    /**
-     * To find and select the runner able to execute a task. If no runner found, the method throws the exception
-     * \DomainException
-     * @param TaskInterface $task
-     * @return RunnerInterface
-     * @throws \DomainException
-     */
-    private function selectRunnerToExecuteTask(TaskInterface $task): RunnerInterface
-    {
-        $this->taskAcceptedByARunner = false;
-
-        foreach ($this->browseRunners() as $runner) {
-            /**
-             * @var RunnerInterface $runner
-             */
-            $runner->canYouExecute($this, $task);
-        }
-
-        if (false === $this->taskAcceptedByARunner) {
-            throw new \DomainException('No runner available to execute the task');
-        }
-
-        return $this->runnerAccepted;
     }
 
     /**
@@ -182,12 +115,10 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
     {
         //Find and select the good runner to execute the task
         $runnerManager = clone $this;
+        $runnerManager->switchToSelectingTask();
         $runner = $runnerManager->selectRunnerToExecuteTask($task);
 
         //No exception, so register the task with the good runner
-        $this->tasksByRunner[$runner->getIdentifier()] = $task;
-        $this->tasksManagerByTasks[$task->getUrl()] = $taskManager;
-
-        return $this;
+        return $this->registerTask($runner, $task, $taskManager);
     }
 }

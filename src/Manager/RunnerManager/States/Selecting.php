@@ -21,9 +21,71 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States;
 
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
 
 class Selecting extends AbstractState
 {
+    /**
+     * {@inheritdoc}
+     */
+    private function doTaskAccepted(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
+    {
+        $this->taskAcceptedByARunner = true;
+        $this->runnerAccepted = $runner;
 
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function taskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
+    {
+        $this->taskAcceptedByARunner = false;
+
+        return $this;
+    }
+
+    /**
+     * Method to browse all available runner, until any runner has accepted
+     * @return \Generator
+     */
+    private function browseRunners()
+    {
+        foreach ($this->runners as $runner) {
+            yield $runner;
+
+            if (true === $this->taskAcceptedByARunner) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * To find and select the runner able to execute a task. If no runner found, the method throws the exception
+     * \DomainException
+     * @param TaskInterface $task
+     * @return RunnerInterface
+     * @throws \DomainException
+     */
+    private function selectRunnerToExecuteTask(TaskInterface $task): RunnerInterface
+    {
+        $this->taskAcceptedByARunner = false;
+
+        foreach ($this->browseRunners() as $runner) {
+            /**
+             * @var RunnerInterface $runner
+             */
+            $runner->canYouExecute($this, $task);
+        }
+
+        if (false === $this->taskAcceptedByARunner) {
+            throw new \DomainException('No runner available to execute the task');
+        }
+
+        return $this->runnerAccepted;
+    }
 }

@@ -21,9 +21,32 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States;
 
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\States\State\AbstractState;
 
 class Loading extends AbstractState
 {
+    /**
+     * {@inheritdoc}
+     */
+    private function doRegisterMe(RunnerInterface $runner): RunnerManagerInterface
+    {
+        $this->runners[$runner->getIdentifier()] = $runner;
 
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function doForgetMe(RunnerInterface $runner): RunnerManagerInterface
+    {
+        $runnerIdentifier = $runner->getIdentifier();
+        if (isset($this->runners[$runnerIdentifier])) {
+            unset($this->runners[$runnerIdentifier]);
+        }
+
+        return $this;
+    }
 }
