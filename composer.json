@@ -27,7 +27,7 @@
         "symfony/symfony": "^3.0.0",
         "teknoo/immutable": "^0.0.1",
         "teknoo/east-framework": "^0.0.1",
-        "teknoo/states": "^2.0.6",
+        "teknoo/states": "^2.1.0",
         "teknoo/states-bundle": "^2.2.2",
         "teknoo/states-life-cycle": "^1.0.1"
     },

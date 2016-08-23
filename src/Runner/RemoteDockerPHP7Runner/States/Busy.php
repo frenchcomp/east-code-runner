@@ -21,9 +21,21 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States;
 
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\States\State\AbstractState;
 
 class Busy extends AbstractState
 {
+    /**
+     * {@inheritdoc}
+     */
+    private function doReset(): RunnerInterface
+    {
+        $this->currentTask = null;
+        $this->currentResult = null;
 
+        $this->switchState(Awaiting::class);
+
+        return $this;
+    }
 }

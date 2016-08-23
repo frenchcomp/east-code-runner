@@ -97,10 +97,7 @@ class RemoteDockerPHP7Runner extends Integrated implements RunnerInterface
      */
     public function reset(): RunnerInterface
     {
-        $this->currentTask = null;
-        $this->currentResult = null;
-
-        return $this;
+        return $this->doReset();
     }
 
     /**

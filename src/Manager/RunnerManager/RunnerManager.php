@@ -23,6 +23,7 @@ namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
@@ -103,7 +104,7 @@ class RunnerManager extends Integrated implements RunnerManagerInterface
      */
     private function switchToSelectingTask(): RunnerManager
     {
-        $this->switchState('Selecting');
+        $this->switchState(Selecting::class);
 
         return $this;
     }
