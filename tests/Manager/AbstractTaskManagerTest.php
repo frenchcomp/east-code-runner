@@ -32,7 +32,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
      * To get an instance of the class to test
      * @return TaskManagerInterface
      */
-    abstract public function buildManager(): TaskManagerInterface
+    abstract public function buildManager(): TaskManagerInterface;
 
     public function testGetIdentifierReturn()
     {
