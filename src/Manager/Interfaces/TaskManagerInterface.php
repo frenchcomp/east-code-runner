@@ -28,6 +28,13 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 interface TaskManagerInterface
 {
     /**
+     * To know the unique identifier about a runner
+     *
+     * @return string
+     */
+    public function getIdentifier(): string;
+    
+    /**
      * To persist a task to execute and sent it to a register.
      *
      * @param TaskInterface $task
