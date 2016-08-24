@@ -19,8 +19,12 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Repository;
+namespace Teknoo\East\CodeRunnerBundle\Manager\TaskManager\States;
 
-interface TaskRepositoryInterface
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
+use Teknoo\States\State\AbstractState;
+
+class Running extends AbstractState
 {
 }

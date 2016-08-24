@@ -25,6 +25,7 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
@@ -140,6 +141,83 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
             $manager->pushResult(
                 $runner,
                 $result
+            )
+        );
+    }
+    
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testPushStatusBadRunner()
+    {
+        $this->buildManager()->pushStatus(
+            new \stdClass(),
+            $this->createMock(StatusInterface::class)
+        );
+    }
+
+    /**
+     * @exceptedException \Throwable
+     */
+    public function testPushStatusBadStatus()
+    {
+        $this->buildManager()->pushStatus(
+            $this->createMock(RunnerInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testPushStatusReturn()
+    {
+        $manager= $this->buildManager();
+        $runner = $this->createMock(RunnerInterface::class);
+        $status = $this->createMock(StatusInterface::class);
+        $task = $this->createMock(TaskInterface::class);
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+            });
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe(
+                $runner
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $task
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->pushStatus(
+                $runner,
+                $status
+            )
+        );
+    }
+
+    /**
+     * @exceptedException \DomainException
+     */
+    public function testPushStatusExceptionTaskUnknown()
+    {
+        $manager= $this->buildManager();
+        $runner = $this->createMock(RunnerInterface::class);
+        $status = $this->createMock(StatusInterface::class);
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->pushStatus(
+                $runner,
+                $status
             )
         );
     }

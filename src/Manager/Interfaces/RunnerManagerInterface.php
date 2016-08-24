@@ -23,6 +23,7 @@ namespace Teknoo\East\CodeRunnerBundle\Manager\Interfaces;
 
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 /**
@@ -57,6 +58,15 @@ interface RunnerManagerInterface
      * @throws \DomainException if the result is not valid for a task registered in the manager
      */
     public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface;
+
+    /**
+     * To allow a runner to update a status of a task
+     *
+     * @param RunnerInterface $runner
+     * @param StatusInterface $status
+     * @return RunnerManagerInterface
+     */
+    public function pushStatus(RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface;
 
     /**
      * Called by a runner to inform the manager that it accept to execute the task.

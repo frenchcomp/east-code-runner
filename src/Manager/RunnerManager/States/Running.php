@@ -26,6 +26,7 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
 
@@ -69,6 +70,27 @@ class Running extends AbstractState
         $taskManager->taskResultIsUpdated($task, $result);
 
         $this->clearRunner($runner, $task);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function doPushStatus(RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface
+    {
+        $runnerIdentifier = $runner->getIdentifier();
+        if (!isset($this->tasksByRunner[$runnerIdentifier])) {
+            throw new \DomainException('Error, the task was not found for this runner');
+        }
+
+        $task = $this->tasksByRunner[$runnerIdentifier];
+        if (!isset($this->tasksManagerByTasks[$task->getUrl()])) {
+            throw new \DomainException('Error, the task was not found for this runner');
+        }
+
+        $taskManager = $this->tasksManagerByTasks[$task->getUrl()];
+        $taskManager->taskStatusIsUpdated($task, $status);
 
         return $this;
     }

@@ -26,6 +26,7 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\Proxy\IntegratedInterface;
 use Teknoo\States\Proxy\IntegratedTrait;
@@ -36,6 +37,7 @@ use Teknoo\States\Proxy\ProxyTrait;
  * @method RunnerManager doRegisterMe(RunnerInterface $runner)
  * @method RunnerManager doForgetMe(RunnerInterface $runner)
  * @method RunnerManager doPushResult(RunnerInterface $runner, ResultInterface $result)
+ * @method RunnerManager doPushStatus(RunnerInterface $runner, StatusInterface $status)
  * @method RunnerManager doTaskAccepted(RunnerInterface $runner, TaskInterface $task)
  * @method RunnerManager doTaskRejected(RunnerInterface $runner, TaskInterface $task)
  * @method RunnerInterface selectRunnerToExecuteTask(TaskInterface  $task)
@@ -59,12 +61,12 @@ class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManage
     private $runners = [];
 
     /**
-     * @var array|TaskInterface[]
+     * @var \ArrayAccess|TaskInterface[]
      */
     private $tasksByRunner = [];
 
     /**
-     * @var array|TaskManagerInterface[]
+     * @var \ArrayAccess|TaskManagerInterface[]
      */
     private $tasksManagerByTasks = [];
 
@@ -112,6 +114,14 @@ class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManage
     public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface
     {
         return $this->doPushResult($runner, $result);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function pushStatus(RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface
+    {
+        return $this->doPushStatus($runner, $status);
     }
 
     /**
