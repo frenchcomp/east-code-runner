@@ -24,6 +24,8 @@ namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
@@ -32,8 +34,8 @@ use Teknoo\States\State\AbstractState;
 
 /**
  * State Running
- * @property array|TaskInterface[] $tasksByRunner
- * @property array|TaskManagerInterface[] $tasksManagerByTasks
+ * @property TasksByRunnerRegistryInterface|TaskInterface[] $tasksByRunner
+ * @property TasksManagerByTasksRegistryInterface|TaskManagerInterface[] $tasksManagerByTasks
  * @mixin RunnerManager
  */
 class Running extends AbstractState

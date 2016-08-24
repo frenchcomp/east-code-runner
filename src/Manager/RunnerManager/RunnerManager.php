@@ -24,6 +24,8 @@ namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
@@ -61,14 +63,14 @@ class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManage
     private $runners = [];
 
     /**
-     * @var \ArrayAccess|TaskInterface[]
+     * @var TasksByRunnerRegistryInterface|TaskInterface[]
      */
-    private $tasksByRunner = [];
+    private $tasksByRunner;
 
     /**
-     * @var \ArrayAccess|TaskManagerInterface[]
+     * @var TasksManagerByTasksRegistryInterface|TaskManagerInterface[]
      */
-    private $tasksManagerByTasks = [];
+    private $tasksManagerByTasks;
 
     /**
      * @var bool
@@ -83,9 +85,15 @@ class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManage
     /**
      * Manager constructor.
      * Initialize States behavior.
+     * @param TasksByRunnerRegistryInterface $tasksByRunner
+     * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasks
      */
-    public function __construct()
-    {
+    public function __construct(
+        TasksByRunnerRegistryInterface $tasksByRunner,
+        TasksManagerByTasksRegistryInterface $tasksManagerByTasks
+    ) {
+        $this->tasksByRunner = $tasksByRunner;
+        $this->tasksManagerByTasks = $tasksManagerByTasks;
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
         //Call the startup factory to initialize this proxy
