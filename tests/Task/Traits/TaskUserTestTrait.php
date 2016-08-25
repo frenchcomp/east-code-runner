@@ -25,8 +25,8 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
 
 /**
- * @method assertInstanceof
- * @method createMock
+ * @method assertInstanceof(string $excepted, $value, string $message='')
+ * @method \PHPUnit_Framework_MockObject_MockObject createMock(string $name)
  */
 trait TaskUserTestTrait
 {
