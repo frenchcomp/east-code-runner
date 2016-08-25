@@ -19,11 +19,10 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Task\Task\States;
+namespace Teknoo\East\CodeRunnerBundle\Entity\Task;
 
-use Teknoo\States\State\AbstractState;
+use Teknoo\States\Factory\Integrated;
 
-class Executed extends AbstractState
+class Factory extends Integrated
 {
-
 }

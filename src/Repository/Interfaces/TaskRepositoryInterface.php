@@ -19,10 +19,8 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Task\Task;
+namespace Teknoo\East\CodeRunnerBundle\Repository\Interfaces;
 
-use Teknoo\States\Factory\Integrated;
-
-class Factory extends Integrated
+interface TaskRepositoryInterface
 {
 }

@@ -19,11 +19,11 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Task\Task\States;
+namespace Teknoo\East\CodeRunnerBundle\Repository;
 
-use Teknoo\States\State\AbstractState;
+use Doctrine\ORM\EntityRepository;
 
-class Registered extends AbstractState
+class TaskRegistrationRepository extends EntityRepository
 {
 
 }
