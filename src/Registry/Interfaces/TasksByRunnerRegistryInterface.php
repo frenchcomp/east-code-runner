@@ -21,9 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Registry\Interfaces;
 
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
-
-interface TasksByRunnerRegistryInterface extends \ArrayAccess, TaskUserInterface
+interface TasksByRunnerRegistryInterface extends \ArrayAccess
 {
     /**
      * To clear all runners memorized tasks in the persistent dbms

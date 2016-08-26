@@ -55,6 +55,7 @@ services:
     arguments:
       - '@teknoo.east.bundle.coderunner.service.dates'
       - '@teknoo.east.bundle.coderunner.repository.task_execution'
+      - '@doctrine.orm.entity_manager'
     private: true
 
   teknoo.east.bundle.coderunner.registry.tasks_manager_by_task:
@@ -62,6 +63,7 @@ services:
     arguments:
       - '@teknoo.east.bundle.coderunner.service.dates'
       - '@teknoo.east.bundle.coderunner.repository.task_registration'
+      - '@doctrine.orm.entity_manager'
     private: true
 
   #Runner

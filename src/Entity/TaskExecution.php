@@ -33,7 +33,7 @@ class TaskExecution
     /**
      * @var string
      */
-    private $taskManagerIdentifier;
+    private $runnerIdentifier;
 
     /**
      * @var Task
@@ -66,18 +66,18 @@ class TaskExecution
     /**
      * @return string
      */
-    public function getTaskManagerIdentifier(): string
+    public function getRunnerIdentifier(): string
     {
-        return $this->taskManagerIdentifier;
+        return $this->runnerIdentifier;
     }
 
     /**
-     * @param string $taskManagerIdentifier
+     * @param string $runnerIdentifier
      * @return TaskExecution
      */
-    public function setTaskManagerIdentifier(string $taskManagerIdentifier): TaskExecution
+    public function setRunnerIdentifier(string $runnerIdentifier): TaskExecution
     {
-        $this->taskManagerIdentifier = $taskManagerIdentifier;
+        $this->runnerIdentifier = $runnerIdentifier;
 
         return $this;
     }

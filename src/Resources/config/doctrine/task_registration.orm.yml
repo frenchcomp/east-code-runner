@@ -12,9 +12,9 @@ type: 'entity'
       field_name: 'deletedAt'
       time_aware: false
   fields:
-    runnerIdentifier:
+    taskManagerIdentifier:
       type: 'string'
-      column: 'runner_identifier'
+      column: 'task_manager_identifier'
       length: 100
     createdAt:
       type: 'datetime'

@@ -30,13 +30,6 @@ use Teknoo\Tests\East\CodeRunnerBundle\Task\TaskUserTestTrait;
 
 abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_TestCase
 {
-    use TaskUserTestTrait;
-
-    public function buildTaskUserInstance(): TaskUserInterface
-    {
-        return $this->buildRegistry();
-    }
-
     abstract public function buildRegistry(): TasksByRunnerRegistryInterface;
 
     /**
