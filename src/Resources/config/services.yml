@@ -26,6 +26,9 @@ parameters:
   teknoo.east.bundle.coderunner.runner.remote_docker_php7.class: 'Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner'
   teknoo.east.bundle.coderunner.runner.capability.class: 'Teknoo\East\CodeRunnerBundle\Runner\Capability'
 
+  #Service
+  teknoo.east.bundle.coderunner.service.dates.class: 'Teknoo\East\CodeRunnerBundle\Service\DatesService'
+
 services:
   #Repository
   teknoo.east.bundle.coderunner.repository.task:
@@ -49,10 +52,16 @@ services:
   #Registry
   teknoo.east.bundle.coderunner.registry.tasks_by_runner:
     class: '%teknoo.east.bundle.coderunner.registry.tasks_by_runner.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.service.dates'
+      - '@teknoo.east.bundle.coderunner.repository.task_execution'
     private: true
 
   teknoo.east.bundle.coderunner.registry.tasks_manager_by_task:
     class: '%teknoo.east.bundle.coderunner.registry.tasks_manager_by_task.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.service.dates'
+      - '@teknoo.east.bundle.coderunner.repository.task_registration'
     private: true
 
   #Runner
@@ -101,4 +110,9 @@ services:
 
   teknoo.east.bundle.coderunner.manager.tasks:
     class: '%teknoo.east.bundle.coderunner.manager.tasks%'
+    private: false
+
+  #Service
+  teknoo.east.bundle.coderunner.service.dates:
+    class: '%teknoo.east.bundle.coderunner.service.dates.class%'
     private: false

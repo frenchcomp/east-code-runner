@@ -3,8 +3,8 @@
     "description": "East Symfony bundle to run PHP code from request in secure environment",
     "license": "MIT",
     "type": "symfony-bundle",
-    "keywords": ["states","class","symfony","bundle","state pattern","pattern","behavioral software design pattern"],
-    "homepage": "http://teknoo.software/states",
+    "keywords": [""],
+    "homepage": "http://teknoo.software/code-runner",
     "authors": [
         {
             "name": "Richard Déloge",

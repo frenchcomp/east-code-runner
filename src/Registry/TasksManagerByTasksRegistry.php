@@ -23,15 +23,41 @@ namespace Teknoo\East\CodeRunnerBundle\Registry;
 
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository;
+use Teknoo\East\CodeRunnerBundle\Service\DatesService;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterface
 {
+    /**
+     * @var DatesService
+     */
+    private $datesService;
+
+    /**
+     * @var TaskRegistrationRepository
+     */
+    private $taskRegistrationRepository;
+
+    /**
+     * TasksManagerByTasksRegistry constructor.
+     * @param DatesService $datesService
+     * @param TaskRegistrationRepository $taskRegistrationRepository
+     */
+    public function __construct(DatesService $datesService, TaskRegistrationRepository $taskRegistrationRepository)
+    {
+        $this->datesService = $datesService;
+        $this->taskRegistrationRepository = $taskRegistrationRepository;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function offsetExists($offset)
     {
-        // TODO: Implement offsetExists() method.
+        if (!$offset instanceof TaskInterface) {
+            throw new \InvalidArgumentException();
+        }
     }
 
     /**
@@ -39,7 +65,9 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      */
     public function offsetGet($offset)
     {
-        // TODO: Implement offsetGet() method.
+        if (!$offset instanceof TaskInterface) {
+            throw new \InvalidArgumentException();
+        }
     }
 
     /**
@@ -47,7 +75,9 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      */
     public function offsetSet($offset, $value)
     {
-        // TODO: Implement offsetSet() method.
+        if (!$offset instanceof TaskInterface) {
+            throw new \InvalidArgumentException();
+        }
     }
 
     /**
@@ -55,7 +85,9 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      */
     public function offsetUnset($offset)
     {
-        // TODO: Implement offsetUnset() method.
+        if (!$offset instanceof TaskInterface) {
+            throw new \InvalidArgumentException();
+        }
     }
 
     /**
