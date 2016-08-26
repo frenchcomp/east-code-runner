@@ -1,7 +1,7 @@
-Teknoo\East\CodeRunnerBundle\Entity\Task\Task:
+Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration:
 type: 'entity'
-  table: 'task'
-  repositoryClass: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRepository'
+  table: 'task_registration'
+  repositoryClass: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository'
   id:
     id:
       type: 'integer'
@@ -12,13 +12,6 @@ type: 'entity'
       time_aware: false
   fields:
     code:
-      type: 'json'
-    url:
-      type: 'string'
-      length: 500
-    status:
-      type: 'json'
-    result:
       type: 'json'
     createdAt:
       type: 'datetime'
@@ -31,7 +24,7 @@ type: 'entity'
         timestampable:
           on: 'update'
     deletedAt:
-      type: 'datetime'
+      type: 'date'
         nullable: true
   lifecycleCallbacks:
     postLoadDoctrine: [ 'postLoadDoctrine' ]
