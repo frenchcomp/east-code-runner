@@ -52,7 +52,7 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     private $id;
 
     /**
-     * @var CodeInterface
+     * @var CodeInterface|\JsonSerializable
      */
     private $code;
 
@@ -62,12 +62,12 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     private $url;
 
     /**
-     * @var StatusInterface
+     * @var StatusInterface|\JsonSerializable
      */
     private $status;
 
     /**
-     * @var ResultInterface
+     * @var ResultInterface|\JsonSerializable
      */
     private $result;
 
@@ -224,6 +224,46 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     public function setDeletedAt($deletedAt): Task
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Method to decode a json value to php object instance after doctrine load
+     *
+     * @param array|\JsonSerializable $value
+     * @return null|\JsonSerializable
+     */
+    private static function decodeJson(&$value)
+    {
+        if ($value instanceof \JsonSerializable) {
+            return $value;
+        }
+
+        if (!\is_array($value) || empty($value['class'])) {
+            return null;
+        }
+
+        if (!\class_exists($value['class'])) {
+            return null;
+        }
+
+        $class = $value['class'];
+        if (is_callable([$class, 'jsonDeserialize'])) {
+            return null;
+        }
+
+        return $class::jsonDeserialize($value);
+    }
+
+    /**
+     * @return Task
+     */
+    public function postLoadJsonUpdate(): Task
+    {
+        $this->code = static::decodeJson($this->code);
+        $this->status = static::decodeJson($this->status);
+        $this->result = static::decodeJson($this->result);
 
         return $this;
     }

@@ -14,25 +14,32 @@ type: 'entity'
   fields:
     code:
       type: 'json'
+      nullable: true
     url:
       type: 'string'
       length: 500
+      nullable: true
     status:
       type: 'json'
+      nullable: true
     result:
       type: 'json'
+      nullable: true
     createdAt:
       type: 'datetime'
+      column: 'created_at'
       gedmo:
         timestampable:
           on: 'create'
     updatedAt:
       type: 'datetime'
+      column: 'updated_at'
       gedmo:
         timestampable:
           on: 'update'
     deletedAt:
       type: 'datetime'
-        nullable: true
+      column: 'deleted_at'
+      nullable: true
   lifecycleCallbacks:
-    postLoadDoctrine: [ 'postLoadDoctrine' ]
+    postLoadDoctrine: [ 'postLoadDoctrine', 'postLoadJsonUpdate' ]

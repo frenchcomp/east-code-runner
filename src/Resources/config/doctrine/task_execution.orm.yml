@@ -12,18 +12,29 @@ type: 'entity'
       field_name: 'deletedAt'
       time_aware: false
   fields:
-    code:
-      type: 'json'
+    taskManagerIdentifier:
+      type: 'string'
+      column: 'task_manager_identifier'
+      length: 100
     createdAt:
       type: 'datetime'
+      column: 'created_at'
       gedmo:
         timestampable:
           on: 'create'
     updatedAt:
       type: 'datetime'
+      column: 'updated_at'
       gedmo:
         timestampable:
           on: 'update'
     deletedAt:
-      type: 'date'
-        nullable: true
+      type: 'datetime'
+      nullable: true
+      column: 'deleted_at'
+  manyToOne:
+    task:
+      targetEntity: 'Teknoo\East\CodeRunnerBundle\Entity\Task\Task'
+      joinColumn:
+        name: 'task_id'
+        referencedColumnName: 'id'

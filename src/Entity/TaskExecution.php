@@ -21,7 +21,143 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Entity;
 
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
+
 class TaskExecution
 {
+    /**
+     * @var int
+     */
+    private $id;
 
+    /**
+     * @var string
+     */
+    private $taskManagerIdentifier;
+
+    /**
+     * @var Task
+     */
+    private $task;
+
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTaskManagerIdentifier(): string
+    {
+        return $this->taskManagerIdentifier;
+    }
+
+    /**
+     * @param string $taskManagerIdentifier
+     * @return TaskExecution
+     */
+    public function setTaskManagerIdentifier(string $taskManagerIdentifier): TaskExecution
+    {
+        $this->taskManagerIdentifier = $taskManagerIdentifier;
+
+        return $this;
+    }
+
+    /**
+     * @return Task
+     */
+    public function getTask(): Task
+    {
+        return $this->task;
+    }
+
+    /**
+     * @param Task $task
+     * @return TaskExecution
+     */
+    public function setTask(Task $task): TaskExecution
+    {
+        $this->task = $task;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     *
+     * @return TaskExecution
+     */
+    public function setCreatedAt(\DateTime $createdAt): TaskExecution
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     *
+     * @return TaskExecution
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): TaskExecution
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param mixed $deletedAt
+     *
+     * @return TaskExecution
+     */
+    public function setDeletedAt($deletedAt): TaskExecution
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
 }
