@@ -118,12 +118,25 @@ class TextResult implements ResultInterface, \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'type' => static::class,
+            'class' => static::class,
             'output' => $this->getOutput(),
             'errors' => $this->getErrors(),
             'versions' => $this->getVersion(),
             'memorySize' => $this->getMemorySize(),
             'timeExecution' => $this->getTimeExecution()
         ];
+    }
+
+    /**
+     * @param array $values
+     * @return TextResult
+     */
+    public static function jsonDeserialize(array $values)
+    {
+        if (!isset($values['class']) || static::class != $values['class']) {
+            throw new \InvalidArgumentException('class is not matching with the serialized values');
+        }
+
+        return new static($values['output'], $values['errors'], $values['versions'], $values['memorySize'], $values['timeExecution']);
     }
 }

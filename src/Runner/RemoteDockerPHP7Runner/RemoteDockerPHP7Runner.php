@@ -86,6 +86,17 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Run
     }
 
     /**
+     * @param Capability $capability
+     * @return RemoteDockerPHP7Runner
+     */
+    public function addCapability(Capability $capability): RemoteDockerPHP7Runner
+    {
+        $this->capabilities[] = $capability;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getIdentifier(): string

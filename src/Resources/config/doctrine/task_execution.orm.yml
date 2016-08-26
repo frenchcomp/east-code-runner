@@ -1,3 +1,4 @@
+#src/Resources/config/doctrine/task_execution.orm.yml
 Teknoo\East\CodeRunnerBundle\Entity\TaskExecution:
 type: 'entity'
   table: 'task_execution'

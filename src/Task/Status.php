@@ -58,8 +58,21 @@ class Status implements StatusInterface, \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'type' => static::class,
+            'class' => static::class,
             'name' => $this->getName()
         ];
+    }
+
+    /**
+     * @param array $values
+     * @return Status
+     */
+    public static function jsonDeserialize(array $values)
+    {
+        if (!isset($values['class']) || static::class != $values['class']) {
+            throw new \InvalidArgumentException('class is not matching with the serialized values');
+        }
+
+        return new static($values['name']);
     }
 }

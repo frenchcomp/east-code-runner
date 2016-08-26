@@ -73,9 +73,22 @@ class PHPCode implements CodeInterface, \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'type' => static::class,
+            'class' => static::class,
             'neededPackages' => $this->getNeededPackages(),
             'code' => $this->code
         ];
+    }
+
+    /**
+     * @param array $values
+     * @return PHPCode
+     */
+    public static function jsonDeserialize(array $values)
+    {
+        if (!isset($values['class']) || static::class != $values['class']) {
+            throw new \InvalidArgumentException('class is not matching with the serialized values');
+        }
+
+        return new static($values['code'], $values['neededPackages']);
     }
 }
