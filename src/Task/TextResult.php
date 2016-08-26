@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
-class TextResult implements ResultInterface
+class TextResult implements ResultInterface, \JsonSerializable
 {
     use ImmutableTrait;
 
@@ -110,5 +110,20 @@ class TextResult implements ResultInterface
     public function getTimeExecution(): int
     {
         return $this->timeExecution;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'type' => static::class,
+            'output' => $this->getOutput(),
+            'errors' => $this->getErrors(),
+            'versions' => $this->getVersion(),
+            'memorySize' => $this->getMemorySize(),
+            'timeExecution' => $this->getTimeExecution()
+        ];
     }
 }

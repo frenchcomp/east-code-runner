@@ -1,0 +1,36 @@
+Teknoo\East\CodeRunnerBundle\Entity\Task\Task:
+type: entity
+  table: task
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  gedmo:
+    soft_deleteable:
+      field_name: deletedAt
+      time_aware: false
+  fields:
+    code:
+      type: json
+    url:
+      type: string
+      length: 500
+    status:
+      type: json
+    result:
+      type: json
+    createdAt:
+      type: datetime
+      gedmo:
+        timestampable:
+          on: create
+    updatedAt:
+      type: datetime
+      gedmo:
+        timestampable:
+          on: update
+    deletedAt:
+      type: date
+        nullable: true
+  lifecycleCallbacks:
+    postLoadDoctrine: [ postLoadDoctrine ]

@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
-class Status implements StatusInterface
+class Status implements StatusInterface, \JsonSerializable
 {
     use ImmutableTrait;
 
@@ -50,5 +50,16 @@ class Status implements StatusInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'type' => static::class,
+            'name' => $this->getName()
+        ];
     }
 }

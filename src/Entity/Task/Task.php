@@ -31,6 +31,9 @@ use Teknoo\Bundle\StatesBundle\Entity\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
+/**
+ * Class Task
+ */
 class Task implements ProxyInterface, IntegratedInterface, TaskInterface
 {
     use ProxyTrait,
@@ -42,6 +45,11 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
      * @var string
      */
     protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
+
+    /**
+     * @var int
+     */
+    private $id;
 
     /**
      * @var CodeInterface
@@ -64,6 +72,21 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     private $result;
 
     /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+    /**
      * Manager constructor.
      * Initialize States behavior.
      */
@@ -73,6 +96,14 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
         $this->initializeProxy();
         //Call the startup factory to initialize this proxy
         $this->initializeObjectWithFactory();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -133,6 +164,66 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     public function registerResult(TaskManagerInterface $taskManager, ResultInterface $result): TaskInterface
     {
         $this->result = $result;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     *
+     * @return Task
+     */
+    public function setCreatedAt(\DateTime $createdAt): Task
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     *
+     * @return Task
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): Task
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param mixed $deletedAt
+     *
+     * @return Task
+     */
+    public function setDeletedAt($deletedAt): Task
+    {
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }

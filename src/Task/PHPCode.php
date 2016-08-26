@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
-class PHPCode implements CodeInterface
+class PHPCode implements CodeInterface, \JsonSerializable
 {
     use ImmutableTrait;
 
@@ -65,5 +65,17 @@ class PHPCode implements CodeInterface
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'type' => static::class,
+            'neededPackages' => $this->getNeededPackages(),
+            'code' => $this->code
+        ];
     }
 }

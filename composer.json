@@ -26,6 +26,8 @@
         "php": ">=7.0",
         "symfony/symfony": "^3.0.0",
         "doctrine/orm": "~2.2",
+        "stof/doctrine-extensions-bundle": "~1.0",
+        "gedmo/doctrine-extensions": "~2.4",
         "teknoo/immutable": "^0.0.1",
         "teknoo/east-framework": "^0.0.1",
         "teknoo/states": "^2.1.0",
