@@ -98,33 +98,20 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \Throwable
      */
-    public function testRegisterTaskManagerExecutingExceptionOnBadUrl()
+    public function testRegisterUrlExceptionOnBadUrl()
     {
-        $this->buildTask()->registerTaskManagerExecuting(
-            new \stdClass(),
-            $this->createMock(TaskManagerInterface::class)
-        );
-    }
-
-    /**
-     * @exceptedException \Throwable
-     */
-    public function testRegisterTaskManagerExecutingExceptionOnBadManager()
-    {
-        $this->buildTask()->registerTaskManagerExecuting(
-            '/hello/world',
+        $this->buildTask()->registerUrl(
             new \stdClass()
         );
     }
 
-    public function testRegisterTaskManagerBehavior()
+    public function testRegisterUrlBehavior()
     {
         $task = $this->buildTask();
         self::assertInstanceOf(
             TaskInterface::class,
-            $task->registerTaskManagerExecuting(
-                '/hello/world',
-                $this->createMock(TaskManagerInterface::class)
+            $task->registerUrl(
+                '/hello/world'
             )
         );
 
