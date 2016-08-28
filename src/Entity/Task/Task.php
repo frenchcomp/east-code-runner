@@ -47,7 +47,7 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
 
     /**
-     * @var int
+     * @var string
      */
     private $id;
 
@@ -99,9 +99,9 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -151,9 +151,19 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     /**
      * {@inheritdoc}
      */
-    public function registerTaskManagerExecuting(string $taskUrl, TaskManagerInterface $taskManager): TaskInterface
+    public function registerUrl(string $taskUrl): TaskInterface
     {
         $this->url = $taskUrl;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function registerStatus(StatusInterface $status): TaskInterface
+    {
+        $this->status = $status;
 
         return $this;
     }

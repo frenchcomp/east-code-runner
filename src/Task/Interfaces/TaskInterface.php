@@ -29,6 +29,11 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 interface TaskInterface
 {
     /**
+     * To return the uniq identifier as UUID of the task
+     */
+    public function getId(): string;
+
+    /**
      * To register the code, as value object, to execute.
      *
      * @param CodeInterface $code
@@ -68,13 +73,20 @@ interface TaskInterface
     public function getResult(): ResultInterface;
 
     /**
-     * To save the task manager whom execute this task. It must update it's url value, available via the method getUrl.
+     * To save the url allowed to this task by the task manager.
      *
      * @param string $taskUrl
-     * @param TaskManagerInterface $taskManager
      * @return TaskInterface
      */
-    public function registerTaskManagerExecuting(string $taskUrl, TaskManagerInterface $taskManager): TaskInterface;
+    public function registerUrl(string $taskUrl): TaskInterface;
+
+    /**
+     * To save/register the status of the task.
+     *
+     * @param StatusInterface $status
+     * @return TaskInterface
+     */
+    public function registerStatus(StatusInterface $status): TaskInterface;
 
     /**
      * To register a result of this task from a task manager. It must update it's result value,

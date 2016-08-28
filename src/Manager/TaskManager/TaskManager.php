@@ -21,6 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Manager\TaskManager;
 
+use Doctrine\ORM\EntityManager;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
@@ -31,6 +32,10 @@ use Teknoo\States\Proxy\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
+/**
+ * Class TaskManager
+ * @method TaskManager doRegisterAndExecuteTask(TaskInterface $task)
+ */
 class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInterface, TaskUserInterface
 {
     use ProxyTrait,
@@ -49,15 +54,44 @@ class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInt
     private $tasks = [];
 
     /**
+     * @var string
+     */
+    private $managerIdentifier;
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * @var string
+     */
+    private $urlTaskPattern;
+
+    /**
      * Manager constructor.
      * Initialize States behavior.
+     * @param string $managerIdentifier
+     * @param EntityManager $entityManager
      */
-    public function __construct()
+    public function __construct(string $managerIdentifier, EntityManager $entityManager, string $urlTaskPattern)
     {
+        $this->managerIdentifier = $managerIdentifier;
+        $this->entityManager = $entityManager;
+        $this->urlTaskPattern = $urlTaskPattern;
+
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
         //Call the startup factory to initialize this proxy
         $this->initializeObjectWithFactory();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier(): string
+    {
+        return $this->managerIdentifier;
     }
 
     /**
@@ -76,6 +110,7 @@ class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInt
     public function executeMe(TaskInterface $task): TaskManagerInterface
     {
         $this->registerTask($task);
+        $this->doRegisterAndExecuteTask($task);
 
         return $this;
     }
@@ -92,22 +127,6 @@ class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInt
      * {@inheritdoc}
      */
     public function taskResultIsUpdated(TaskInterface $task, ResultInterface $result): TaskManagerInterface
-    {
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateMyExecutionStatus(TaskInterface $task): TaskManagerInterface
-    {
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setMyExecutionResult(TaskInterface $task): TaskManagerInterface
     {
         return $this;
     }

@@ -63,24 +63,6 @@ interface TaskManagerInterface
     public function taskResultIsUpdated(TaskInterface $task, ResultInterface $result): TaskManagerInterface;
 
     /**
-     * To update in the persistent database the status of a task from runner push.
-     *
-     * @param TaskInterface $task
-     * @return TaskManagerInterface
-     * @throws \DomainException if the task is unknown for the manager
-     */
-    public function updateMyExecutionStatus(TaskInterface $task): TaskManagerInterface;
-
-    /**
-     * To register in the persistent database the status of a task from runner push.
-     *
-     * @param TaskInterface $task
-     * @return TaskManagerInterface
-     * @throws \DomainException if the task is unknown for the manager
-     */
-    public function setMyExecutionResult(TaskInterface $task): TaskManagerInterface;
-
-    /**
      * To close a task to execute.
      *
      * @param TaskInterface $task

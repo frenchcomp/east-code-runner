@@ -100,7 +100,7 @@ services:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.curl']]
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.zip']]
     tags:
-      - {name: 'teknoo.east.bundle.coderunner.runner'}
+      - {name: 'teknoo.east.coderunner.runner'}
 
   #Manager
   teknoo.east.bundle.coderunner.manager.runners:
@@ -113,6 +113,8 @@ services:
   teknoo.east.bundle.coderunner.manager.tasks:
     class: '%teknoo.east.bundle.coderunner.manager.tasks%'
     private: false
+    tags:
+          - {name: 'teknoo.east.coderunner.task_manager'}
 
   #Service
   teknoo.east.bundle.coderunner.service.dates:
