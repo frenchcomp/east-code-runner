@@ -19,35 +19,23 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Manager\TaskManager;
+namespace Teknoo\East\CodeRunnerBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
-use Teknoo\States\Proxy\IntegratedInterface;
-use Teknoo\States\Proxy\IntegratedTrait;
-use Teknoo\States\Proxy\ProxyInterface;
-use Teknoo\States\Proxy\ProxyTrait;
 
 /**
  * Class TaskManager
- * @method TaskManager doRegisterAndExecuteTask(TaskInterface $task)
  */
-class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInterface, TaskUserInterface
+class TaskManager implements TaskManagerInterface, TaskUserInterface
 {
-    use ProxyTrait,
-        IntegratedTrait;
-
-    /**
-     * Class name of the factory to use in set up to initialize this object in this construction.
-     *
-     * @var string
-     */
-    protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
-
     /**
      * @var TaskInterface[]
      */
@@ -69,21 +57,48 @@ class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInt
     private $urlTaskPattern;
 
     /**
+     * @var DatesService
+     */
+    private $datesService;
+
+    /**
+     * @var RunnerManagerInterface
+     */
+    private $runnerManager;
+
+    /**
      * Manager constructor.
      * Initialize States behavior.
      * @param string $managerIdentifier
+     * @param string $urlTaskPattern
      * @param EntityManager $entityManager
+     * @param DatesService $datesService
+     * @param RunnerManagerInterface $runnerManager
      */
-    public function __construct(string $managerIdentifier, EntityManager $entityManager, string $urlTaskPattern)
-    {
+    public function __construct(
+        string $managerIdentifier,
+        string $urlTaskPattern,
+        EntityManager $entityManager,
+        DatesService $datesService,
+        RunnerManagerInterface $runnerManager
+    ) {
         $this->managerIdentifier = $managerIdentifier;
         $this->entityManager = $entityManager;
         $this->urlTaskPattern = $urlTaskPattern;
+        $this->datesService = $datesService;
+        $this->runnerManager = $runnerManager;
+    }
 
-        //Call the method of the trait to initialize local attributes of the proxy
-        $this->initializeProxy();
-        //Call the startup factory to initialize this proxy
-        $this->initializeObjectWithFactory();
+    /**
+     * @param TaskInterface $task
+     * @return TaskManager
+     */
+    private function persistTask(TaskInterface $task): TaskManager
+    {
+        $this->entityManager->persist($task);
+        $this->entityManager->flush();
+
+        return $this;
     }
 
     /**
@@ -120,6 +135,9 @@ class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInt
      */
     public function taskStatusIsUpdated(TaskInterface $task, StatusInterface $status): TaskManagerInterface
     {
+        $task->registerStatus($status);
+        $this->persistTask($task);
+
         return $this;
     }
 
@@ -128,6 +146,9 @@ class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInt
      */
     public function taskResultIsUpdated(TaskInterface $task, ResultInterface $result): TaskManagerInterface
     {
+        $task->registerResult($this, $result);
+        $this->persistTask($task);
+
         return $this;
     }
 
@@ -141,6 +162,61 @@ class TaskManager implements ProxyInterface, IntegratedInterface, TaskManagerInt
             unset($this->tasks[$taskHash]);
         }
 
+        if ($task instanceof Task) {
+            $this->removeTask($task);
+        }
+
         return $this;
     }
+
+    /**
+     * @param TaskInterface $task
+     * @return TaskManager
+     */
+    private function generateUrl(TaskInterface $task): TaskManager
+    {
+        $url = \str_replace('UUID', $task->getId(), $this->urlTaskPattern);
+        $task->registerUrl($url);
+
+        return $this;
+    }
+
+    /**
+     * @param TaskInterface $task
+     * @return TaskManager
+     */
+    private function dispatchToRunnerManager(TaskInterface $task): TaskManager
+    {
+        $this->runnerManager->executeForMeThisTask($this, $task);
+
+        return $this;
+    }
+
+    /**
+     * @param TaskInterface $task
+     * @return TaskManager
+     */
+    private function doRegisterAndExecuteTask(TaskInterface $task): TaskManager
+    {
+        $this->persistTask($task);
+        $this->generateUrl($task);
+        $this->entityManager->flush();
+
+        $this->dispatchToRunnerManager($task);
+
+        return $this;
+    }
+
+    /**
+     * @param Task $task
+     * @return TaskManager
+     */
+    private function removeTask(Task $task): TaskManager
+    {
+        $task->setDeletedAt($this->datesService->getDate());
+        $this->persistTask($task);
+
+        return $this;
+    }
+
 }

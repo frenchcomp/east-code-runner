@@ -34,12 +34,36 @@ use Teknoo\States\State\AbstractState;
 
 /**
  * State Running
+ * @property RunnerInterface[] $runners
  * @property TasksByRunnerRegistryInterface|TaskInterface[] $tasksByRunner
  * @property TasksManagerByTasksRegistryInterface|TaskManagerInterface[] $tasksManagerByTasks
  * @mixin RunnerManager
  */
 class Running extends AbstractState
 {
+    /**
+     * {@inheritdoc}
+     */
+    private function doRegisterMe(RunnerInterface $runner): RunnerManagerInterface
+    {
+        $this->runners[$runner->getIdentifier()] = $runner;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function doForgetMe(RunnerInterface $runner): RunnerManagerInterface
+    {
+        $runnerIdentifier = $runner->getIdentifier();
+        if (isset($this->runners[$runnerIdentifier])) {
+            unset($this->runners[$runnerIdentifier]);
+        }
+
+        return $this;
+    }
+
     /**
      * Method to clear a runner after its execution and free memory in this runner about this task.
      *
