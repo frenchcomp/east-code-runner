@@ -19,21 +19,15 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
+namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
-use Teknoo\East\CodeRunnerBundle\Task\Task;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 
-/**
- * @cover Teknoo\East\CodeRunnerBundle\Task\Task
- */
-class TaskTest extends AbstractTaskTest
+class RunnerManagerTest extends AbstractRunnerManagerTest
 {
-    /**
-     * @return TaskInterface|Task
-     */
-    public function buildTask(): TaskInterface
+    public function buildManager(): RunnerManagerInterface
     {
-        return new Task();
+        return new RunnerManager();
     }
 }
