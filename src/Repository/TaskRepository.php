@@ -22,9 +22,8 @@
 namespace Teknoo\East\CodeRunnerBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Teknoo\East\CodeRunnerBundle\Repository\Interfaces\TaskRepositoryInterface;
 
-class TaskRepository extends EntityRepository implements TaskRepositoryInterface
+class TaskRepository extends EntityRepository
 {
 
 }
