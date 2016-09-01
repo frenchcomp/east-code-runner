@@ -46,6 +46,8 @@ class Registered extends AbstractState
     {
         $this->result = $result;
 
+        $this->updateStates();
+
         return $this;
     }
 }

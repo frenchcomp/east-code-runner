@@ -21,11 +21,22 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Entity\Task;
 
+use Symfony\Component\Validator\Constraints\RegexValidator;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\States\Executed;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\States\Registered;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\States\Unregistered;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Assertion;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsInstanceOf;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotInstanceOf;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotNull;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNull;
+use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
+use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
 use Teknoo\States\Proxy\IntegratedInterface;
 use Teknoo\Bundle\StatesBundle\Entity\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
@@ -34,10 +45,11 @@ use Teknoo\States\Proxy\ProxyTrait;
 /**
  * Class Task
  */
-class Task implements ProxyInterface, IntegratedInterface, TaskInterface
+class Task implements ProxyInterface, IntegratedInterface, TaskInterface, AutomatedInterface
 {
     use ProxyTrait,
-        IntegratedTrait;
+        IntegratedTrait,
+        AutomatedTrait;
 
     /**
      * Class name of the factory to use in set up to initialize this object in this construction.
@@ -96,6 +108,8 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
         $this->initializeProxy();
         //Call the startup factory to initialize this proxy
         $this->initializeObjectWithFactory();
+        //Initialize tests
+        $this->updateStates();
     }
 
     /**
@@ -267,6 +281,32 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
         $this->status = static::decodeJson($this->status);
         $this->result = static::decodeJson($this->result);
 
+        //Initialize states
+        $this->updateStates();
+
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatesAssertions(): array
+    {
+        return [
+            (new Assertion([Unregistered::class]))
+                ->with('url', new IsNull())
+                ->with('code', new IsNotInstanceOf(CodeInterface::class))
+            ,
+            (new Assertion([Registered::class]))
+                ->with('url', new IsNotNull())
+                ->with('code', new IsInstanceOf(CodeInterface::class))
+                ->with('result', new IsNotInstanceOf(ResultInterface::class))
+            ,
+            (new Assertion([Executed::class]))
+                ->with('url', new IsNotNull())
+                ->with('code', new IsInstanceOf(CodeInterface::class))
+                ->with('result', new IsInstanceOf(ResultInterface::class))
+            ,
+        ];
     }
 }

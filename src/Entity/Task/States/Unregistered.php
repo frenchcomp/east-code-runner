@@ -40,6 +40,8 @@ class Unregistered extends AbstractState
     {
         $this->code = $code;
 
+        $this->updateStates();
+
         return $this;
     }
 
@@ -49,6 +51,8 @@ class Unregistered extends AbstractState
     private function doRegisterUrl(string $taskUrl): Task
     {
         $this->url = $taskUrl;
+
+        $this->updateStates();
 
         return $this;
     }

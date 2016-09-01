@@ -26,15 +26,18 @@ use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
+use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
 use Teknoo\States\Proxy\IntegratedInterface;
 use Teknoo\States\Proxy\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
-class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, RunnerInterface
+class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, AutomatedInterface, RunnerInterface
 {
     use ProxyTrait,
-        IntegratedTrait;
+        IntegratedTrait,
+        AutomatedTrait;
 
     /**
      * Class name of the factory to use in set up to initialize this object in this construction.
