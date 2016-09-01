@@ -150,11 +150,11 @@ class TaskRegistration
     }
 
     /**
-     * @param mixed $deletedAt
+     * @param \DateTime|null $deletedAt
      *
      * @return TaskRegistration
      */
-    public function setDeletedAt($deletedAt): TaskRegistration
+    public function setDeletedAt(\DateTime $deletedAt=null): TaskRegistration
     {
         $this->deletedAt = $deletedAt;
 

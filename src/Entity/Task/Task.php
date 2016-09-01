@@ -227,11 +227,11 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
     }
 
     /**
-     * @param mixed $deletedAt
+     * @param \DateTime|null $deletedAt
      *
      * @return Task
      */
-    public function setDeletedAt($deletedAt): Task
+    public function setDeletedAt(\DateTime $deletedAt=null): Task
     {
         $this->deletedAt = $deletedAt;
 

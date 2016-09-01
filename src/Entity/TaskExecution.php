@@ -150,11 +150,11 @@ class TaskExecution
     }
 
     /**
-     * @param mixed $deletedAt
+     * @param \DateTime|null $deletedAt
      *
      * @return TaskExecution
      */
-    public function setDeletedAt($deletedAt): TaskExecution
+    public function setDeletedAt(\DateTime $deletedAt=null): TaskExecution
     {
         $this->deletedAt = $deletedAt;
 

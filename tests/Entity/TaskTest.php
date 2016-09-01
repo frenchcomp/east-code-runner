@@ -23,6 +23,7 @@ namespace Teknoo\Tests\East\CodeRunnerBundle\Entity;
 
 use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\Tests\East\CodeRunnerBundle\Entity\Traits\PopulateEntityTrait;
 use Teknoo\Tests\East\CodeRunnerBundle\Task\AbstractTaskTest;
 
 /**
@@ -33,11 +34,117 @@ use Teknoo\Tests\East\CodeRunnerBundle\Task\AbstractTaskTest;
  */
 class TaskTest extends AbstractTaskTest
 {
+    use PopulateEntityTrait;
+
     /**
      * @return TaskInterface|Task
      */
     public function buildTask(): TaskInterface
     {
         return new Task();
+    }
+
+    /**
+     * @return Task|TaskInterface
+     */
+    protected function buildEntity()
+    {
+        return $this->buildTask();
+    }
+
+    public function testGetCreatedAt()
+    {
+        $date = new \DateTime('2016-07-28');
+        self::assertEquals(
+            $date,
+            $this->generateEntityPopulated(['createdAt'=>$date])->getCreatedAt()
+        );
+    }
+
+    public function testSetCreatedAt()
+    {
+        $date = new \DateTime('2016-07-28');
+        $entity = $this->buildTask();
+        self::assertEquals(
+            Task::class,
+            $entity->setCreatedAt($date)
+        );
+
+        self::assertEquals(
+            $date,
+            $entity->getCreatedAt()
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testSetCreatedAtExceptionOnBadArgument()
+    {
+        $this->buildTask()->setCreatedAt(new \stdClass());
+    }
+
+    public function testGetUpdatedAt()
+    {
+        $date = new \DateTime('2016-07-28');
+        self::assertEquals(
+            $date,
+            $this->generateEntityPopulated(['updatedAt'=>$date])->getUpdatedAt()
+        );
+    }
+
+    public function testSetUpdatedAt()
+    {
+        $date = new \DateTime('2016-07-28');
+        $entity = $this->buildTask();
+        self::assertEquals(
+            Task::class,
+            $entity->setUpdatedAt($date)
+        );
+
+        self::assertEquals(
+            $date,
+            $entity->getUpdatedAt()
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testSetUpdatedAtExceptionOnBadArgument()
+    {
+        $this->buildTask()->setUpdatedAt(new \stdClass());
+    }
+
+    public function testGetDeletedAt()
+    {
+        $date = new \DateTime('2016-07-28');
+        self::assertEquals(
+            $date,
+            $this->generateEntityPopulated(['deletedAt'=>$date])->getDeletedAt()
+        );
+    }
+
+    public function testSetDeletedAt()
+    {
+        $date = new \DateTime('2016-07-28');
+        $entity = $this->buildTask();
+        self::assertEquals(
+            Task::class,
+            $entity->setDeletedAt($date)
+        );
+
+        self::assertEquals(
+            $date,
+            $entity->getDeletedAt()
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testSetDeletedAtExceptionOnBadArgument()
+    {
+        $this->buildTask()->setDeletedAt(new \stdClass());
     }
 }
