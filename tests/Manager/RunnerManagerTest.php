@@ -23,11 +23,50 @@ namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 
 class RunnerManagerTest extends AbstractRunnerManagerTest
 {
+    /**
+     * @var TasksByRunnerRegistryInterface
+     */
+    private $tasksByRunner;
+
+    /**
+     * @var TasksManagerByTasksRegistryInterface
+     */
+    private $tasksManagerByTasks;
+
+    /**
+     * @return TasksByRunnerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getTasksByRunnerMock(): TasksByRunnerRegistryInterface
+    {
+        if (!$this->tasksByRunner instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->tasksByRunner = $this->createMock(TasksByRunnerRegistryInterface::class);
+        }
+
+        return $this->tasksByRunner;
+    }
+
+    /**
+     * @return TasksManagerByTasksRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getTasksManagerByTasksMock(): TasksManagerByTasksRegistryInterface
+    {
+        if (!$this->tasksManagerByTasks instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->tasksManagerByTasks = $this->createMock(TasksManagerByTasksRegistryInterface::class);
+        }
+
+        return $this->tasksManagerByTasks;
+    }
+
     public function buildManager(): RunnerManagerInterface
     {
-        return new RunnerManager();
+        return new RunnerManager(
+            $this->getTasksByRunnerMock(),
+            $this->getTasksManagerByTasksMock()
+        );
     }
 }

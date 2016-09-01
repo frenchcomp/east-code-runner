@@ -21,23 +21,37 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Entity;
 
-use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
-use Teknoo\Tests\East\CodeRunnerBundle\Task\AbstractTaskTest;
+use Teknoo\East\CodeRunnerBundle\Entity\TaskExecution;
+use Teknoo\Tests\East\CodeRunnerBundle\Entity\Traits\PopulateEntityTrait;
 
 /**
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\Task
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\States\Executed
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\States\Registered
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\States\Unregistered
+ * @covers Teknoo\East\CodeRunnerBundle\Entity\TaskExecution
  */
-class TaskTest extends AbstractTaskTest
+class TaskExecutionTest extends \PHPUnit_Framework_TestCase
 {
+    use PopulateEntityTrait;
+
     /**
-     * @return TaskInterface|Task
+     * @return TaskExecution
      */
-    public function buildTask(): TaskInterface
+    public function buildEntity(): TaskExecution
     {
-        return new Task();
+        return new TaskExecution();
+    }
+
+    public function testGetId()
+    {
+        self::assertEquals(
+            123,
+            $this->generateEntityPopulated(['id'=>123])->getId()
+        );
+    }
+
+    public function testGetRunnerIdentifier()
+    {
+        self::assertEquals(
+            'fooBar',
+            $this->generateEntityPopulated(['id'=>123])->getRunnerIdentifier()
+        );
     }
 }

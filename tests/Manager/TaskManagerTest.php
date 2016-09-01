@@ -21,13 +21,81 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
+use Doctrine\ORM\EntityManager;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
-use Teknoo\East\CodeRunnerBundle\Manager\TaskManager\TaskManager;
+use Teknoo\East\CodeRunnerBundle\Manager\TaskManager;
+use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 
 class TaskManagerTest extends AbstractTaskManagerTest
 {
-    public function buildManager(): TaskManagerInterface
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * @var DatesService
+     */
+    private $datesService;
+
+    /**
+     * @var RunnerManagerInterface
+     */
+    private $runnerManager;
+
+    /**
+     * @return EntityManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getEntityManagerMock(): EntityManager
     {
-        return new TaskManager();
+        if (!$this->entityManager instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->entityManager = $this->createMock(EntityManager::class);
+        }
+
+        return $this->entityManager;
+    }
+
+    /**
+     * @return DatesService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getDatesServiceMock(): DatesService
+    {
+        if (!$this->datesService instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->datesService = $this->createMock(DatesService::class);
+        }
+
+        return $this->datesService;
+    }
+
+    /**
+     * @return RunnerManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getRunnerManagerMock(): RunnerManagerInterface
+    {
+        if (!$this->runnerManager instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->runnerManager = $this->createMock(RunnerManagerInterface::class);
+        }
+
+        return $this->runnerManager;
+    }
+
+    /**
+     * @param string $managerIdentifier
+     * @param string $urlTaskPattern
+     * @return TaskManagerInterface
+     */
+    public function buildManager(
+        string $managerIdentifier = 'managerId',
+        string $urlTaskPattern = 'https://foo.bar/task/UUID'
+    ): TaskManagerInterface {
+        return new TaskManager(
+            $managerIdentifier,
+            $urlTaskPattern,
+            $this->getEntityManagerMock(),
+            $this->getDatesServiceMock(),
+            $this->getRunnerManagerMock()
+        );
     }
 }
