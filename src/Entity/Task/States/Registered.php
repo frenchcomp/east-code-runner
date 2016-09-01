@@ -21,9 +21,31 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Entity\Task\States;
 
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\States\State\AbstractState;
 
+/**
+ * State Registered
+ * @mixin Task
+ */
 class Registered extends AbstractState
 {
+    /**
+     * {@inheritdoc}
+     */
+    private function doRegisterStatus(StatusInterface $status): Task
+    {
+        $this->status = $status;
 
+        return $this;
+    }
+
+    private function doRegisterResult(ResultInterface $result): Task
+    {
+        $this->result = $result;
+
+        return $this;
+    }
 }

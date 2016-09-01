@@ -111,9 +111,7 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
      */
     public function setCode(CodeInterface $code): TaskInterface
     {
-        $this->code = $code;
-
-        return $this;
+        return $this->doSetCode($code);
     }
 
     /**
@@ -153,9 +151,7 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
      */
     public function registerUrl(string $taskUrl): TaskInterface
     {
-        $this->url = $taskUrl;
-
-        return $this;
+        return $this->doRegisterUrl($taskUrl);
     }
 
     /**
@@ -163,9 +159,7 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
      */
     public function registerStatus(StatusInterface $status): TaskInterface
     {
-        $this->status = $status;
-
-        return $this;
+        return $this->doRegisterStatus($status);
     }
 
     /**
@@ -173,9 +167,7 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface
      */
     public function registerResult(TaskManagerInterface $taskManager, ResultInterface $result): TaskInterface
     {
-        $this->result = $result;
-
-        return $this;
+        return $this->doRegisterResult($result);
     }
 
     /**
