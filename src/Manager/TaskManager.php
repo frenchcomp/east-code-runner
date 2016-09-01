@@ -29,18 +29,12 @@ use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
 
 /**
  * Class TaskManager
  */
-class TaskManager implements TaskManagerInterface, TaskUserInterface
+class TaskManager implements TaskManagerInterface
 {
-    /**
-     * @var TaskInterface[]
-     */
-    private $tasks = [];
-
     /**
      * @var string
      */
@@ -109,22 +103,12 @@ class TaskManager implements TaskManagerInterface, TaskUserInterface
         return $this->managerIdentifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function registerTask(TaskInterface $task): TaskUserInterface
-    {
-        $this->tasks[\spl_object_hash($task)] = $task;
-
-        return $this;
-    }
 
     /**
      * {@inheritdoc}
      */
     public function executeMe(TaskInterface $task): TaskManagerInterface
     {
-        $this->registerTask($task);
         $this->doRegisterAndExecuteTask($task);
 
         return $this;
@@ -157,11 +141,6 @@ class TaskManager implements TaskManagerInterface, TaskUserInterface
      */
     public function forgetMe(TaskInterface $task): TaskManagerInterface
     {
-        $taskHash = \spl_object_hash($task);
-        if (isset($this->tasks[$taskHash])) {
-            unset($this->tasks[$taskHash]);
-        }
-
         if ($task instanceof Task) {
             $this->removeTask($task);
         }

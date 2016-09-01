@@ -29,7 +29,6 @@ use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 
 class TaskManagerTest extends AbstractTaskManagerTest
 {
-
     /**
      * @var EntityManager
      */
