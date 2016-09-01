@@ -21,7 +21,6 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Entity\Task;
 
-use Symfony\Component\Validator\Constraints\RegexValidator;
 use Teknoo\East\CodeRunnerBundle\Entity\Task\States\Executed;
 use Teknoo\East\CodeRunnerBundle\Entity\Task\States\Registered;
 use Teknoo\East\CodeRunnerBundle\Entity\Task\States\Unregistered;
@@ -44,6 +43,10 @@ use Teknoo\States\Proxy\ProxyTrait;
 
 /**
  * Class Task
+ * @method Task doRegisterStatus(StatusInterface $status)
+ * @method Task doRegisterResult(ResultInterface $result)
+ * @method Task doSetCode(CodeInterface $code)
+ * @method Task doRegisterUrl(string $taskUrl)
  */
 class Task implements ProxyInterface, IntegratedInterface, TaskInterface, AutomatedInterface
 {

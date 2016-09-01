@@ -29,6 +29,8 @@ use Teknoo\States\State\AbstractState;
 /**
  * State Registered
  * @mixin Task
+ * @property StatusInterface $status
+ * @property ResultInterface $result
  */
 class Registered extends AbstractState
 {

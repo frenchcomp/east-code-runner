@@ -78,7 +78,7 @@ class TaskRegistrationRepository extends EntityRepository
         $queryBuilder = $this->createQueryBuilder('tr');
         $queryBuilder->update();
         $queryBuilder->andWhere('tr.deletedAd <> null');
-        $queryBuilder->set('tr.deletedAt = :dateValue');
+        $queryBuilder->andWhere('tr.deletedAt = :dateValue');
         $queryBuilder->setParameter('dateValue', $date->format('Y-m-d H:i:s'));
 
         //Execute it

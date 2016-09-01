@@ -77,7 +77,7 @@ class TaskExecutionRepository extends EntityRepository
         $queryBuilder = $this->createQueryBuilder('te');
         $queryBuilder->update();
         $queryBuilder->andWhere('te.deletedAd <> null');
-        $queryBuilder->set('te.deletedAt = :dateValue');
+        $queryBuilder->andWhere('te.deletedAt = :dateValue');
         $queryBuilder->setParameter('dateValue', $date->format('Y-m-d H:i:s'));
 
         //Execute it

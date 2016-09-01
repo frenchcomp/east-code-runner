@@ -24,19 +24,21 @@ namespace Teknoo\East\CodeRunnerBundle\Entity\Task\States;
 use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
 
 /**
  * State Unregistered
  * @mixin Task
+ * @property StatusInterface $status
+ * @property string $url
+ * @property CodeInterface $code
  */
 class Unregistered extends AbstractState
 {
     /**
      * {@inheritdoc}
      */
-    public function doSetCode(CodeInterface $code): Task
+    private function doSetCode(CodeInterface $code): Task
     {
         $this->code = $code;
 

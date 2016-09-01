@@ -21,9 +21,13 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Entity\Task\States;
 
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\States\State\AbstractState;
 
+/**
+ * State Executed
+ * @mixin Task
+ */
 class Executed extends AbstractState
 {
-
 }

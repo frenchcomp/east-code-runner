@@ -23,6 +23,9 @@ namespace Teknoo\East\CodeRunnerBundle\Entity\Task;
 
 use Teknoo\States\Factory\Integrated;
 
+/**
+ * Class Factory of Task
+ */
 class Factory extends Integrated
 {
 }

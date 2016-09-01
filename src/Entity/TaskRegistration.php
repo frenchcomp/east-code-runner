@@ -21,7 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Entity;
 
-use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 class TaskRegistration
 {
@@ -36,7 +36,7 @@ class TaskRegistration
     private $taskManagerIdentifier;
 
     /**
-     * @var Task
+     * @var TaskInterface
      */
     private $task;
 
@@ -83,18 +83,18 @@ class TaskRegistration
     }
 
     /**
-     * @return Task
+     * @return TaskInterface
      */
-    public function getTask(): Task
+    public function getTask(): TaskInterface
     {
         return $this->task;
     }
 
     /**
-     * @param Task $task
+     * @param TaskInterface $task
      * @return TaskRegistration
      */
-    public function setTask(Task $task): TaskRegistration
+    public function setTask(TaskInterface $task): TaskRegistration
     {
         $this->task = $task;
 
