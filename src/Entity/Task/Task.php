@@ -312,6 +312,8 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface, Automa
         return [
             (new Assertion([Unregistered::class]))
                 ->with('url', new IsNull())
+            ,
+            (new Assertion([Unregistered::class]))
                 ->with('code', new IsNotInstanceOf(CodeInterface::class))
             ,
             (new Assertion([Registered::class]))

@@ -176,7 +176,7 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
             $this->save($taskRegistration);
         }
 
-        $this->taskRegistrationRepository->clear($offset->getIdentifier());
+        $this->taskRegistrationRepository->clearRegistration($offset->getIdentifier());
     }
 
     /**

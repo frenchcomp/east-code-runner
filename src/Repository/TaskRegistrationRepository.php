@@ -97,7 +97,7 @@ class TaskRegistrationRepository extends EntityRepository
      * @param string $url
      * @return TaskRegistrationRepository
      */
-    public function clear(string $url): TaskRegistrationRepository
+    public function clearRegistration(string $url): TaskRegistrationRepository
     {
         if (isset($this->tasksRegistrationsList[$url])) {
             unset($this->tasksRegistrationsList[$url]);

@@ -22,6 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Registry;
 
 use Doctrine\ORM\EntityManager;
+use Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\TasksManagerByTasksRegistry;
 use Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository;
@@ -45,6 +46,11 @@ class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistr
     private $entityManager;
 
     /**
+     * @var array|TaskRegistration[]
+     */
+    public $taskRegistrationList = [];
+
+    /**
      * @return DatesService
      */
     public function getDatesServiceMock(): DatesService
@@ -63,6 +69,17 @@ class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistr
     {
         if (!$this->taskRegistrationRepository instanceof \PHPUnit_Framework_MockObject_MockObject) {
             $this->taskRegistrationRepository = $this->createMock(TaskRegistrationRepository::class);
+
+            $this->taskRegistrationRepository
+                ->expects(self::any())
+                ->method('findByTaskUrl')
+                ->willReturnCallback(function ($identifer) {
+                    if (isset($this->taskRegistrationList[$identifer])) {
+                        return $this->taskRegistrationList[$identifer];
+                    }
+
+                    return false;
+                });
         }
 
         return $this->taskRegistrationRepository;
@@ -75,6 +92,13 @@ class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistr
     {
         if (!$this->entityManager instanceof \PHPUnit_Framework_MockObject_MockObject) {
             $this->entityManager = $this->createMock(EntityManager::class);
+
+            $this->entityManager
+                ->expects(self::any())
+                ->method('persist')
+                ->willReturnCallback(function (TaskRegistration $registration) {
+                    $this->taskRegistrationList[$registration->getTask()->getUrl()] = $registration;
+                });
         }
 
         return $this->entityManager;

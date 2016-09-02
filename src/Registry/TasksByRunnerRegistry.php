@@ -157,7 +157,7 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
             $this->save($taskExecution);
         }
 
-        $this->taskExecutionRepository->clear($offset->getIdentifier());
+        $this->taskExecutionRepository->clearExecution($offset->getIdentifier());
     }
 
     /**

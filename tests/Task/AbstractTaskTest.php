@@ -24,6 +24,7 @@ namespace Teknoo\Tests\East\CodeRunnerBundle\Task;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
@@ -151,6 +152,10 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     public function testRegisterResultBehavior()
     {
         $task = $this->buildTask();
+        $task->setCode($this->createMock(CodeInterface::class));
+        $task->registerStatus($this->createMock(StatusInterface::class));
+        $task->registerUrl('https://teknoo.software/foo/bar');
+
         $result = $this->createMock(ResultInterface::class);
         self::assertInstanceOf(
             TaskInterface::class,
@@ -160,7 +165,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        self::assertInternalType(
+        self::assertInstanceOf(
             ResultInterface::class,
             $task->getResult()
         );

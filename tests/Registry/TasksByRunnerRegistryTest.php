@@ -22,6 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Registry;
 
 use Doctrine\ORM\EntityManager;
+use Teknoo\East\CodeRunnerBundle\Entity\TaskExecution;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\TasksByRunnerRegistry;
 use Teknoo\East\CodeRunnerBundle\Repository\TaskExecutionRepository;
@@ -45,6 +46,11 @@ class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
     private $entityManager;
 
     /**
+     * @var array|TaskExecution[]
+     */
+    public $taskExecutionList = [];
+
+    /**
      * @return DatesService|\PHPUnit_Framework_MockObject_MockObject
      */
     public function getDatesServiceMock(): DatesService
@@ -63,6 +69,17 @@ class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
     {
         if (!$this->taskExecutionRepository instanceof \PHPUnit_Framework_MockObject_MockObject) {
             $this->taskExecutionRepository = $this->createMock(TaskExecutionRepository::class);
+
+            $this->taskExecutionRepository
+                ->expects(self::any())
+                ->method('findByRunnerIdentifier')
+                ->willReturnCallback(function ($identifer) {
+                    if (isset($this->taskExecutionList[$identifer])) {
+                        return $this->taskExecutionList[$identifer];
+                    }
+
+                    return false;
+                });
         }
 
         return $this->taskExecutionRepository;
@@ -75,6 +92,13 @@ class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
     {
         if (!$this->entityManager instanceof \PHPUnit_Framework_MockObject_MockObject) {
             $this->entityManager = $this->createMock(EntityManager::class);
+
+            $this->entityManager
+                ->expects(self::any())
+                ->method('persist')
+                ->willReturnCallback(function (TaskExecution $execution) {
+                    $this->taskExecutionList[$execution->getRunnerIdentifier()] = $execution;
+                });
         }
 
         return $this->entityManager;

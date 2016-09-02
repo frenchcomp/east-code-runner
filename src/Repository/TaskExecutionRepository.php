@@ -96,7 +96,7 @@ class TaskExecutionRepository extends EntityRepository
      * @param string $identifier
      * @return TaskExecutionRepository
      */
-    public function clear(string $identifier): TaskExecutionRepository
+    public function clearExecution(string $identifier): TaskExecutionRepository
     {
         if (isset($this->tasksExecutionsList[$identifier])) {
             unset($this->tasksExecutionsList[$identifier]);
