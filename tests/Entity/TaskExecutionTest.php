@@ -59,7 +59,7 @@ class TaskExecutionTest extends \PHPUnit_Framework_TestCase
     public function testSetRunnerIdentifier()
     {
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskExecution::class,
             $entity->setRunnerIdentifier('fooBar')
         );
@@ -91,7 +91,7 @@ class TaskExecutionTest extends \PHPUnit_Framework_TestCase
     {
         $task = $this->createMock(TaskInterface::class);
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskExecution::class,
             $entity->setTask($task)
         );
@@ -123,7 +123,7 @@ class TaskExecutionTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskExecution::class,
             $entity->setCreatedAt($date)
         );
@@ -155,7 +155,7 @@ class TaskExecutionTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskExecution::class,
             $entity->setUpdatedAt($date)
         );
@@ -187,7 +187,7 @@ class TaskExecutionTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskExecution::class,
             $entity->setDeletedAt($date)
         );

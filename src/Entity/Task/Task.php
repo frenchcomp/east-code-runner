@@ -39,7 +39,6 @@ use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
 use Teknoo\States\Proxy\IntegratedInterface;
 use Teknoo\Bundle\StatesBundle\Entity\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
-use Teknoo\States\Proxy\ProxyTrait;
 
 /**
  * Class Task
@@ -50,8 +49,7 @@ use Teknoo\States\Proxy\ProxyTrait;
  */
 class Task implements ProxyInterface, IntegratedInterface, TaskInterface, AutomatedInterface
 {
-    use ProxyTrait,
-        IntegratedTrait,
+    use IntegratedTrait,
         AutomatedTrait;
 
     /**
@@ -136,6 +134,10 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface, Automa
      */
     public function getCode(): CodeInterface
     {
+        if (!$this->code instanceof CodeInterface) {
+            throw new \UnexpectedValueException('Code is not available');
+        }
+
         return $this->code;
     }
 
@@ -144,6 +146,10 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface, Automa
      */
     public function getUrl(): string
     {
+        if (empty($this->url)) {
+            throw new \UnexpectedValueException('Url is not available');
+        }
+
         return $this->url;
     }
 
@@ -152,6 +158,10 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface, Automa
      */
     public function getStatus(): StatusInterface
     {
+        if (!$this->status instanceof StatusInterface) {
+            throw new \UnexpectedValueException('Result is not available');
+        }
+
         return $this->status;
     }
 
@@ -160,6 +170,10 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface, Automa
      */
     public function getResult(): ResultInterface
     {
+        if (!$this->result instanceof ResultInterface) {
+            throw new \UnexpectedValueException('Result is not available');
+        }
+
         return $this->result;
     }
 

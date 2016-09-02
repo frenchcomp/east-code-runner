@@ -65,7 +65,7 @@ class TaskTest extends AbstractTaskTest
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildTask();
-        self::assertEquals(
+        self::assertInstanceOf(
             Task::class,
             $entity->setCreatedAt($date)
         );
@@ -97,7 +97,7 @@ class TaskTest extends AbstractTaskTest
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildTask();
-        self::assertEquals(
+        self::assertInstanceOf(
             Task::class,
             $entity->setUpdatedAt($date)
         );
@@ -129,7 +129,7 @@ class TaskTest extends AbstractTaskTest
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildTask();
-        self::assertEquals(
+        self::assertInstanceOf(
             Task::class,
             $entity->setDeletedAt($date)
         );

@@ -23,6 +23,7 @@ namespace Teknoo\East\CodeRunnerBundle\Manager\RunnerManager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Running;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
@@ -98,6 +99,8 @@ class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManage
         $this->initializeProxy();
         //Call the startup factory to initialize this proxy
         $this->initializeObjectWithFactory();
+        //Initialize state
+        $this->enableState(Running::class);
     }
 
     /**

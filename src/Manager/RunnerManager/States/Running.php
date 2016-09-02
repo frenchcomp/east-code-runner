@@ -46,7 +46,8 @@ class Running extends AbstractState
      */
     private function doRegisterMe(RunnerInterface $runner): RunnerManagerInterface
     {
-        $this->runners[$runner->getIdentifier()] = $runner;
+        $runners = $this->runners;
+        $runners[$runner->getIdentifier()] = $runner;
 
         return $this;
     }

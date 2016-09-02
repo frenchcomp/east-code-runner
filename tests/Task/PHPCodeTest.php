@@ -36,4 +36,12 @@ class PHPCodeTest extends AbstractCodeTest
     {
         return new PHPCode('<php phpinfo();', ['php'=>'>=7']);
     }
+
+    /**
+     * @expectedException \Teknoo\Immutable\Exception\ImmutableException
+     */
+    public function testValueObjectBehaviorConstructor()
+    {
+        $this->buildCode()->__construct('<php phpinfo();', ['php'=>'>=7']);
+    }
 }

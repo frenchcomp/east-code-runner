@@ -35,7 +35,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     abstract public function buildTask(): TaskInterface;
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testSetCodeExceptionOnBadInput()
     {
@@ -64,7 +64,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      */
     public function testGetCodeExceptionOnCodeMissing()
     {
@@ -72,7 +72,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      */
     public function testGetUrlExceptionOnUrlMissing()
     {
@@ -80,7 +80,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      */
     public function testGetStatusExceptionOnStatusMissing()
     {
@@ -88,7 +88,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      */
     public function testGetResultExceptionOnResultMissing()
     {
@@ -96,7 +96,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testRegisterUrlExceptionOnBadUrl()
     {
@@ -127,7 +127,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testRegisterResultExceptionOnBadManager()
     {
@@ -138,7 +138,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testRegisterResultExceptionOnBadResult()
     {

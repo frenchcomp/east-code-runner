@@ -59,7 +59,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
     public function testSetTaskManagerIdentifier()
     {
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskRegistration::class,
             $entity->setTaskManagerIdentifier('fooBar')
         );
@@ -91,7 +91,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
     {
         $task = $this->createMock(TaskInterface::class);
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskRegistration::class,
             $entity->setTask($task)
         );
@@ -123,7 +123,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskRegistration::class,
             $entity->setCreatedAt($date)
         );
@@ -155,7 +155,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskRegistration::class,
             $entity->setUpdatedAt($date)
         );
@@ -187,7 +187,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
-        self::assertEquals(
+        self::assertInstanceOf(
             TaskRegistration::class,
             $entity->setDeletedAt($date)
         );

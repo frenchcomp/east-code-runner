@@ -36,4 +36,12 @@ class StatusTest extends AbstractStatusTest
     {
         return new Status('Pending');
     }
+
+    /**
+     * @expectedException \Teknoo\Immutable\Exception\ImmutableException
+     */
+    public function testValueObjectBehaviorConstructor()
+    {
+        $this->buildStatus()->__construct('Pending');
+    }
 }

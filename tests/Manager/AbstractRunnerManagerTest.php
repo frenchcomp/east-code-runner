@@ -37,7 +37,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     abstract public function buildManager(): RunnerManagerInterface;
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testRegisterMeBadTask()
     {
@@ -53,7 +53,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testForgetMeBadTask()
     {
@@ -69,7 +69,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testPushResultBadRunner()
     {
@@ -80,7 +80,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testPushResultBadResult()
     {
@@ -128,7 +128,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \DomainException
+     * @expectedException \DomainException
      */
     public function testPushResultExceptionTaskUnknown()
     {
@@ -146,7 +146,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testPushStatusBadRunner()
     {
@@ -157,7 +157,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testPushStatusBadStatus()
     {
@@ -205,7 +205,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \DomainException
+     * @expectedException \DomainException
      */
     public function testPushStatusExceptionTaskUnknown()
     {
@@ -223,7 +223,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskAcceptedBadRunner()
     {
@@ -234,7 +234,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskAcceptedBadTask()
     {
@@ -284,7 +284,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \DomainException
+     * @expectedException \DomainException
      */
     public function testTaskAcceptedReturnExceptionOnTaskUnknown()
     {
@@ -298,7 +298,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskRejectedBadRunner()
     {
@@ -309,7 +309,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskRejectedBadTask()
     {
@@ -362,7 +362,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \DomainException
+     * @expectedException \DomainException
      */
     public function testTaskRejectedExceptionTaskUnknown()
     {
@@ -376,7 +376,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testExecuteForMeThisTaskBadManager()
     {
@@ -387,7 +387,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testExecuteForMeThisTaskBadTask()
     {
@@ -409,7 +409,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \DomainException
+     * @expectedException \DomainException
      */
     public function testExecuteForMeThisTaskExceptionWhenTaskNotExecutableByAnyRunners()
     {

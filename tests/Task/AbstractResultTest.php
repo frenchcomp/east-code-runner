@@ -58,7 +58,7 @@ abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
     public function testGetMemorySizeReturn()
     {
         self::assertInternalType(
-            'string',
+            'int',
             $this->buildResult()->getMemorySize()
         );
     }
@@ -66,7 +66,7 @@ abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
     public function testGetTimeExecutionReturn()
     {
         self::assertInternalType(
-            'string',
+            'int',
             $this->buildResult()->getTimeExecution()
         );
     }
@@ -90,7 +90,7 @@ abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Teknoo\Immutable\Exception\ImmutableException
      */
-    public function testValueObjectBehaviorConstructor()
+    public function testValueObjectBehaviorConstructorException()
     {
         $this->buildResult()->__construct();
     }

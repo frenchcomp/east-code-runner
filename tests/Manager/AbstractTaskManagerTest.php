@@ -43,7 +43,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testExecuteMeBadTask()
     {
@@ -58,14 +58,14 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecuteMeMustCallRegisterTaskManagerExecuting()
+    public function testExecuteMeMustCallregisterUrl()
     {
         $manager = $this->buildManager();
         $task = $this->createMock(TaskInterface::class);
 
         $task->expects(self::once())
-            ->method('registerTaskManagerExecuting')
-            ->with(new \PHPUnit_Framework_Constraint_Not(self::isEmpty()), $manager)
+            ->method('registerUrl')
+            ->with(new \PHPUnit_Framework_Constraint_Not(self::isEmpty()))
             ->willReturnSelf();
 
         self::assertInstanceOf(
@@ -75,7 +75,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskStatusIsUpdatedBadTask()
     {
@@ -86,7 +86,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskStatusIsUpdatedBadStatus()
     {
@@ -108,7 +108,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskResultIsUpdatedBadTask()
     {
@@ -119,7 +119,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testTaskResultIsUpdatedBadResult()
     {
@@ -141,7 +141,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testForgetMeBadTask()
     {

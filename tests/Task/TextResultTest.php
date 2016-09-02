@@ -34,6 +34,14 @@ class TextResultTest extends AbstractResultTest
      */
     public function buildResult(): ResultInterface
     {
-        return new TextResult('hello world', '', '7.0.0', 12, 34);
+        return new TextResult('hello world', 'errors', '7.0.0', 12, 34);
+    }
+
+    /**
+     * @expectedException \Teknoo\Immutable\Exception\ImmutableException
+     */
+    public function testValueObjectBehaviorConstructorException()
+    {
+        $this->buildResult()->__construct('hello world', 'errors', '7.0.0', 12, 34);
     }
 }

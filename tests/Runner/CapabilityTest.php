@@ -36,4 +36,17 @@ class CapabilityTest extends AbstractCapabilityTest
     {
         return new Capability('foo', 'bar');
     }
+
+    /**
+     * @expectedException \Teknoo\Immutable\Exception\ImmutableException
+     */
+    public function testValueObjectBehaviorConstructor()
+    {
+        $this->buildCapacity()->__construct('foo', 'bar');
+    }
+
+    public function testGetValueReturnNull()
+    {
+        self::assertNull((new Capability('foo', null))->getValue());
+    }
 }

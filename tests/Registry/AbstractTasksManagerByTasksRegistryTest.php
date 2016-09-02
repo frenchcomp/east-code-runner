@@ -30,7 +30,7 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
     abstract public function buildRegistry(): TasksManagerByTasksRegistryInterface;
 
     /**
-     * @exceptedException \InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testOffsetExistsInvalidArgument()
     {
@@ -38,7 +38,7 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
     }
 
     /**
-     * @exceptedException \InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testOffsetGetInvalidArgument()
     {
@@ -46,7 +46,7 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
     }
 
     /**
-     * @exceptedException \InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testOffsetSetInvalidArgument()
     {
@@ -54,7 +54,7 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
     }
 
     /**
-     * @exceptedException \InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testOffsetUnsetInvalidArgument()
     {

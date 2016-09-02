@@ -146,4 +146,9 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Aut
     {
         // TODO: Implement canYouExecute() method.
     }
+
+    public function getStatesAssertions(): array
+    {
+        return [];
+    }
 }
