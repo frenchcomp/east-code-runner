@@ -25,6 +25,8 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 class RunnerManagerTest extends AbstractRunnerManagerTest
 {
@@ -45,6 +47,35 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
     {
         if (!$this->tasksByRunner instanceof \PHPUnit_Framework_MockObject_MockObject) {
             $this->tasksByRunner = $this->createMock(TasksByRunnerRegistryInterface::class);
+
+            $repository = [];
+            $this->tasksByRunner
+                ->expects(self::any())
+                ->method('offsetExists')
+                ->willReturnCallback(function ($name) use (&$repository) {
+                   return isset($repository[$name]);
+                });
+
+            $this->tasksByRunner
+                ->expects(self::any())
+                ->method('offsetGet')
+                ->willReturnCallback(function ($name) use (&$repository) {
+                    return $repository[$name];
+                });
+
+            $this->tasksByRunner
+                ->expects(self::any())
+                ->method('offsetSet')
+                ->willReturnCallback(function ($name, $value) use (&$repository) {
+                    $repository[$name] = $value;
+                });
+
+            $this->tasksByRunner
+                ->expects(self::any())
+                ->method('offsetUnset')
+                ->willReturnCallback(function ($name) use (&$repository) {
+                    unset($repository[$name]);
+                });
         }
 
         return $this->tasksByRunner;
@@ -57,11 +88,43 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
     {
         if (!$this->tasksManagerByTasks instanceof \PHPUnit_Framework_MockObject_MockObject) {
             $this->tasksManagerByTasks = $this->createMock(TasksManagerByTasksRegistryInterface::class);
+
+            $repository = [];
+            $this->tasksManagerByTasks
+                ->expects(self::any())
+                ->method('offsetExists')
+                ->willReturnCallback(function ($name) use (&$repository) {
+                    return isset($repository[$name]);
+                });
+
+            $this->tasksManagerByTasks
+                ->expects(self::any())
+                ->method('offsetGet')
+                ->willReturnCallback(function ($name) use (&$repository) {
+                    return $repository[$name];
+                });
+
+            $this->tasksManagerByTasks
+                ->expects(self::any())
+                ->method('offsetSet')
+                ->willReturnCallback(function ($name, $value) use (&$repository) {
+                    $repository[$name] = $value;
+                });
+
+            $this->tasksManagerByTasks
+                ->expects(self::any())
+                ->method('offsetUnset')
+                ->willReturnCallback(function ($name) use (&$repository) {
+                    unset($repository[$name]);
+                });
         }
 
         return $this->tasksManagerByTasks;
     }
 
+    /**
+     * @return RunnerManagerInterface|RunnerManager
+     */
     public function buildManager(): RunnerManagerInterface
     {
         return new RunnerManager(

@@ -48,6 +48,7 @@ class Running extends AbstractState
     {
         $runners = $this->runners;
         $runners[$runner->getIdentifier()] = $runner;
+        $this->runners = $runners;
 
         return $this;
     }
@@ -58,8 +59,10 @@ class Running extends AbstractState
     private function doForgetMe(RunnerInterface $runner): RunnerManagerInterface
     {
         $runnerIdentifier = $runner->getIdentifier();
+        $runners = $this->runners;
         if (isset($this->runners[$runnerIdentifier])) {
-            unset($this->runners[$runnerIdentifier]);
+            unset($runners[$runnerIdentifier]);
+            $this->runners = $runners;
         }
 
         return $this;

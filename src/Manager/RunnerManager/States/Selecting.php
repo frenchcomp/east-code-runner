@@ -50,7 +50,7 @@ class Selecting extends AbstractState
     /**
      * {@inheritdoc}
      */
-    private function taskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
+    private function doTaskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
     {
         $this->taskAcceptedByARunner = false;
 

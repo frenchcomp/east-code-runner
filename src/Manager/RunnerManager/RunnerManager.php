@@ -157,7 +157,7 @@ class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManage
      *
      * @return RunnerManager
      */
-    private function switchToSelectingTask(): RunnerManager
+    public function switchToSelectingTask(): RunnerManager
     {
         $this->switchState(Selecting::class);
 
