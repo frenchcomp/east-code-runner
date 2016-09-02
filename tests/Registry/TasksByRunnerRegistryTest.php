@@ -28,6 +28,10 @@ use Teknoo\East\CodeRunnerBundle\Registry\TasksByRunnerRegistry;
 use Teknoo\East\CodeRunnerBundle\Repository\TaskExecutionRepository;
 use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 
+/**
+ * Test TasksByRunnerRegistryTest
+ * @covers Teknoo\East\CodeRunnerBundle\Registry\TasksByRunnerRegistry
+ */
 class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
 {
     /**

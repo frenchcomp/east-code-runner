@@ -25,9 +25,14 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
+/**
+ * Test RunnerManagerTest
+ * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager
+ * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\Factory
+ * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Running
+ * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting
+ */
 class RunnerManagerTest extends AbstractRunnerManagerTest
 {
     /**

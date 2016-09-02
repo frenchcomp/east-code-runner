@@ -27,6 +27,10 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\TaskManager;
 use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 
+/**
+ * Tests TaskManagerTest
+ * @covers Teknoo\East\CodeRunnerBundle\Manager\TaskManager
+ */
 class TaskManagerTest extends AbstractTaskManagerTest
 {
     /**

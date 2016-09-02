@@ -26,7 +26,7 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\Tests\East\CodeRunnerBundle\Entity\Traits\PopulateEntityTrait;
 
 /**
- * @covers @covers Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration
+ * @covers Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration
  */
 class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
 {
