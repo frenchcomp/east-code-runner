@@ -22,11 +22,8 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Registry;
 
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
-use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskUserInterface;
-use Teknoo\Tests\East\CodeRunnerBundle\Task\TaskUserTestTrait;
 
 abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,12 +64,18 @@ abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_Test
     public function testArrayAccessBehavior()
     {
         $task1 = $this->createMock(TaskInterface::class);
+        $task1->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task1');
         $task2 = $this->createMock(TaskInterface::class);
+        $task2->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task2');
         $task3 = $this->createMock(TaskInterface::class);
+        $task3->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task3');
 
         $runner1 = $this->createMock(RunnerInterface::class);
+        $runner1->expects(self::any())->method('getIdentifier')->willReturn('runner1');
         $runner2 = $this->createMock(RunnerInterface::class);
+        $runner2->expects(self::any())->method('getIdentifier')->willReturn('runner2');
         $runner3 = $this->createMock(RunnerInterface::class);
+        $runner3->expects(self::any())->method('getIdentifier')->willReturn('runner3');
 
         $registry = $this->buildRegistry();
 
@@ -125,8 +128,8 @@ abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_Test
 
         self::assertTrue(isset($registry[$runner]));
 
-        self::assertInstanceof(
-            TasksManagerByTasksRegistryInterface::class,
+        self::assertInstanceOf(
+            TasksByRunnerRegistryInterface::class,
             $registry->clearAll()
         );
 

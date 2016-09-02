@@ -73,12 +73,32 @@ class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
             $this->taskExecutionRepository
                 ->expects(self::any())
                 ->method('findByRunnerIdentifier')
-                ->willReturnCallback(function ($identifer) {
-                    if (isset($this->taskExecutionList[$identifer])) {
-                        return $this->taskExecutionList[$identifer];
+                ->willReturnCallback(function ($identifier) {
+                    if (isset($this->taskExecutionList[$identifier])) {
+                        return $this->taskExecutionList[$identifier];
                     }
 
                     return false;
+                });
+            
+            $this->taskExecutionRepository
+                ->expects(self::any())
+                ->method('clearExecution')
+                ->willReturnCallback(function ($identifier) {
+                    if (isset($this->taskExecutionList[$identifier])) {
+                        unset($this->taskExecutionList[$identifier]);
+                    }
+
+                    return $this->taskExecutionRepository;
+                });
+
+            $this->taskExecutionRepository
+                ->expects(self::any())
+                ->method('clearAll')
+                ->willReturnCallback(function () {
+                    $this->taskExecutionList = [];
+
+                    return $this->taskExecutionRepository;
                 });
         }
 

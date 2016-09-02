@@ -24,7 +24,6 @@ namespace Teknoo\East\CodeRunnerBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
-use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository;
 use Teknoo\East\CodeRunnerBundle\Service\DatesService;
@@ -153,7 +152,7 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
         if ($taskRegistration instanceof TaskRegistration) {
             $taskRegistration->setTask($value);
         } else {
-            $taskRegistration = $this->create($value, $offset);
+            $taskRegistration = $this->create($offset, $value);
         }
 
         $this->save($taskRegistration);
@@ -176,14 +175,16 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
             $this->save($taskRegistration);
         }
 
-        $this->taskRegistrationRepository->clearRegistration($offset->getIdentifier());
+        $this->taskRegistrationRepository->clearRegistration($offset->getUrl());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function clearAll(): TasksByRunnerRegistryInterface
+    public function clearAll(): TasksManagerByTasksRegistryInterface
     {
         $this->taskRegistrationRepository->clearAll($this->datesService->getDate());
+
+        return $this;
     }
 }

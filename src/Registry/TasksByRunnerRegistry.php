@@ -166,5 +166,7 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     public function clearAll(): TasksByRunnerRegistryInterface
     {
         $this->taskExecutionRepository->clearAll($this->datesService->getDate());
+
+        return $this;
     }
 }

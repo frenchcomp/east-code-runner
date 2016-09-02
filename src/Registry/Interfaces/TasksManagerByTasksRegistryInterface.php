@@ -21,12 +21,19 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Registry\Interfaces;
 
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
+
 interface TasksManagerByTasksRegistryInterface extends \ArrayAccess
 {
     /**
+     * @param TaskManagerInterface $taskManager
+     */
+    public function addTaskManager(TaskManagerInterface $taskManager);
+
+    /**
      * To clear all runners memorized tasks in the persistent dbms
      *
-     * @return TasksByRunnerRegistryInterface
+     * @return TasksManagerByTasksRegistryInterface
      */
-    public function clearAll(): TasksByRunnerRegistryInterface;
+    public function clearAll(): TasksManagerByTasksRegistryInterface;
 }

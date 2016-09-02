@@ -80,6 +80,26 @@ class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistr
 
                     return false;
                 });
+
+            $this->taskRegistrationRepository
+                ->expects(self::any())
+                ->method('clearRegistration')
+                ->willReturnCallback(function ($identifier) {
+                    if (isset($this->taskRegistrationList[$identifier])) {
+                        unset($this->taskRegistrationList[$identifier]);
+                    }
+
+                    return $this->taskRegistrationRepository;
+                });
+
+            $this->taskRegistrationRepository
+                ->expects(self::any())
+                ->method('clearAll')
+                ->willReturnCallback(function () {
+                    $this->taskRegistrationList = [];
+
+                    return $this->taskRegistrationRepository;
+                });
         }
 
         return $this->taskRegistrationRepository;

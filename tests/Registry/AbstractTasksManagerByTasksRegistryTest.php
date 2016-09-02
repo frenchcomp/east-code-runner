@@ -64,14 +64,23 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
     public function testArrayAccessBehavior()
     {
         $manager1 = $this->createMock(TaskManagerInterface::class);
+        $manager1->expects(self::any())->method('getIdentifier')->willReturn('manager1');
         $manager2 = $this->createMock(TaskManagerInterface::class);
+        $manager2->expects(self::any())->method('getIdentifier')->willReturn('manager2');
         $manager3 = $this->createMock(TaskManagerInterface::class);
+        $manager3->expects(self::any())->method('getIdentifier')->willReturn('manager3');
 
         $task1 = $this->createMock(TaskInterface::class);
+        $task1->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task1');
         $task2 = $this->createMock(TaskInterface::class);
+        $task2->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task2');
         $task3 = $this->createMock(TaskInterface::class);
+        $task3->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task3');
 
         $registry = $this->buildRegistry();
+        $registry->addTaskManager($manager1);
+        $registry->addTaskManager($manager2);
+        $registry->addTaskManager($manager3);
 
         self::assertFalse(isset($registry[$task1]));
         self::assertFalse(isset($registry[$task2]));
@@ -115,6 +124,7 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
             ->willReturn('fooBar');
 
         $manager = $this->createMock(TaskManagerInterface::class);
+        $registry->addTaskManager($manager);
 
         self::assertFalse(isset($registry[$task]));
 
