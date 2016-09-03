@@ -95,4 +95,33 @@ abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
         $this->buildResult()->__construct();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeEmptyClass()
+    {
+        $result = $this->buildResult();
+        $className = get_class($result);
+        $className::jsonDeserialize([]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeBadClass()
+    {
+        $result = $this->buildResult();
+        $className = get_class($result);
+        $className::jsonDeserialize(['class'=>'\DateTime']);
+    }
+
+    public function testJsonEncodeDecode()
+    {
+        $result = $this->buildResult();
+        $className = get_class($result);
+        self::assertEquals(
+            $result,
+            $className::jsonDeserialize(json_decode(json_encode($result), true))
+        );
+    }
 }

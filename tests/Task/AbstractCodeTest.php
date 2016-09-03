@@ -70,4 +70,34 @@ abstract class AbstractCodeTest extends \PHPUnit_Framework_TestCase
     {
         $this->buildCode()->__construct();
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeEmptyClass()
+    {
+        $code = $this->buildCode();
+        $className = get_class($code);
+        $className::jsonDeserialize([]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeBadClass()
+    {
+        $code = $this->buildCode();
+        $className = get_class($code);
+        $className::jsonDeserialize(['class'=>'\DateTime']);
+    }
+
+    public function testJsonEncodeDecode()
+    {
+        $code = $this->buildCode();
+        $className = get_class($code);
+        self::assertEquals(
+            $code,
+            $className::jsonDeserialize(json_decode(json_encode($code), true))
+        );
+    }
 }

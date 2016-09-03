@@ -62,4 +62,34 @@ abstract class AbstractStatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->buildStatus()->__construct();
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeEmptyClass()
+    {
+        $status = $this->buildStatus();
+        $className = get_class($status);
+        $className::jsonDeserialize([]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeBadClass()
+    {
+        $status = $this->buildStatus();
+        $className = get_class($status);
+        $className::jsonDeserialize(['class'=>'\DateTime']);
+    }
+
+    public function testJsonEncodeDecode()
+    {
+        $status = $this->buildStatus();
+        $className = get_class($status);
+        self::assertEquals(
+            $status,
+            $className::jsonDeserialize(json_decode(json_encode($status), true))
+        );
+    }
 }
