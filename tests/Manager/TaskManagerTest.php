@@ -22,6 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\TaskManager;
@@ -99,6 +100,18 @@ class TaskManagerTest extends AbstractTaskManagerTest
             $this->getEntityManagerMock(),
             $this->getDatesServiceMock(),
             $this->getRunnerManagerMock()
+        );
+    }
+
+    public function testForgetMeTaskEntity()
+    {
+        $this->getEntityManagerMock()
+            ->expects(self::once())
+            ->method('flush');
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->forgetMe($this->createMock(Task::class))
         );
     }
 }

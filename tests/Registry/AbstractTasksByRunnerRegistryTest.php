@@ -99,6 +99,9 @@ abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_Test
         self::assertEquals($task2, $registry[$runner2]);
         self::assertEquals($task3, $registry[$runner3]);
 
+        $registry[$runner2] = $task3;
+        self::assertEquals($task3, $registry[$runner2]);
+
         unset($registry[$runner2]);
         $registry[$runner3] = $task1;
 

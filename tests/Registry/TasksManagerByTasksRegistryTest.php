@@ -22,7 +22,9 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Registry;
 
 use Doctrine\ORM\EntityManager;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\TasksManagerByTasksRegistry;
 use Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository;

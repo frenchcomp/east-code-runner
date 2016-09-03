@@ -91,6 +91,22 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     }
 
     /**
+     * @param TaskInterface $task
+     * @return null|TaskRegistration
+     */
+    private function getTaskRegistration(TaskInterface $task)
+    {
+        $url = $task->getUrl();
+        $taskRegistration = $this->taskRegistrationRepository->findByTaskUrl($url);
+
+        if (!$taskRegistration instanceof TaskRegistration || $taskRegistration->getDeletedAt() instanceof \DateTime) {
+            return null;
+        }
+
+        return $taskRegistration;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function offsetGet($offset)
@@ -99,10 +115,9 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
             throw new \InvalidArgumentException();
         }
 
-        $url = $offset->getUrl();
-        $taskRegistration = $this->taskRegistrationRepository->findByTaskUrl($url);
+        $taskRegistration = $this->getTaskRegistration($offset);
 
-        if (!$taskRegistration instanceof TaskRegistration || $taskRegistration->getDeletedAt() instanceof \DateTime) {
+        if (!$taskRegistration instanceof TaskRegistration) {
             return null;
         }
 
@@ -143,14 +158,14 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      */
     public function offsetSet($offset, $value)
     {
-        if (!$offset instanceof TaskInterface) {
+        if (!$offset instanceof TaskInterface || !$value instanceof TaskManagerInterface) {
             throw new \InvalidArgumentException();
         }
 
-        $taskRegistration = $this[$offset];
+        $taskRegistration = $this->getTaskRegistration($offset);
 
         if ($taskRegistration instanceof TaskRegistration) {
-            $taskRegistration->setTask($value);
+            $taskRegistration->setTaskManagerIdentifier($value->getIdentifier());
         } else {
             $taskRegistration = $this->create($offset, $value);
         }
@@ -167,7 +182,7 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
             throw new \InvalidArgumentException();
         }
 
-        $taskRegistration = $this[$offset];
+        $taskRegistration = $this->getTaskRegistration($offset);
 
         if ($taskRegistration instanceof TaskRegistration) {
             $taskRegistration->setDeletedAt($this->datesService->getDate());

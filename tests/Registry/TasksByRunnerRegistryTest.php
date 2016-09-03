@@ -22,10 +22,12 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Registry;
 
 use Doctrine\ORM\EntityManager;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Entity\TaskExecution;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\TasksByRunnerRegistry;
 use Teknoo\East\CodeRunnerBundle\Repository\TaskExecutionRepository;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 
 /**
@@ -139,5 +141,4 @@ class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
             $this->getEntityManagerMock()
         );
     }
-
 }

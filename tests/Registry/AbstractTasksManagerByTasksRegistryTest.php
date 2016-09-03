@@ -102,6 +102,9 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
         self::assertEquals($manager2, $registry[$task2]);
         self::assertEquals($manager3, $registry[$task3]);
 
+        $registry[$task2] = $manager3;
+        self::assertEquals($manager3, $registry[$task2]);
+
         unset($registry[$task2]);
         $registry[$task3] = $manager1;
 
@@ -112,6 +115,30 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
         self::assertEquals($manager1, $registry[$task1]);
         self::assertNull($registry[$task2]);
         self::assertEquals($manager1, $registry[$task3]);
+    }
+
+    /**
+     * @expectedException \DomainException
+     */
+    public function testArrayAccessBehaviorUnknownManager()
+    {
+        $manager1 = $this->createMock(TaskManagerInterface::class);
+        $manager1->expects(self::any())->method('getIdentifier')->willReturn('manager1');
+
+        $task1 = $this->createMock(TaskInterface::class);
+        $task1->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task1');
+
+        $registry = $this->buildRegistry();
+
+        self::assertFalse(isset($registry[$task1]));
+
+        self::assertNull($registry[$task1]);
+
+        $registry[$task1] = $manager1;
+
+        self::assertTrue(isset($registry[$task1]));
+
+        $registry[$task1];
     }
 
     public function testClearAll()

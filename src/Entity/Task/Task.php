@@ -282,7 +282,7 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface, Automa
         }
 
         $class = $value['class'];
-        if (is_callable([$class, 'jsonDeserialize'])) {
+        if (!is_callable([$class, 'jsonDeserialize'])) {
             return null;
         }
 

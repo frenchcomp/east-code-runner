@@ -23,6 +23,9 @@ namespace Teknoo\Tests\East\CodeRunnerBundle\Entity;
 
 use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
+use Teknoo\East\CodeRunnerBundle\Task\Status;
+use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 use Teknoo\Tests\East\CodeRunnerBundle\Entity\Traits\PopulateEntityTrait;
 use Teknoo\Tests\East\CodeRunnerBundle\Task\AbstractTaskTest;
 
@@ -50,6 +53,14 @@ class TaskTest extends AbstractTaskTest
     protected function buildEntity()
     {
         return $this->buildTask();
+    }
+
+    public function testGetId()
+    {
+        self::assertEquals(
+            123,
+            $this->generateEntityPopulated(['id'=>123])->getId()
+        );
     }
 
     public function testGetCreatedAt()
@@ -146,5 +157,69 @@ class TaskTest extends AbstractTaskTest
     public function testSetDeletedAtExceptionOnBadArgument()
     {
         $this->buildTask()->setDeletedAt(new \stdClass());
+    }
+
+    public function testPostLoadJsonUpdateAlreadyDecoded()
+    {
+        $code = new PHPCode('<?php phpinfo();', []);
+        self::assertEquals(
+            $code,
+            $this->generateEntityPopulated(['code' => $code])->postLoadJsonUpdate()->getCode()
+        );
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testPostLoadJsonUpdateNoClass()
+    {
+        $this->generateEntityPopulated(['code' => json_decode(json_encode([]), true)])->postLoadJsonUpdate()->getCode();
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testPostLoadJsonUpdateClassDoesNotExist()
+    {
+        $this->generateEntityPopulated(['code' => json_decode(json_encode(['class' => 'fooBar']), true)])->postLoadJsonUpdate()->getCode();
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testPostLoadJsonUpdateNoCallable()
+    {
+        $this->generateEntityPopulated(['code' => json_decode(json_encode(['class' => '\DateTime']), true)])->postLoadJsonUpdate()->getCode();
+    }
+
+    public function testPostLoadJsonUpdateNonDecoded()
+    {
+        $code = new PHPCode('<?php phpinfo();', []);
+        $status = new Status('Test');
+        $result = new TextResult('foo', 'bar', '7.0', 12, 23);
+
+        /**
+         * @var Task $task
+         */
+        $task = $this->generateEntityPopulated([
+            'code' => json_decode(json_encode($code), true),
+            'status' => json_decode(json_encode($status), true),
+            'result' => json_decode(json_encode($result), true)
+        ])->postLoadJsonUpdate();
+
+        self::assertEquals(
+            $code,
+            $task->getCode()
+        );
+
+        self::assertEquals(
+            $status,
+            $task->getStatus()
+        );
+
+        self::assertEquals(
+            $result,
+            $task->getResult()
+        );
     }
 }

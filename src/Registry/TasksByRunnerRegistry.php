@@ -79,6 +79,22 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     }
 
     /**
+     * @param RunnerInterface $runner
+     * @return null|TaskExecution
+     */
+    private function getTaskExecution(RunnerInterface $runner)
+    {
+        $runnerIdentifier = $runner->getIdentifier();
+        $taskExecution = $this->taskExecutionRepository->findByRunnerIdentifier($runnerIdentifier);
+
+        if (!$taskExecution instanceof TaskExecution || $taskExecution->getDeletedAt() instanceof \DateTime) {
+            return null;
+        }
+
+        return $taskExecution;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function offsetGet($offset)
@@ -87,10 +103,9 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
             throw new \InvalidArgumentException();
         }
 
-        $runnerIdentifier = $offset->getIdentifier();
-        $taskExecution = $this->taskExecutionRepository->findByRunnerIdentifier($runnerIdentifier);
+        $taskExecution = $this->getTaskExecution($offset);
 
-        if (!$taskExecution instanceof TaskExecution || $taskExecution->getDeletedAt() instanceof \DateTime) {
+        if (!$taskExecution instanceof TaskExecution) {
             return null;
         }
 
@@ -129,7 +144,7 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
             throw new \InvalidArgumentException();
         }
 
-        $taskExecution = $this[$offset];
+        $taskExecution = $this->getTaskExecution($offset);
 
         if ($taskExecution instanceof TaskExecution) {
             $taskExecution->setTask($value);
@@ -149,7 +164,7 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
             throw new \InvalidArgumentException();
         }
 
-        $taskExecution = $this[$offset];
+        $taskExecution = $this->getTaskExecution($offset);
 
         if ($taskExecution instanceof TaskExecution) {
             $taskExecution->setDeletedAt($this->datesService->getDate());
