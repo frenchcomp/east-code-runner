@@ -19,11 +19,10 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States;
+namespace Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner;
 
-use Teknoo\States\State\AbstractState;
+use Teknoo\States\Factory\Integrated;
 
-class Corrupted extends AbstractState
+class Factory extends Integrated
 {
-
 }

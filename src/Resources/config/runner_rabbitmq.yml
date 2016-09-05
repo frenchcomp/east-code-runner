@@ -1,0 +1,7 @@
+#src/Resources/config/runner_rabbitmq.yml
+parameters:
+  teknoo.east.bundle.coderunner.vendor.amqpc_connection.class: 'PhpAmqpLib\Connection\AMQPConnection'
+  teknoo.east.bundle.coderunner.vendor.amqpc_channel.class: 'PhpAmqpLib\Connection\AMQPChannel'
+
+
+services:

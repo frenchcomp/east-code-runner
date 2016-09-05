@@ -39,7 +39,7 @@ class Busy extends AbstractState
         $this->currentTask = null;
         $this->currentResult = null;
 
-        $this->switchState(Awaiting::class);
+        $this->updateStates();
 
         return $this;
     }

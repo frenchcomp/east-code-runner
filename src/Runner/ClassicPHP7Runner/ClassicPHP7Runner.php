@@ -24,6 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
@@ -33,7 +34,7 @@ use Teknoo\States\Proxy\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
-class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, AutomatedInterface, RunnerInterface
+class ClassicPHP7Runner implements ProxyInterface, IntegratedInterface, AutomatedInterface, RunnerInterface
 {
     use ProxyTrait,
         IntegratedTrait,
@@ -77,10 +78,20 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Aut
     private $currentResult;
 
     /**
+     * @var RunnerManagerInterface
+     */
+    private $currentManager;
+
+    /**
+     * @var string[]
+     */
+    private $forbiddenMethodsList = [];
+
+    /**
      * RemoteDockerPHP7Runner constructor.
      * Initialize States behavior.
      * @param string $identifier
-     * @parma string $name
+     * @param string $name
      * @param array $capabilities
      */
     public function __construct(string $identifier, string $name, array $capabilities)
@@ -97,9 +108,9 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Aut
 
     /**
      * @param Capability $capability
-     * @return RemoteDockerPHP7Runner
+     * @return ClassicPHP7Runner
      */
-    public function addCapability(Capability $capability): RemoteDockerPHP7Runner
+    public function addCapability(Capability $capability): ClassicPHP7Runner
     {
         $this->capabilities[] = $capability;
 
@@ -151,11 +162,11 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Aut
      */
     public function canYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
     {
-        // TODO: Implement canYouExecute() method.
+        return $this->doCanYouExecute($manager, $task);
     }
 
     public function getStatesAssertions(): array
     {
-        return [];
+        // TODO: Implement getStatesAssertions() method.
     }
 }
