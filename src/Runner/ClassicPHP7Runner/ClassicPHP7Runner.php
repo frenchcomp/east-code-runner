@@ -19,14 +19,18 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner;
+namespace Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
+use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States\Awaiting;
+use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States\Busy;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Assertion;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsInstanceOf;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotInstanceOf;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
 use Teknoo\States\Proxy\IntegratedInterface;
@@ -92,18 +96,21 @@ class ClassicPHP7Runner implements ProxyInterface, IntegratedInterface, Automate
      * Initialize States behavior.
      * @param string $identifier
      * @param string $name
+     * @param string $version
      * @param array $capabilities
      */
-    public function __construct(string $identifier, string $name, array $capabilities)
+    public function __construct(string $identifier, string $name, string $version, array $capabilities)
     {
         $this->identifier = $identifier;
         $this->name = $name;
+        $this->version = $version;
         $this->capabilities = $capabilities;
 
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
         //Call the startup factory to initialize this proxy
         $this->initializeObjectWithFactory();
+        $this->updateStates();
     }
 
     /**
@@ -165,8 +172,14 @@ class ClassicPHP7Runner implements ProxyInterface, IntegratedInterface, Automate
         return $this->doCanYouExecute($manager, $task);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStatesAssertions(): array
     {
-        // TODO: Implement getStatesAssertions() method.
+        return [
+            (new Assertion(Awaiting::class))->with('currentTask', new IsNotInstanceOf(TaskInterface::class)),
+            (new Assertion(Busy::class))->with('currentTask', new IsInstanceOf(TaskInterface::class)),
+        ];
     }
 }

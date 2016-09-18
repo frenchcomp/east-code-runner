@@ -23,13 +23,17 @@ namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
 
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
 
-class RemoteDockerPHP7RunnerTest extends AbstractRunnerTest
+/**
+ * Class ClassicPHP7RunnerTest
+ * @covers Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner
+ */
+class ClassicPHP7RunnerTest extends AbstractRunnerTest
 {
     public function buildRunner(): RunnerInterface
     {
-        return new RemoteDockerPHP7Runner('RemoteDockerPHP7Runner1', 'RemoteDockerPHP7Runner', 'PHP7.0', [new Capability('feature', 'PHP7')]);
+        return new ClassicPHP7Runner('ClassicPHP7Runner1', 'ClassicPHP7Runner', 'PHP7.0', [new Capability('feature', 'PHP7')]);
     }
 
     public function testCanYouExecuteCodeNotRunnableByTHisRunner()

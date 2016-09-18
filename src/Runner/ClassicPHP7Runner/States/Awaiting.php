@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\ClassicPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
@@ -66,6 +66,8 @@ class Awaiting extends AbstractState
     private function rejectTask(RunnerManagerInterface $manager, TaskInterface $task)
     {
         $manager->taskRejected($this, $task);
+
+        $this->updateStates();
     }
 
     /**
@@ -81,6 +83,8 @@ class Awaiting extends AbstractState
         $manager->taskAccepted($this, $task);
 
         $this->currentManager->pushStatus($this, new Status('Registered'));
+
+        $this->updateStates();
     }
 
     /**
@@ -110,6 +114,14 @@ class Awaiting extends AbstractState
 
         $this->updateStates();
 
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function doReset(): RunnerInterface
+    {
         return $this;
     }
 }

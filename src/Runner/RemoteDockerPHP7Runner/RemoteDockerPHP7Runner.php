@@ -23,9 +23,14 @@ namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
+use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States\Awaiting;
+use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States\Busy;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Assertion;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsInstanceOf;
+use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotInstanceOf;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
 use Teknoo\States\Proxy\IntegratedInterface;
@@ -80,13 +85,15 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Aut
      * RemoteDockerPHP7Runner constructor.
      * Initialize States behavior.
      * @param string $identifier
-     * @parma string $name
+     * @param string $name
+     * @param string $version
      * @param array $capabilities
      */
-    public function __construct(string $identifier, string $name, array $capabilities)
+    public function __construct(string $identifier, string $name, string $version, array $capabilities)
     {
         $this->identifier = $identifier;
         $this->name = $name;
+        $this->version = $version;
         $this->capabilities = $capabilities;
 
         //Call the method of the trait to initialize local attributes of the proxy
@@ -154,8 +161,14 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Aut
         // TODO: Implement canYouExecute() method.
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStatesAssertions(): array
     {
-        return [];
+        return [
+            (new Assertion(Awaiting::class))->with('currentTask', new IsNotInstanceOf(TaskInterface::class)),
+            (new Assertion(Busy::class))->with('currentTask', new IsInstanceOf(TaskInterface::class)),
+        ];
     }
 }

@@ -23,7 +23,7 @@ namespace Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\ClassicPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
 use Teknoo\East\CodeRunnerBundle\Task\TextResult;

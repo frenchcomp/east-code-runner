@@ -74,7 +74,7 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testCanYouExecuteExceptionOnBadManager()
     {
@@ -85,7 +85,7 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @exceptedException \Throwable
+     * @expectedException \Throwable
      */
     public function testCanYouExecuteExceptionOnBadResult()
     {

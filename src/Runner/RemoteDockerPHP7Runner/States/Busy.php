@@ -21,8 +21,10 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States;
 
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
 
 /**
@@ -31,6 +33,16 @@ use Teknoo\States\State\AbstractState;
  */
 class Busy extends AbstractState
 {
+    /**
+     * {@inheritdoc}
+     */
+    private function doCanYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
+    {
+        $manager->taskRejected($this, $task);
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
