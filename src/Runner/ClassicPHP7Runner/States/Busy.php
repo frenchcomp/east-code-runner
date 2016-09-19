@@ -59,8 +59,7 @@ class Busy extends AbstractState
     private function run()
     {
         $this->currentManager->pushStatus($this, new Status('Executing'));
-        $memoryUsageBefore = \memory_get_usage(true);
-        $timeBefore = microtime(true);
+        $timeBefore = \microtime(true)*1000;
 
         $output = '';$this->currentManager->pushStatus($this, new Status('Executed'));
         $error = '';
@@ -70,13 +69,11 @@ class Busy extends AbstractState
             $error = $e->getMessage();
         }
 
-        $memoryUsageAfter = \memory_get_usage(true);
-        $timeAfter = microtime(true);
+        $timeAfter = \microtime(true)*1000;
 
-        $memoryUsage = $memoryUsageAfter - $memoryUsageBefore;
         $time = $timeAfter - $timeBefore;
 
-        $this->currentResult = new TextResult($output, $error, $this->getVersion(), $memoryUsage, $time);
+        $this->currentResult = new TextResult($output, $error, $this->getVersion(), \memory_get_usage(true), $time);
 
         $this->currentManager->pushStatus($this, new Status('Executed'));
         $this->currentManager->pushResult($this, $this->currentResult);

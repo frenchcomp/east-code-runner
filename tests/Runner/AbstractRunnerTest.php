@@ -110,7 +110,7 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @exceptedException \DomainException
      */
-    abstract public function testCanYouExecuteCodeNotRunnableByTHisRunner();
+    abstract public function testCanYouExecuteCodeNotRunnableByThisRunner();
 
     /**
      * @exceptedException \LogicException

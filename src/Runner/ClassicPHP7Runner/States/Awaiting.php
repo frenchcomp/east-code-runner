@@ -47,7 +47,7 @@ class Awaiting extends AbstractState
              * @var CapabilityInterface $capability
              */
             foreach ($capabilities as $capability) {
-                if ('package' == $capability->getType() && $package == $capability->getValue()) {
+                if ('package' == $capability->getType() && $package == $capability) {
                     $packageFound = true;
                     break;
                 }
@@ -113,6 +113,8 @@ class Awaiting extends AbstractState
         $this->acceptTask($manager, $task);
 
         $this->updateStates();
+
+        $this->run();
 
         return $this;
     }
