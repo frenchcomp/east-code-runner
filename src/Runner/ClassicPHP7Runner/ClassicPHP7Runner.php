@@ -44,13 +44,6 @@ class ClassicPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInt
         AutomatedTrait;
 
     /**
-     * Class name of the factory to use in set up to initialize this object in this construction.
-     *
-     * @var string
-     */
-    protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
-
-    /**
      * @var string
      */
     private $identifier;

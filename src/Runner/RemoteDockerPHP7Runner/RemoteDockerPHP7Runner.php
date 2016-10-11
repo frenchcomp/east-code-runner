@@ -21,7 +21,6 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner;
 
-use Sluggable\Fixture\Issue104\Bus;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States\Awaiting;
@@ -34,8 +33,6 @@ use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsInstanceO
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotInstanceOf;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
-use Teknoo\States\Proxy\IntegratedInterface;
-use Teknoo\States\Proxy\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
@@ -43,13 +40,6 @@ class RemoteDockerPHP7Runner implements ProxyInterface, AutomatedInterface, Runn
 {
     use ProxyTrait,
         AutomatedTrait;
-
-    /**
-     * Class name of the factory to use in set up to initialize this object in this construction.
-     *
-     * @var string
-     */
-    protected static $startupFactoryClassName = '\Teknoo\States\Factory\StandardStartupFactory';
 
     /**
      * @var string

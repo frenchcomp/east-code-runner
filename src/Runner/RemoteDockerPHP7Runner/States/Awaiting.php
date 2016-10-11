@@ -21,9 +21,18 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States;
 
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\States\State\AbstractState;
 
 class Awaiting extends AbstractState
 {
-
+    /**
+     * {@inheritdoc}
+     */
+    private function doReset()
+    {
+        return function() : RunnerInterface {
+            return $this;
+        };
+    }
 }
