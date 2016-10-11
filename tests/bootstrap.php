@@ -31,25 +31,4 @@ error_reporting(E_ALL | E_STRICT);
 
 ini_set('memory_limit', '16M');
 
-$composerInstance = include(__DIR__.'/../vendor/autoload.php');
-
-/**
- * Service to generate a finder for Stated class factory
- * @param string $statedClassName
- * @param string $path
- * @return FinderComposerIntegrated
- */
-$finderFactory = function (string $statedClassName, string $path) use ($composerInstance) {
-    return new FinderComposerIntegrated($statedClassName, $path, $composerInstance);
-};
-
-$factoryRepository = new \ArrayObject();
-$loader = new LoaderComposer($composerInstance, $finderFactory, $factoryRepository);
-
-//Register autoload function in the spl autoloader stack
-spl_autoload_register(
-    array($loader, 'loadClass'),
-    true,
-    true
-);
-
+include(__DIR__.'/../vendor/autoload.php');

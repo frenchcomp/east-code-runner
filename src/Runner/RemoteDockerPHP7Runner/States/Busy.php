@@ -26,33 +26,41 @@ use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
+use Teknoo\States\State\StateInterface;
+use Teknoo\States\State\StateTrait;
 
 /**
  * State Busy
  * @mixin RemoteDockerPHP7Runner
  */
-class Busy extends AbstractState
+class Busy implements StateInterface
 {
+    use StateTrait;
+
     /**
      * {@inheritdoc}
      */
-    private function doCanYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
+    private function doCanYouExecute()
     {
-        $manager->taskRejected($this, $task);
+        return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
+            $manager->taskRejected($this, $task);
 
-        return $this;
+            return $this;
+        };
     }
 
     /**
      * {@inheritdoc}
      */
-    private function doReset(): RunnerInterface
+    private function doReset()
     {
-        $this->currentTask = null;
-        $this->currentResult = null;
+        return function() : RunnerInterface {
+            $this->currentTask = null;
+            $this->currentResult = null;
 
-        $this->updateStates();
+            $this->updateStates();
 
-        return $this;
+            return $this;
+        };
     }
 }

@@ -28,54 +28,68 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
 use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 use Teknoo\States\State\AbstractState;
+use Teknoo\States\State\StateInterface;
+use Teknoo\States\State\StateTrait;
 
 /**
  * State Busy
  * @mixin ClassicPHP7Runner
  */
-class Busy extends AbstractState
+class Busy implements StateInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    private function doReset(): RunnerInterface
+    use StateTrait;
+
+    private function doReset()
     {
-        $this->currentTask = null;
-        $this->currentResult = null;
-        $this->currentManager = null;
+        /**
+         * {@inheritdoc}
+         */
+        return function(): RunnerInterface {
+            $this->currentTask = null;
+            $this->currentResult = null;
+            $this->currentManager = null;
 
-        $this->updateStates();
+            $this->updateStates();
 
-        return $this;
+            return $this;
+        };
     }
 
-    private function doCanYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
+    private function doCanYouExecute()
     {
-        $manager->taskRejected($this, $task);
+        /**
+         * {@inheritdoc}
+         */
+        return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
+            $manager->taskRejected($this, $task);
 
-        return $this;
+            return $this;
+        };
     }
 
     private function run()
     {
-        $this->currentManager->pushStatus($this, new Status('Executing'));
-        $timeBefore = \microtime(true)*1000;
+        return function () {
+            $this->currentManager->pushStatus($this, new Status('Executing'));
+            $timeBefore = \microtime(true) * 1000;
 
-        $output = '';$this->currentManager->pushStatus($this, new Status('Executed'));
-        $error = '';
-        try {
-            $output = eval($this->currentTask->getCode()->getCode());
-        } catch (\Throwable $e) {
-            $error = $e->getMessage();
-        }
+            $output = '';
+            $this->currentManager->pushStatus($this, new Status('Executed'));
+            $error = '';
+            try {
+                $output = eval($this->currentTask->getCode()->getCode());
+            } catch (\Throwable $e) {
+                $error = $e->getMessage();
+            }
 
-        $timeAfter = \microtime(true)*1000;
+            $timeAfter = \microtime(true) * 1000;
 
-        $time = $timeAfter - $timeBefore;
+            $time = $timeAfter - $timeBefore;
 
-        $this->currentResult = new TextResult($output, $error, $this->getVersion(), \memory_get_usage(true), $time);
+            $this->currentResult = new TextResult($output, $error, $this->getVersion(), \memory_get_usage(true), $time);
 
-        $this->currentManager->pushStatus($this, new Status('Executed'));
-        $this->currentManager->pushResult($this, $this->currentResult);
+            $this->currentManager->pushStatus($this, new Status('Executed'));
+            $this->currentManager->pushResult($this, $this->currentResult);
+        };
     }
 }

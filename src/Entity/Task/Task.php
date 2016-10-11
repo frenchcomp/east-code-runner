@@ -36,9 +36,8 @@ use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotNull;
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNull;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
 use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
-use Teknoo\States\Proxy\IntegratedInterface;
-use Teknoo\Bundle\StatesBundle\Entity\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
+use Teknoo\States\Proxy\ProxyTrait;
 
 /**
  * Class Task
@@ -47,9 +46,9 @@ use Teknoo\States\Proxy\ProxyInterface;
  * @method Task doSetCode(CodeInterface $code)
  * @method Task doRegisterUrl(string $taskUrl)
  */
-class Task implements ProxyInterface, IntegratedInterface, TaskInterface, AutomatedInterface
+class Task implements ProxyInterface, TaskInterface, AutomatedInterface
 {
-    use IntegratedTrait,
+    use ProxyTrait,
         AutomatedTrait;
 
     /**
@@ -107,10 +106,20 @@ class Task implements ProxyInterface, IntegratedInterface, TaskInterface, Automa
     {
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
-        //Call the startup factory to initialize this proxy
-        $this->initializeObjectWithFactory();
         //Initialize tests
         $this->updateStates();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function statesListDeclaration(): array
+    {
+        return [
+            Executed::class,
+            Registered::class,
+            Unregistered::class
+        ];
     }
 
     /**

@@ -38,10 +38,9 @@ use Teknoo\States\Proxy\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
-class ClassicPHP7Runner implements ProxyInterface, IntegratedInterface, AutomatedInterface, RunnerInterface
+class ClassicPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInterface
 {
     use ProxyTrait,
-        IntegratedTrait,
         AutomatedTrait;
 
     /**
@@ -108,9 +107,18 @@ class ClassicPHP7Runner implements ProxyInterface, IntegratedInterface, Automate
 
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
-        //Call the startup factory to initialize this proxy
-        $this->initializeObjectWithFactory();
         $this->updateStates();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function statesListDeclaration(): array
+    {
+        return [
+            Awaiting::class,
+            Busy::class
+        ];
     }
 
     /**

@@ -29,101 +29,115 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
 use Teknoo\States\State\AbstractState;
+use Teknoo\States\State\StateInterface;
+use Teknoo\States\State\StateTrait;
 
 /**
  * State Awaiting
  * @mixin ClassicPHP7Runner
  */
-class Awaiting extends AbstractState
+class Awaiting implements StateInterface
 {
-    private function checkRequirements(PHPCode $code)
+    use StateTrait;
+
+    private function checkRequirements()
     {
-        $capabilities = $this->getCapabilities();
+        return function (PHPCode $code) {
+            $capabilities = $this->getCapabilities();
 
-        foreach ($code->getNeededPackages() as $package) {
-            $packageFound = false;
+            foreach ($code->getNeededPackages() as $package) {
+                $packageFound = false;
 
-            /**
-             * @var CapabilityInterface $capability
-             */
-            foreach ($capabilities as $capability) {
-                if ('package' == $capability->getType() && $package == $capability) {
-                    $packageFound = true;
-                    break;
+                /**
+                 * @var CapabilityInterface $capability
+                 */
+                foreach ($capabilities as $capability) {
+                    if ('package' == $capability->getType() && $package == $capability) {
+                        $packageFound = true;
+                        break;
+                    }
+                }
+
+                if (false === $packageFound) {
+                    throw new \RuntimeException("Package $package is not available");
                 }
             }
+        };
+    }
 
-            if (false === $packageFound) {
-                throw new \RuntimeException("Package $package is not available");
+    private function rejectTask()
+    {
+        /**
+         * @param RunnerManagerInterface $manager
+         * @param TaskInterface $task
+         */
+        return function (RunnerManagerInterface $manager, TaskInterface $task) {
+            $manager->taskRejected($this, $task);
+
+            $this->updateStates();
+        };
+    }
+
+    private function acceptTask()
+    {
+        /**
+         * @param RunnerManagerInterface $manager
+         * @param TaskInterface $task
+         */
+        return function (RunnerManagerInterface $manager, TaskInterface $task) {
+            $this->currentTask = $task;
+            $this->currentResult = null;
+            $this->currentManager = $manager;
+
+            $manager->taskAccepted($this, $task);
+
+            $this->currentManager->pushStatus($this, new Status('Registered'));
+
+            $this->updateStates();
+        };
+    }
+
+    private function doCanYouExecute()
+    {
+        /**
+         * @param RunnerManagerInterface $manager
+         * @param TaskInterface $task
+         * @return RunnerInterface
+         */
+        return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
+            $code = $task->getCode();
+
+            if (!$code instanceof PHPCode) {
+                $this->rejectTask($manager, $task);
+
+                return $this;
             }
-        }
-    }
 
-    /**
-     * @param RunnerManagerInterface $manager
-     * @param TaskInterface $task
-     */
-    private function rejectTask(RunnerManagerInterface $manager, TaskInterface $task)
-    {
-        $manager->taskRejected($this, $task);
+            try {
+                $this->checkRequirements($code);
+            } catch (\Throwable $t) {
+                $this->rejectTask($manager, $task);
 
-        $this->updateStates();
-    }
+                return $this;
+            }
 
-    /**
-     * @param RunnerManagerInterface $manager
-     * @param TaskInterface $task
-     */
-    private function acceptTask(RunnerManagerInterface $manager, TaskInterface $task)
-    {
-        $this->currentTask = $task;
-        $this->currentResult = null;
-        $this->currentManager = $manager;
+            $this->acceptTask($manager, $task);
 
-        $manager->taskAccepted($this, $task);
+            $this->updateStates();
 
-        $this->currentManager->pushStatus($this, new Status('Registered'));
-
-        $this->updateStates();
-    }
-
-    /**
-     * @param RunnerManagerInterface $manager
-     * @param TaskInterface $task
-     * @return RunnerInterface
-     */
-    private function doCanYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
-    {
-        $code = $task->getCode();
-
-        if (!$code instanceof PHPCode) {
-            $this->rejectTask($manager, $task);
+            $this->run();
 
             return $this;
-        }
-
-        try {
-            $this->checkRequirements($code);
-        } catch (\Throwable $t) {
-            $this->rejectTask($manager, $task);
-
-            return $this;
-        }
-
-        $this->acceptTask($manager, $task);
-
-        $this->updateStates();
-
-        $this->run();
-
-        return $this;
+        };
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    private function doReset(): RunnerInterface
+    private function doReset()
     {
-        return $this;
+        /**
+         * {@inheritdoc}
+         */
+        return function (): RunnerInterface {
+            return $this;
+        };
     }
 }

@@ -21,6 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner;
 
+use Sluggable\Fixture\Issue104\Bus;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States\Awaiting;
@@ -38,10 +39,9 @@ use Teknoo\States\Proxy\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
-class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, AutomatedInterface, RunnerInterface
+class RemoteDockerPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInterface
 {
     use ProxyTrait,
-        IntegratedTrait,
         AutomatedTrait;
 
     /**
@@ -98,8 +98,17 @@ class RemoteDockerPHP7Runner implements ProxyInterface, IntegratedInterface, Aut
 
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
-        //Call the startup factory to initialize this proxy
-        $this->initializeObjectWithFactory();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function statesListDeclaration(): array
+    {
+        return [
+            Awaiting::class,
+            Busy::class
+        ];
     }
 
     /**

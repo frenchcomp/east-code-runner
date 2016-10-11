@@ -29,10 +29,10 @@
         "stof/doctrine-extensions-bundle": "~1.0",
         "gedmo/doctrine-extensions": "~2.4",
         "teknoo/immutable": "^0.0.1",
-        "teknoo/east-framework": "^0.0.1",
-        "teknoo/states": "^2.1.0",
-        "teknoo/states-bundle": "^2.2.2",
-        "teknoo/states-life-cycle": "^1.0.2"
+        "teknoo/east-framework": "^0.0.4-alpha1",
+        "teknoo/states": "^3.0.0-alpha1",
+        "teknoo/states-bundle": "^3.0.0-alpha1",
+        "teknoo/states-life-cycle": "^2.0.0-alpha1"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.4",

@@ -31,8 +31,6 @@ use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
-use Teknoo\States\Proxy\IntegratedInterface;
-use Teknoo\States\Proxy\IntegratedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
@@ -46,10 +44,9 @@ use Teknoo\States\Proxy\ProxyTrait;
  * @method RunnerInterface selectRunnerToExecuteTask(TaskInterface  $task)
  * @method RunnerManager registerTask(RunnerInterface $runner, TaskInterface  $task, TaskManagerInterface $manager)
  */
-class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManagerInterface
+class RunnerManager implements ProxyInterface, RunnerManagerInterface
 {
-    use ProxyTrait,
-        IntegratedTrait;
+    use ProxyTrait;
 
     /**
      * Class name of the factory to use in set up to initialize this object in this construction.
@@ -97,10 +94,19 @@ class RunnerManager implements ProxyInterface, IntegratedInterface, RunnerManage
         $this->tasksManagerByTasks = $tasksManagerByTasks;
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
-        //Call the startup factory to initialize this proxy
-        $this->initializeObjectWithFactory();
         //Initialize state
         $this->enableState(Running::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function statesListDeclaration(): array
+    {
+        return [
+            Running::class,
+            Selecting::class
+        ];
     }
 
     /**

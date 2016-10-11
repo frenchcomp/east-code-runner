@@ -24,7 +24,8 @@ namespace Teknoo\East\CodeRunnerBundle\Entity\Task\States;
 use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
-use Teknoo\States\State\AbstractState;
+use Teknoo\States\State\StateInterface;
+use Teknoo\States\State\StateTrait;
 
 /**
  * State Unregistered
@@ -33,39 +34,47 @@ use Teknoo\States\State\AbstractState;
  * @property string $url
  * @property CodeInterface $code
  */
-class Unregistered extends AbstractState
+class Unregistered implements StateInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    private function doSetCode(CodeInterface $code): Task
+    use StateTrait;
+
+    private function doSetCode()
     {
-        $this->code = $code;
-
-        $this->updateStates();
-
-        return $this;
-    }
-
         /**
-     * {@inheritdoc}
-     */
-    private function doRegisterUrl(string $taskUrl): Task
-    {
-        $this->url = $taskUrl;
+         * {@inheritdoc}
+         */
+        return function (CodeInterface $code): Task {
+            $this->code = $code;
 
-        $this->updateStates();
+            $this->updateStates();
 
-        return $this;
+            return $this;
+        };
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    private function doRegisterStatus(StatusInterface $status): Task
+    private function doRegisterUrl()
     {
-        $this->status = $status;
+        /**
+         * {@inheritdoc}
+         */
+        return function (string $taskUrl): Task {
+            $this->url = $taskUrl;
 
-        return $this;
+            $this->updateStates();
+
+            return $this;
+        };
+    }
+
+    private function doRegisterStatus()
+    {
+        /**
+         * {@inheritdoc}
+         */
+        return function (StatusInterface $status): Task {
+            $this->status = $status;
+
+            return $this;
+        };
     }
 }

@@ -26,6 +26,8 @@ use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
+use Teknoo\States\State\StateInterface;
+use Teknoo\States\State\StateTrait;
 
 /**
  * Class Selecting
@@ -34,66 +36,76 @@ use Teknoo\States\State\AbstractState;
  * @property RunnerInterface $runnerAccepted
  * @mixin RunnerManager
  */
-class Selecting extends AbstractState
+class Selecting implements StateInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    private function doTaskAccepted(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
-    {
-        $this->taskAcceptedByARunner = true;
-        $this->runnerAccepted = $runner;
+    use StateTrait;
 
-        return $this;
+    private function doTaskAccepted()
+    {
+        /**
+         * {@inheritdoc}
+         */
+        return function (RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface {
+            $this->taskAcceptedByARunner = true;
+            $this->runnerAccepted = $runner;
+
+            return $this;
+        };
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    private function doTaskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface
+    private function doTaskRejected()
     {
-        $this->taskAcceptedByARunner = false;
+        /**
+         * {@inheritdoc}
+         */
+        return function (RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface {
+            $this->taskAcceptedByARunner = false;
 
-        return $this;
+            return $this;
+        };
     }
 
-    /**
-     * Method to browse all available runner, until any runner has accepted
-     * @return \Generator
-     */
     private function browseRunners()
     {
-        foreach ($this->runners as $runner) {
-            yield $runner;
+        /**
+         * Method to browse all available runner, until any runner has accepted
+         * @return \Generator
+         */
+        return function () {
+            foreach ($this->runners as $runner) {
+                yield $runner;
 
-            if (true === $this->taskAcceptedByARunner) {
-                break;
+                if (true === $this->taskAcceptedByARunner) {
+                    break;
+                }
             }
-        }
+        };
     }
 
-    /**
-     * To find and select the runner able to execute a task. If no runner found, the method throws the exception
-     * \DomainException
-     * @param TaskInterface $task
-     * @return RunnerInterface
-     * @throws \DomainException
-     */
-    private function selectRunnerToExecuteTask(TaskInterface $task): RunnerInterface
+    private function selectRunnerToExecuteTask()
     {
-        $this->taskAcceptedByARunner = false;
+        /**
+         * To find and select the runner able to execute a task. If no runner found, the method throws the exception
+         * \DomainException
+         * @param TaskInterface $task
+         * @return RunnerInterface
+         * @throws \DomainException
+         */
+        return function (TaskInterface $task): RunnerInterface {
+            $this->taskAcceptedByARunner = false;
 
-        foreach ($this->browseRunners() as $runner) {
-            /**
-             * @var RunnerInterface $runner
-             */
-            $runner->canYouExecute($this, $task);
-        }
+            foreach ($this->browseRunners() as $runner) {
+                /**
+                 * @var RunnerInterface $runner
+                 */
+                $runner->canYouExecute($this, $task);
+            }
 
-        if (false === $this->taskAcceptedByARunner) {
-            throw new \DomainException('No runner available to execute the task');
-        }
+            if (false === $this->taskAcceptedByARunner) {
+                throw new \DomainException('No runner available to execute the task');
+            }
 
-        return $this->runnerAccepted;
+            return $this->runnerAccepted;
+        };
     }
 }
