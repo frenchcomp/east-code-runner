@@ -19,26 +19,39 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
+namespace Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States;
 
-use Teknoo\East\CodeRunnerBundle\Runner\Capability;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\States\State\AbstractState;
 
-class RemoteDockerPHP7RunnerTest extends AbstractRunnerTest
+/**
+ * Class Awaiting
+ * @mixin RemotePHP7Runner
+ */
+class Awaiting extends AbstractState
 {
-    public function buildRunner(): RunnerInterface
+    /**
+     * {@inheritdoc}
+     */
+    private function doCanYouExecute()
     {
-        return new RemoteDockerPHP7Runner('RemoteDockerPHP7Runner1', 'RemoteDockerPHP7Runner', 'PHP7.0', [new Capability('feature', 'PHP7')]);
+        return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
+
+
+            return $this;
+        };
     }
 
-    public function testCanYouExecuteCodeNotRunnableByTHisRunner()
+    /**
+     * {@inheritdoc}
+     */
+    private function doReset()
     {
-        $this->fail();
-    }
-
-    public function testCanYouExecuteCodeInvalid()
-    {
-        $this->fail();
+        return function() : RunnerInterface {
+            return $this;
+        };
     }
 }

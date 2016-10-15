@@ -23,7 +23,7 @@ parameters:
   teknoo.east.bundle.coderunner.registry.tasks_manager_by_task.class: 'Teknoo\East\CodeRunnerBundle\Registry\TasksManagerByTasksRegistry'
 
   #Runner
-  teknoo.east.bundle.coderunner.runner.remote_docker_php7.class: 'Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner'
+  teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner'
   teknoo.east.bundle.coderunner.runner.capability.class: 'Teknoo\East\CodeRunnerBundle\Runner\Capability'
 
   #Service
@@ -91,8 +91,8 @@ services:
     private: true
     shared: false
 
-  teknoo.east.bundle.coderunner.runner.remote_docker_php7:
-    class: '%teknoo.east.bundle.coderunner.runner.remote_docker_php7.class%'
+  teknoo.east.bundle.coderunner.runner.remote_php7:
+    class: '%teknoo.east.bundle.coderunner.runner.remote_php7.class%'
     private: false
     calls:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]

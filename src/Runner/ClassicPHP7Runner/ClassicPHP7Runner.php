@@ -84,7 +84,7 @@ class ClassicPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInt
     private $forbiddenMethodsList = [];
 
     /**
-     * RemoteDockerPHP7Runner constructor.
+     * RemotePHP7Runner constructor.
      * Initialize States behavior.
      * @param string $identifier
      * @param string $name

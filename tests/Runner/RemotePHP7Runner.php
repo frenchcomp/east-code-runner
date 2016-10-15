@@ -19,20 +19,26 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States;
+namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
 
+use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\States\State\AbstractState;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
 
-class Awaiting extends AbstractState
+class RemotePHP7RunnerTest extends AbstractRunnerTest
 {
-    /**
-     * {@inheritdoc}
-     */
-    private function doReset()
+    public function buildRunner(): RunnerInterface
     {
-        return function() : RunnerInterface {
-            return $this;
-        };
+        return new RemotePHP7Runner('RemotePHP7Runner1', 'RemotePHP7Runner', 'PHP7.0', [new Capability('feature', 'PHP7')]);
+    }
+
+    public function testCanYouExecuteCodeNotRunnableByTHisRunner()
+    {
+        $this->fail();
+    }
+
+    public function testCanYouExecuteCodeInvalid()
+    {
+        $this->fail();
     }
 }

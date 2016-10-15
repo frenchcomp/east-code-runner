@@ -19,11 +19,11 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States;
+namespace Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\RemoteDockerPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\State\AbstractState;
 use Teknoo\States\State\StateInterface;
@@ -31,7 +31,7 @@ use Teknoo\States\State\StateTrait;
 
 /**
  * State Busy
- * @mixin RemoteDockerPHP7Runner
+ * @mixin RemotePHP7Runner
  */
 class Busy implements StateInterface
 {
@@ -43,7 +43,7 @@ class Busy implements StateInterface
     private function doCanYouExecute()
     {
         return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
-            $manager->taskRejected($this, $task);
+
 
             return $this;
         };

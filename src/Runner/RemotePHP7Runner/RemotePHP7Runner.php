@@ -19,12 +19,12 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner;
+namespace Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
-use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States\Awaiting;
-use Teknoo\East\CodeRunnerBundle\Runner\RemoteDockerPHP7Runner\States\Busy;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Awaiting;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Busy;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
@@ -36,7 +36,7 @@ use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
-class RemoteDockerPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInterface
+class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInterface
 {
     use ProxyTrait,
         AutomatedTrait;
@@ -72,7 +72,7 @@ class RemoteDockerPHP7Runner implements ProxyInterface, AutomatedInterface, Runn
     private $currentResult;
 
     /**
-     * RemoteDockerPHP7Runner constructor.
+     * RemotePHP7Runner constructor.
      * Initialize States behavior.
      * @param string $identifier
      * @param string $name
@@ -103,9 +103,9 @@ class RemoteDockerPHP7Runner implements ProxyInterface, AutomatedInterface, Runn
 
     /**
      * @param Capability $capability
-     * @return RemoteDockerPHP7Runner
+     * @return RemotePHP7Runner
      */
-    public function addCapability(Capability $capability): RemoteDockerPHP7Runner
+    public function addCapability(Capability $capability): RemotePHP7Runner
     {
         $this->capabilities[] = $capability;
 
