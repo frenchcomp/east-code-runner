@@ -19,23 +19,24 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States;
+namespace Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
-use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 use Teknoo\States\State\AbstractState;
 use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Busy
+ * State Awaiting
  * @mixin ClassicPHP7Runner
  */
-class Busy implements StateInterface
+class Awaiting implements StateInterface
 {
     use StateTrait;
 
@@ -44,13 +45,7 @@ class Busy implements StateInterface
         /**
          * {@inheritdoc}
          */
-        return function(): RunnerInterface {
-            $this->currentTask = null;
-            $this->currentResult = null;
-            $this->currentManager = null;
-
-            $this->updateStates();
-
+        return function (): RunnerInterface {
             return $this;
         };
     }
@@ -58,33 +53,12 @@ class Busy implements StateInterface
     private function doExecute()
     {
         return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
-            throw new \RuntimeException('Runner unavailable');
-        };
-    }
+            $this->currentTask = $task;
+            $this->updateStates();
 
-    private function run()
-    {
-        return function () {
-            $this->currentManager->pushStatus($this, new Status('Executing'));
-            $timeBefore = \microtime(true) * 1000;
+            $this->taskProducer->publish(json_encode($task));
 
-            $output = '';
-            $this->currentManager->pushStatus($this, new Status('Executed'));
-            $error = '';
-            try {
-                $output = eval($this->currentTask->getCode()->getCode());
-            } catch (\Throwable $e) {
-                $error = $e->getMessage();
-            }
-
-            $timeAfter = \microtime(true) * 1000;
-
-            $time = $timeAfter - $timeBefore;
-
-            $this->currentResult = new TextResult($output, $error, $this->getVersion(), \memory_get_usage(true), $time);
-
-            $this->currentManager->pushStatus($this, new Status('Executed'));
-            $this->currentManager->pushResult($this, $this->currentResult);
+            return $this;
         };
     }
 }

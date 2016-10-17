@@ -49,4 +49,18 @@ class Awaiting implements StateInterface
             return $this;
         };
     }
+
+    private function doExecute()
+    {
+        return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
+            $this->currentTask = $task;
+            $this->currentResult = null;
+            $this->currentManager = $manager;
+
+            $this->updateStates();
+            $this->run();
+
+            return $this;
+        };
+    }
 }

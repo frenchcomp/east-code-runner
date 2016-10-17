@@ -21,18 +21,26 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner;
 
-use OldSound\RabbitMqBundle\RabbitMq\Consumer;
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Awaiting;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Busy;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Assertion;
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsInstanceOf;
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotInstanceOf;
+use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedInterface;
+use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
+use Teknoo\States\Proxy\ProxyInterface;
+use Teknoo\States\Proxy\ProxyTrait;
 
-class RemotePHP7Runner implements RunnerInterface
+class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInterface
 {
+    use ProxyTrait,
+        AutomatedTrait,
+        CheckRequirementsTrait;
+
     /**
      * @var string
      */
@@ -59,25 +67,14 @@ class RemotePHP7Runner implements RunnerInterface
     private $currentTask;
 
     /**
-     * @var ResultInterface
-     */
-    private $currentResult;
-
-    /**
      * @var Producer
      */
     private $taskProducer;
 
     /**
-     * @var Consumer
-     */
-    private $resultConsumer;
-
-    /**
      * RemotePHP7Runner constructor.
      * Initialize States behavior.
      * @param Producer $taskProducer
-     * @param Consumer $resultConsumer
      * @param string $identifier
      * @param string $name
      * @param string $version
@@ -85,18 +82,31 @@ class RemotePHP7Runner implements RunnerInterface
      */
     public function __construct(
         Producer $taskProducer,
-        Consumer $resultConsumer,
         string $identifier,
         string $name,
         string $version,
         array $capabilities
     ) {
         $this->taskProducer = $taskProducer;
-        $this->resultConsumer = $resultConsumer;
         $this->identifier = $identifier;
         $this->name = $name;
         $this->version = $version;
         $this->capabilities = $capabilities;
+
+        //Call the method of the trait to initialize local attributes of the proxy
+        $this->initializeProxy();
+        $this->updateStates();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function statesListDeclaration(): array
+    {
+        return [
+            Awaiting::class,
+            Busy::class
+        ];
     }
 
     /**
@@ -147,14 +157,22 @@ class RemotePHP7Runner implements RunnerInterface
      */
     public function reset(): RunnerInterface
     {
-        // TODO: Implement reset() method.
+        return $this;
+    }
+
+    public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
+    {
+        return $this->doExecute($manager, $task);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function canYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
+    public function getStatesAssertions(): array
     {
-        // TODO: Implement canYouExecute() method.
+        return [
+            (new Assertion(Awaiting::class))->with('currentTask', new IsNotInstanceOf(TaskInterface::class)),
+            (new Assertion(Busy::class))->with('currentTask', new IsInstanceOf(TaskInterface::class)),
+        ];
     }
 }
