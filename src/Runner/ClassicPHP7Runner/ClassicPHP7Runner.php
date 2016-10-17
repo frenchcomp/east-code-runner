@@ -25,9 +25,12 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States\Awaiting;
 use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States\Busy;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
+use Teknoo\East\CodeRunnerBundle\Task\Status;
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Assertion;
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsInstanceOf;
 use Teknoo\States\LifeCycle\StatedClass\Automated\Assertion\Property\IsNotInstanceOf;
@@ -77,11 +80,6 @@ class ClassicPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInt
      * @var RunnerManagerInterface
      */
     private $currentManager;
-
-    /**
-     * @var string[]
-     */
-    private $forbiddenMethodsList = [];
 
     /**
      * RemotePHP7Runner constructor.
@@ -165,12 +163,79 @@ class ClassicPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInt
         return $this->doReset();
     }
 
+    private function checkRequirements(PHPCode $code) {
+        $capabilities = $this->getCapabilities();
+
+        foreach ($code->getNeededPackages() as $package) {
+            $packageFound = false;
+
+            /**
+             * @var CapabilityInterface $capability
+             */
+            foreach ($capabilities as $capability) {
+                if ('package' == $capability->getType() && $package == $capability) {
+                    $packageFound = true;
+                    break;
+                }
+            }
+
+            if (false === $packageFound) {
+                throw new \RuntimeException("Package $package is not available");
+            }
+        }
+    }
+
+    private function rejectTask(RunnerManagerInterface $manager, TaskInterface $task)
+    {
+        $manager->taskRejected($this, $task);
+
+        $this->updateStates();
+    }
+
+    private function acceptTask(RunnerManagerInterface $manager, TaskInterface $task) {
+        $this->currentTask = $task;
+        $this->currentResult = null;
+        $this->currentManager = $manager;
+
+        $manager->taskAccepted($this, $task);
+
+        $this->currentManager->pushStatus($this, new Status('Registered'));
+
+        $this->updateStates();
+    }
+
     /**
      * {@inheritdoc}
      */
     public function canYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
     {
-        return $this->doCanYouExecute($manager, $task);
+        $code = $task->getCode();
+
+        if (!$code instanceof PHPCode) {
+            $this->rejectTask($manager, $task);
+
+            return $this;
+        }
+
+        try {
+            $this->checkRequirements($code);
+        } catch (\Throwable $t) {
+            $this->rejectTask($manager, $task);
+
+            return $this;
+        }
+
+        $this->acceptTask($manager, $task);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
+    {
+        return $this->doExecute($manager, $task);
     }
 
     /**

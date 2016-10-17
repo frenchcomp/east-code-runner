@@ -55,18 +55,6 @@ class Busy implements StateInterface
         };
     }
 
-    private function doCanYouExecute()
-    {
-        /**
-         * {@inheritdoc}
-         */
-        return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
-            $manager->taskRejected($this, $task);
-
-            return $this;
-        };
-    }
-
     private function run()
     {
         return function () {
