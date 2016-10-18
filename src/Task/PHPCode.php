@@ -68,7 +68,7 @@ class PHPCode implements CodeInterface, \JsonSerializable
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function jsonSerialize(): array
     {
@@ -80,6 +80,7 @@ class PHPCode implements CodeInterface, \JsonSerializable
     }
 
     /**
+     * Static method to reconstruct a PHPCode instance from its json representation
      * @param array $values
      * @return PHPCode
      */

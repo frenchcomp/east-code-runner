@@ -46,12 +46,23 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
     private $logger;
 
     /**
+     * Method to convert the JSON representation of a StatusInterface object to an instance of this class
      * @param AMQPMessage $message
      * @return Status
      */
     private function extractStatus(AMQPMessage $message): Status
     {
-        return Status::jsonDeserialize(json_decode($message->body, true));
+        $decodedBody = json_decode($message->body, true);
+        if (empty($decodedBody['class']) || !is_callable([$decodedBody['class'], 'jsonDeserialize'])) {
+            throw new \RuntimeException('Error, the status representation has no classname');
+        }
+
+        /**
+         * @var $statusClassName Status::class
+         */
+        $statusClassName = $decodedBody['class'];
+
+        return $statusClassName::jsonDeserialize($decodedBody);
     }
 
     /**

@@ -53,7 +53,7 @@ class Status implements StatusInterface, \JsonSerializable
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function jsonSerialize(): array
     {
@@ -64,6 +64,7 @@ class Status implements StatusInterface, \JsonSerializable
     }
 
     /**
+     * Static method to reconstruct a Status instance from its json representation
      * @param array $values
      * @return Status
      */

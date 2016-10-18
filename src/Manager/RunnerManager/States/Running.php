@@ -57,9 +57,12 @@ class Running implements StateInterface
             $runners[$runner->getIdentifier()] = $runner;
             $this->runners = $runners;
 
-            $taskOnThisRunner = $this->tasksByRunner[$runner];
-            if ($taskOnThisRunner instanceof TaskInterface) {
-                $runner->rememberYourCurrentTask($taskOnThisRunner);
+            $runnerIdentifier = $runner->getIdentifier();
+            if (isset($this->tasksByRunner[$runnerIdentifier])) {
+                $taskOnThisRunner = $this->tasksByRunner[$runnerIdentifier];
+                if ($taskOnThisRunner instanceof TaskInterface) {
+                    $runner->rememberYourCurrentTask($taskOnThisRunner);
+                }
             }
 
             return $this;
@@ -167,12 +170,14 @@ class Running implements StateInterface
     public function loadNextTaskFor()
     {
         return function (RunnerInterface $runner): RunnerManager {
-            if (!$this->tasksByRunner[$runner] instanceof TaskInterface) {
+            $runnerIdentifier = $runner->getIdentifier();
+            if (!isset($this->tasksByRunner[$runnerIdentifier])
+                || !$this->tasksByRunner[$runnerIdentifier] instanceof TaskInterface) {
                 $taskStandBy = $this->tasksStandbyRegistry->dequeue($runner);
 
                 if ($taskStandBy instanceof TaskInterface) {
                     $runner->execute($this, $taskStandBy);
-                    $this->tasksByRunner[$runner] = $taskStandBy;
+                    $this->tasksByRunner[$runnerIdentifier] = $taskStandBy;
                 }
             }
 

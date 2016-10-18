@@ -27,7 +27,7 @@ use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Running;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
-use Teknoo\East\CodeRunnerBundle\Registry\TasksStandbyRegistry;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
@@ -65,7 +65,7 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
     private $tasksManagerByTasks;
 
     /**
-     * @var TasksStandbyRegistry
+     * @var TasksStandbyRegistryInterface
      */
     private $tasksStandbyRegistry;
 
@@ -84,12 +84,12 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
      * Initialize States behavior.
      * @param TasksByRunnerRegistryInterface $tasksByRunner
      * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasks
-     * @param TasksStandbyRegistry $tasksStandbyRegistry
+     * @param TasksStandbyRegistryInterface $tasksStandbyRegistry
      */
     public function __construct(
         TasksByRunnerRegistryInterface $tasksByRunner,
         TasksManagerByTasksRegistryInterface $tasksManagerByTasks,
-        TasksStandbyRegistry $tasksStandbyRegistry
+        TasksStandbyRegistryInterface $tasksStandbyRegistry
     ) {
         $this->tasksByRunner = $tasksByRunner;
         $this->tasksManagerByTasks = $tasksManagerByTasks;

@@ -25,11 +25,13 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksStandbyRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 /**
  * Test RunnerManagerTest
  * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager
- * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\Factory
  * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Running
  * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting
  */
@@ -44,6 +46,11 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
      * @var TasksManagerByTasksRegistryInterface
      */
     private $tasksManagerByTasks;
+
+    /**
+     * @var TasksStandbyRegistryInterface
+     */
+    private $tasksStandbyRegistry;
 
     /**
      * @return TasksByRunnerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -128,13 +135,50 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
     }
 
     /**
+     * @return TasksStandbyRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getTasksStandbyRegistryMock(): TasksStandbyRegistryInterface
+    {
+        if (!$this->tasksStandbyRegistry instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->tasksStandbyRegistry = $this->createMock(TasksStandbyRegistryInterface::class);
+
+            $tasksStandbyRegistry = $this->tasksStandbyRegistry;
+            $queue = [];
+            $this->tasksStandbyRegistry
+                ->expects($this->any())
+                ->method('enqueue')
+                ->willReturnCallback(function (RunnerInterface $runner, TaskInterface $task)
+                use (&$queue, $tasksStandbyRegistry) {
+                    $queue[$runner->getIdentifier()][] = $task;
+                    return $tasksStandbyRegistry;
+            });
+
+            $tasksStandbyRegistry = $this->tasksStandbyRegistry;
+            $this->tasksStandbyRegistry
+                ->expects($this->any())
+                ->method('dequeue')
+                ->willReturnCallback(function (RunnerInterface $runner)
+                use (&$queue, $tasksStandbyRegistry) {
+                    if (empty($queue[$runner->getIdentifier()])) {
+                        return null;
+                    }
+
+                    return array_shift($queue[$runner->getIdentifier()]);
+            });
+        }
+
+        return $this->tasksStandbyRegistry;
+    }
+
+    /**
      * @return RunnerManagerInterface|RunnerManager
      */
     public function buildManager(): RunnerManagerInterface
     {
         return new RunnerManager(
             $this->getTasksByRunnerMock(),
-            $this->getTasksManagerByTasksMock()
+            $this->getTasksManagerByTasksMock(),
+            $this->getTasksStandbyRegistryMock()
         );
     }
 }

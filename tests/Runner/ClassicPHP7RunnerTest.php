@@ -61,7 +61,11 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
         $manager->expects(self::once())
             ->method('taskAccepted')
             ->with($runner, $task)
-            ->willReturnSelf();
+            ->willReturnCallback(function (RunnerInterface $runner, TaskInterface $task) use ($manager) {
+                $runner->execute($manager, $task);
+
+                return $manager;
+            });
 
         $manager->expects(self::never())
             ->method('taskRejected');
@@ -161,7 +165,11 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
         $manager->expects(self::once())
             ->method('taskAccepted')
             ->with($runner, $task)
-            ->willReturnSelf();
+            ->willReturnCallback(function (RunnerInterface $runner, TaskInterface $task) use ($manager) {
+                $runner->execute($manager, $task);
+
+                return $manager;
+            });
 
         $manager->expects(self::never())
             ->method('taskRejected');

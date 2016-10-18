@@ -67,8 +67,6 @@ trait CheckRequirementsTrait
     {
         $manager->taskAccepted($this, $task);
 
-        $this->currentManager->pushStatus($this, new Status('Accepted'));
-
         $this->updateStates();
     }
 

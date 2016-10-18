@@ -113,7 +113,7 @@ class TextResult implements ResultInterface, \JsonSerializable
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function jsonSerialize(): array
     {
@@ -128,6 +128,7 @@ class TextResult implements ResultInterface, \JsonSerializable
     }
 
     /**
+     * Static method to reconstruct a TextResult instance from its json representation
      * @param array $values
      * @return TextResult
      */
@@ -137,6 +138,12 @@ class TextResult implements ResultInterface, \JsonSerializable
             throw new \InvalidArgumentException('class is not matching with the serialized values');
         }
 
-        return new static($values['output'], $values['errors'], $values['versions'], $values['memorySize'], $values['timeExecution']);
+        return new static(
+            $values['output'],
+            $values['errors'],
+            $values['versions'],
+            $values['memorySize'],
+            $values['timeExecution']
+        );
     }
 }
