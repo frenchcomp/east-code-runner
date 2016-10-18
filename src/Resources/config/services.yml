@@ -4,15 +4,18 @@ parameters:
   teknoo.east.bundle.coderunner.entity.task.class: 'Teknoo\East\CodeRunnerBundle\Entity\Task\Task'
   teknoo.east.bundle.coderunner.entity.task_execution.class: 'Teknoo\East\CodeRunnerBundle\Entity\TaskExecution'
   teknoo.east.bundle.coderunner.entity.task_registration.class: 'Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration'
+  teknoo.east.bundle.coderunner.entity.task_standby.class: 'Teknoo\East\CodeRunnerBundle\Entity\TaskStandby'
 
   teknoo.east.bundle.coderunner.entity.task.name: 'TeknooEastCodeRunnerBundle:Task'
   teknoo.east.bundle.coderunner.entity.task_execution.name: 'TeknooEastCodeRunnerBundle:TaskExecution'
   teknoo.east.bundle.coderunner.entity.task_registration.name: 'TeknooEastCodeRunnerBundle:TaskRegistration'
+  teknoo.east.bundle.coderunner.entity.task_standby.name: 'TeknooEastCodeRunnerBundle:TaskStandby'
 
   #Repository
   teknoo.east.bundle.coderunner.repository.task.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRepository'
   teknoo.east.bundle.coderunner.repository.task_execution.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskExecutionRepository'
   teknoo.east.bundle.coderunner.repository.task_registration.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository'
+  teknoo.east.bundle.coderunner.repository.task_standby.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskStandbyRepository'
 
   #Manager
   teknoo.east.bundle.coderunner.manager.runners.class: 'Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager'
@@ -21,6 +24,7 @@ parameters:
   #Registry
   teknoo.east.bundle.coderunner.registry.tasks_by_runner.class: 'Teknoo\East\CodeRunnerBundle\Registry\TasksByRunnerRegistry'
   teknoo.east.bundle.coderunner.registry.tasks_manager_by_task.class: 'Teknoo\East\CodeRunnerBundle\Registry\TasksManagerByTasksRegistry'
+  teknoo.east.bundle.coderunner.registry.tasks_standby.class: 'Teknoo\East\CodeRunnerBundle\Registry\TasksStandbyRegistry'
 
   #Runner
   teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner'
@@ -32,21 +36,27 @@ parameters:
 services:
   #Repository
   teknoo.east.bundle.coderunner.repository.task:
-    class: '%teknoo.east.bundle.coderunner.repository.task%'
+    class: '%teknoo.east.bundle.coderunner.repository.task.class%'
     factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
     arguments: ['%teknoo.east.bundle.coderunner.entity.task.name%']
     private: true
 
   teknoo.east.bundle.coderunner.repository.task_execution:
-    class: '%teknoo.east.bundle.coderunner.repository.task_execution%'
+    class: '%teknoo.east.bundle.coderunner.repository.task_execution.class%'
     factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
     arguments: ['%teknoo.east.bundle.coderunner.entity.task_execution.name%']
     private: true
 
   teknoo.east.bundle.coderunner.repository.task_registration:
-    class: '%teknoo.east.bundle.coderunner.repository.task_registration%'
+    class: '%teknoo.east.bundle.coderunner.repository.task_registration.class%'
     factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
     arguments: ['%teknoo.east.bundle.coderunner.entity.task_registration.name%']
+    private: true
+
+  teknoo.east.bundle.coderunner.repository.task_standby:
+    class: '%teknoo.east.bundle.coderunner.repository.task_standby.class%'
+    factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
+    arguments: ['%teknoo.east.bundle.coderunner.entity.task_standby.name%']
     private: true
 
   #Registry
@@ -63,6 +73,14 @@ services:
     arguments:
       - '@teknoo.east.bundle.coderunner.service.dates'
       - '@teknoo.east.bundle.coderunner.repository.task_registration'
+      - '@doctrine.orm.entity_manager'
+    private: true
+
+  teknoo.east.bundle.coderunner.registry.tasks_standby:
+    class: '%teknoo.east.bundle.coderunner.registry.tasks_standby.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.service.dates'
+      - '@teknoo.east.bundle.coderunner.repository.task_standby'
       - '@doctrine.orm.entity_manager'
     private: true
 
@@ -109,6 +127,7 @@ services:
     arguments:
       - '@teknoo.east.bundle.coderunner.registry.tasks_by_runner'
       - '@teknoo.east.bundle.coderunner.registry.tasks_manager_by_task'
+      - '@teknoo.east.bundle.coderunner.registry.tasks_standby'
 
   teknoo.east.bundle.coderunner.manager.tasks:
     class: '%teknoo.east.bundle.coderunner.manager.tasks%'

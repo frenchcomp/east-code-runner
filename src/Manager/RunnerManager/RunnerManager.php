@@ -27,6 +27,7 @@ use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Running;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Registry\TasksStandbyRegistry;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
@@ -64,6 +65,11 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
     private $tasksManagerByTasks;
 
     /**
+     * @var TasksStandbyRegistry
+     */
+    private $tasksStandbyRegistry;
+
+    /**
      * @var bool
      */
     private $taskAcceptedByARunner = false;
@@ -78,13 +84,17 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
      * Initialize States behavior.
      * @param TasksByRunnerRegistryInterface $tasksByRunner
      * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasks
+     * @param TasksStandbyRegistry $tasksStandbyRegistry
      */
     public function __construct(
         TasksByRunnerRegistryInterface $tasksByRunner,
-        TasksManagerByTasksRegistryInterface $tasksManagerByTasks
+        TasksManagerByTasksRegistryInterface $tasksManagerByTasks,
+        TasksStandbyRegistry $tasksStandbyRegistry
     ) {
         $this->tasksByRunner = $tasksByRunner;
         $this->tasksManagerByTasks = $tasksManagerByTasks;
+        $this->tasksStandbyRegistry = $tasksStandbyRegistry;
+
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();
         //Initialize state
