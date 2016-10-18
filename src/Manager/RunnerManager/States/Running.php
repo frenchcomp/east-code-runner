@@ -26,6 +26,7 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
+use Teknoo\East\CodeRunnerBundle\Registry\TasksStandbyRegistry;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
@@ -39,6 +40,7 @@ use Teknoo\States\State\StateTrait;
  * @property RunnerInterface[] $runners
  * @property TasksByRunnerRegistryInterface|TaskInterface[] $tasksByRunner
  * @property TasksManagerByTasksRegistryInterface|TaskManagerInterface[] $tasksManagerByTasks
+ * @property TasksStandbyRegistry $tasksStandbyRegistry
  * @mixin RunnerManager
  */
 class Running implements StateInterface
@@ -150,7 +152,7 @@ class Running implements StateInterface
          * @return RunnerManager
          */
         return function (RunnerInterface $runner, TaskInterface $task, TaskManagerInterface $taskManager): RunnerManager {
-            $this->tasksByRunner[$runner->getIdentifier()] = $task;
+            $this->tasksStandbyRegistry->enqueue($runner, $task);
             $this->tasksManagerByTasks[$task->getUrl()] = $taskManager;
 
             return $this;

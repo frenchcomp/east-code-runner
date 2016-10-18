@@ -66,9 +66,9 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
 
     /**
      * @param RunnerInterface $runner
-     * @return null|TaskStandby
+     * @return null|Task
      */
-    private function getNextTaskStandBy(RunnerInterface $runner)
+    private function getNextTask(RunnerInterface $runner)
     {
         $runnerIdentifier = $runner->getIdentifier();
         $taskStandby = $this->taskStandbyRepository->fetchNextTaskStandby($runnerIdentifier);
@@ -77,7 +77,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
             return null;
         }
 
-        return $taskStandby;
+        return $taskStandby->getTask();
     }
 
     /**
@@ -106,7 +106,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function enqueue(RunnerInterface $runner, Task $task): TasksStandbyRegistryInterface
+    public function enqueue(RunnerInterface $runner, TaskInterface $task): TasksStandbyRegistryInterface
     {
         $taskStandby = $this->create($task, $runner);
         $this->save($taskStandby);
@@ -116,11 +116,11 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
 
     /**
      * @param RunnerInterface $runner
-     * @return null|TaskStandby
+     * @return null|TaskInterface
      */
     public function dequeue(RunnerInterface $runner)
     {
-        return $this->getNextTaskStandBy($runner);
+        return $this->getNextTask($runner);
     }
 
     /**

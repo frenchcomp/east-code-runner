@@ -21,23 +21,23 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Registry\Interfaces;
 
-use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 interface TasksStandbyRegistryInterface
 {
     /**
      * To add a task in standby list of a runner
      * @param RunnerInterface $runner
-     * @param Task $task
+     * @param TaskInterface $task
      * @return TasksStandbyRegistryInterface|self
      */
-    public function enqueue (RunnerInterface $runner, Task $task): TasksStandbyRegistryInterface;
+    public function enqueue (RunnerInterface $runner, TaskInterface $task): TasksStandbyRegistryInterface;
 
     /**
      * Dequeues a standby task for a runner. If there are no standby queue, the method must return null.
      * @param RunnerInterface $runner
-     * @return Task|null
+     * @return TaskInterface|null
      */
     public function dequeue(RunnerInterface $runner);
     
