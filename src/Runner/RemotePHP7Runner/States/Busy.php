@@ -24,6 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
 use Teknoo\East\CodeRunnerBundle\Task\TextResult;
@@ -33,7 +34,7 @@ use Teknoo\States\State\StateTrait;
 
 /**
  * State Busy
- * @mixin ClassicPHP7Runner
+ * @mixin RemotePHP7Runner
  */
 class Busy implements StateInterface
 {

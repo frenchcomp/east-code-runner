@@ -19,10 +19,12 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Runner;
+namespace Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner;
 
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Runner\Capability;
+use Teknoo\East\CodeRunnerBundle\Runner\CheckRequirementsTrait;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Awaiting;
 use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Busy;

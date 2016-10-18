@@ -27,7 +27,6 @@ use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
-use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 
 class RabbitMQStatusConsumerService implements ConsumerInterface
 {

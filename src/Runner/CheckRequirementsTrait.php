@@ -26,10 +26,15 @@ use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
+use Teknoo\East\CodeRunnerBundle\Task\Status;
 
+/**
+ * @mixin RunnerInterface
+ */
 trait CheckRequirementsTrait
 {
-    private function checkRequirements(PHPCode $code) {
+    private function checkRequirements(PHPCode $code)
+    {
         $capabilities = $this->getCapabilities();
 
         foreach ($code->getNeededPackages() as $package) {
@@ -58,7 +63,8 @@ trait CheckRequirementsTrait
         $this->updateStates();
     }
 
-    private function acceptTask(RunnerManagerInterface $manager, TaskInterface $task) {
+    private function acceptTask(RunnerManagerInterface $manager, TaskInterface $task)
+    {
         $manager->taskAccepted($this, $task);
 
         $this->currentManager->pushStatus($this, new Status('Accepted'));
