@@ -66,6 +66,13 @@ interface RunnerInterface
     public function reset(): RunnerInterface;
 
     /**
+     * To restore in the runner its current task in execution (for asynchronous runners)
+     * @param TaskInterface $task
+     * @return RunnerInterface
+     */
+    public function rememberYourCurrentTask(TaskInterface $task): RunnerInterface;
+
+    /**
      * To check if a task is executable by the runner, the runner must recall to the manager the method accept or reject
      *
      * @param RunnerManagerInterface $manager

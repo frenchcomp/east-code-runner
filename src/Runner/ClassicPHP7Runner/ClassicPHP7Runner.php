@@ -165,14 +165,23 @@ class ClassicPHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInt
         return $this->doReset();
     }
 
-
-
     /**
      * {@inheritdoc}
      */
     public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
     {
         return $this->doExecute($manager, $task);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rememberYourCurrentTask(TaskInterface $task): RunnerInterface
+    {
+        $this->currentTask = $task;
+        $this->updateStates();
+
+        return $this;
     }
 
     /**

@@ -31,7 +31,6 @@ use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
-use Teknoo\States\State\AbstractState;
 use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
@@ -57,6 +56,11 @@ class Running implements StateInterface
             $runners = $this->runners;
             $runners[$runner->getIdentifier()] = $runner;
             $this->runners = $runners;
+
+            $taskOnThisRunner = $this->tasksByRunner[$runner];
+            if ($taskOnThisRunner instanceof TaskInterface) {
+                $runner->rememberYourCurrentTask($taskOnThisRunner);
+            }
 
             return $this;
         };
@@ -154,6 +158,34 @@ class Running implements StateInterface
         return function (RunnerInterface $runner, TaskInterface $task, TaskManagerInterface $taskManager): RunnerManager {
             $this->tasksStandbyRegistry->enqueue($runner, $task);
             $this->tasksManagerByTasks[$task->getUrl()] = $taskManager;
+            $this->loadNextTaskFor($runner);
+
+            return $this;
+        };
+    }
+
+    public function loadNextTaskFor()
+    {
+        return function (RunnerInterface $runner): RunnerManager {
+            if (!$this->tasksByRunner[$runner] instanceof TaskInterface) {
+                $taskStandBy = $this->tasksStandbyRegistry->dequeue($runner);
+
+                if ($taskStandBy instanceof TaskInterface) {
+                    $runner->execute($this, $taskStandBy);
+                    $this->tasksByRunner[$runner] = $taskStandBy;
+                }
+            }
+
+            return $this;
+        };
+    }
+
+    public function loadNextTasks()
+    {
+        return function (): RunnerManager {
+            foreach ($this->runners as $runner) {
+                $this->loadNextTaskFor($runner);
+            }
 
             return $this;
         };

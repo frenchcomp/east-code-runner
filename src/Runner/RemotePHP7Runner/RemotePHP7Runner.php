@@ -160,9 +160,23 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface
     {
         return $this->doExecute($manager, $task);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rememberYourCurrentTask(TaskInterface $task): RunnerInterface
+    {
+        $this->currentTask = $task;
+        $this->updateStates();
+
+        return $this;
     }
 
     /**
