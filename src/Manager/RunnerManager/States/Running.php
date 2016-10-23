@@ -176,8 +176,13 @@ class Running implements StateInterface
                 $taskStandBy = $this->tasksStandbyRegistry->dequeue($runner);
 
                 if ($taskStandBy instanceof TaskInterface) {
-                    $runner->execute($this, $taskStandBy);
-                    $this->tasksByRunner[$runnerIdentifier] = $taskStandBy;
+                    try {
+                        $runner->execute($this, $taskStandBy);
+                        $this->tasksByRunner[$runnerIdentifier] = $taskStandBy;
+                    } catch (\Throwable $e) {
+                        $this->tasksStandbyRegistry->enqueue($runner, $taskStandBy);
+                        throw $e;
+                    }
                 }
             }
 

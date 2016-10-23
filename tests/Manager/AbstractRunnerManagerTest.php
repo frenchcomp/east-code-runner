@@ -107,6 +107,11 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
                 return $runner;
             });
 
+        $runner->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -189,6 +194,11 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
                 return $runner;
             });
 
+        $runner->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -269,6 +279,11 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
                 return $runner1;
             });
 
+        $runner1->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -280,6 +295,9 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
         $runner2->expects(self::any())->method('getIdentifier')->willReturn('runner2');
         $runner2->expects(self::never())
             ->method('canYouExecute');
+
+        $runner2->expects(self::never())
+            ->method('execute');
 
         self::assertInstanceOf(
             RunnerManagerInterface::class,
@@ -334,6 +352,9 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
                 return $runner1;
             });
 
+        $runner1->expects(self::never())
+            ->method('execute');
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -350,6 +371,11 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
                 return $runner2;
             });
+
+        $runner2->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
 
         self::assertInstanceOf(
             RunnerManagerInterface::class,
@@ -407,6 +433,9 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
                 return $runner;
             });
+
+        $runner->expects(self::never())
+            ->method('execute');
 
         self::assertInstanceOf(
             RunnerManagerInterface::class,

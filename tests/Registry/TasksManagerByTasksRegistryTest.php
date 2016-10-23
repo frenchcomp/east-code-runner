@@ -32,7 +32,7 @@ use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 
 /**
  * Test TasksManagerByTasksRegistryTest
- * @covers Teknoo\East\CodeRunnerBundle\Registry\TasksManagerByTasksRegistry
+ * @covers \Teknoo\East\CodeRunnerBundle\Registry\TasksManagerByTasksRegistry
  */
 class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistryTest
 {

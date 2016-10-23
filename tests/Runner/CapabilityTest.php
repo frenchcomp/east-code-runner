@@ -25,7 +25,7 @@ use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 
 /**
- * @covers Teknoo\East\CodeRunnerBundle\Runner\Capability
+ * @covers \Teknoo\East\CodeRunnerBundle\Runner\Capability
  */
 class CapabilityTest extends AbstractCapabilityTest
 {

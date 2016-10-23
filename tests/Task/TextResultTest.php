@@ -25,7 +25,7 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 
 /**
- * @covers Teknoo\East\CodeRunnerBundle\Task\TextResult
+ * @covers \Teknoo\East\CodeRunnerBundle\Task\TextResult
  */
 class TextResultTest extends AbstractResultTest
 {

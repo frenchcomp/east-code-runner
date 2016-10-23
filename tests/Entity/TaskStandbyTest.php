@@ -21,23 +21,23 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Entity;
 
-use Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration;
+use Teknoo\East\CodeRunnerBundle\Entity\TaskStandby;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\Tests\East\CodeRunnerBundle\Entity\Traits\PopulateEntityTrait;
 
 /**
- * @covers \Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration
+ * @covers \Teknoo\East\CodeRunnerBundle\Entity\TaskStandby
  */
-class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
+class TaskStandbyTest extends \PHPUnit_Framework_TestCase
 {
     use PopulateEntityTrait;
 
     /**
-     * @return TaskRegistration
+     * @return TaskStandby
      */
-    public function buildEntity(): TaskRegistration
+    public function buildEntity(): TaskStandby
     {
-        return new TaskRegistration();
+        return new TaskStandby();
     }
 
     public function testGetId()
@@ -48,34 +48,34 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetTaskManagerIdentifier()
+    public function testGetRunnerIdentifier()
     {
         self::assertEquals(
             'fooBar',
-            $this->generateEntityPopulated(['taskManagerIdentifier'=>'fooBar'])->getTaskManagerIdentifier()
+            $this->generateEntityPopulated(['runnerIdentifier'=>'fooBar'])->getRunnerIdentifier()
         );
     }
 
-    public function testSetTaskManagerIdentifier()
+    public function testSetRunnerIdentifier()
     {
         $entity = $this->buildEntity();
         self::assertInstanceOf(
-            TaskRegistration::class,
-            $entity->setTaskManagerIdentifier('fooBar')
+            TaskStandby::class,
+            $entity->setRunnerIdentifier('fooBar')
         );
 
         self::assertEquals(
             'fooBar',
-            $entity->getTaskManagerIdentifier()
+            $entity->getRunnerIdentifier()
         );
     }
 
     /**
      * @expectedException \Throwable
      */
-    public function testSetTaskManagerIdentifierExceptionOnBadArgument()
+    public function testSetRunnerIdentifierExceptionOnBadArgument()
     {
-        $this->buildEntity()->setTaskManagerIdentifier(new \stdClass());
+        $this->buildEntity()->setRunnerIdentifier(new \stdClass());
     }
 
     public function testGetTask()
@@ -92,7 +92,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
         $task = $this->createMock(TaskInterface::class);
         $entity = $this->buildEntity();
         self::assertInstanceOf(
-            TaskRegistration::class,
+            TaskStandby::class,
             $entity->setTask($task)
         );
 
@@ -124,7 +124,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
         self::assertInstanceOf(
-            TaskRegistration::class,
+            TaskStandby::class,
             $entity->setCreatedAt($date)
         );
 
@@ -156,7 +156,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
         self::assertInstanceOf(
-            TaskRegistration::class,
+            TaskStandby::class,
             $entity->setUpdatedAt($date)
         );
 
@@ -188,7 +188,7 @@ class TaskRegistrationTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('2016-07-28');
         $entity = $this->buildEntity();
         self::assertInstanceOf(
-            TaskRegistration::class,
+            TaskStandby::class,
             $entity->setDeletedAt($date)
         );
 

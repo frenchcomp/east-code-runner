@@ -22,6 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Manager;
 
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunnerBundle\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
@@ -31,9 +32,9 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 
 /**
  * Test RunnerManagerTest
- * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager
- * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Running
- * @covers Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting
+ * @covers \Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager
+ * @covers \Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Running
+ * @covers \Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\States\Selecting
  */
 class RunnerManagerTest extends AbstractRunnerManagerTest
 {
@@ -145,7 +146,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             $tasksStandbyRegistry = $this->tasksStandbyRegistry;
             $queue = [];
             $this->tasksStandbyRegistry
-                ->expects($this->any())
+                ->expects(self::any())
                 ->method('enqueue')
                 ->willReturnCallback(function (RunnerInterface $runner, TaskInterface $task)
                 use (&$queue, $tasksStandbyRegistry) {
@@ -155,7 +156,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
             $tasksStandbyRegistry = $this->tasksStandbyRegistry;
             $this->tasksStandbyRegistry
-                ->expects($this->any())
+                ->expects(self::any())
                 ->method('dequeue')
                 ->willReturnCallback(function (RunnerInterface $runner)
                 use (&$queue, $tasksStandbyRegistry) {
@@ -179,6 +180,129 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             $this->getTasksByRunnerMock(),
             $this->getTasksManagerByTasksMock(),
             $this->getTasksStandbyRegistryMock()
+        );
+    }
+
+    public function testRegisterMeMustRememberToRunnerItsCurrentlyTask()
+    {
+        $task = $this->createMock(TaskInterface::class);
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::once())->method('rememberYourCurrentTask')->with($task)->willReturnSelf();
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
+
+        $this->getTasksByRunnerMock()['abc'] = $task;
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $this->buildManager()->registerMe($runner)
+        );
+    }
+
+    public function testManagerCanYouExecuteOnBusyRunnerMustNotCallExecute()
+    {
+        $task = $this->createMock(TaskInterface::class);
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::once())->method('rememberYourCurrentTask')->with($task)->willReturnSelf();
+        $runner->expects(self::never())->method('execute');
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
+
+        $this->getTasksByRunnerMock()['abc'] = $task;
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $this->getTasksStandbyRegistryMock()
+            ->expects(self::once())
+            ->method('enqueue')
+            ->willReturnSelf();
+
+        $manager = $this->buildManager();
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe($runner)
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $task
+            )
+        );
+    }
+
+    public function testManagerCanYouExecuteOnBusyRunnerMustNotCallExecuteCanCallLoadNextTaskForAfter()
+    {
+        $task = $this->createMock(TaskInterface::class);
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::once())->method('rememberYourCurrentTask')->with($task)->willReturnSelf();
+        $runner->expects(self::once())->method('execute');
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
+
+        $this->getTasksByRunnerMock()['abc'] = $task;
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $this->getTasksStandbyRegistryMock()
+            ->expects(self::once())
+            ->method('enqueue')
+            ->willReturnSelf();
+
+        $manager = $this->buildManager();
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe($runner)
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $task
+            )
+        );
+
+        unset($this->getTasksByRunnerMock()['abc']);
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->loadNextTaskFor($runner)
+        );
+    }
+
+    public function testBashMethodsLoadNextTasks()
+    {
+        $task = $this->createMock(TaskInterface::class);
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::once())->method('execute');
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
+
+        $this->getTasksStandbyRegistryMock()->enqueue($runner, $task);
+
+        $manager = $this->buildManager();
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe($runner)
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->loadNextTasks()
         );
     }
 }

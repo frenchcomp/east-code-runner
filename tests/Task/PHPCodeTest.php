@@ -25,7 +25,7 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
 
 /**
- * @covers Teknoo\East\CodeRunnerBundle\Task\PHPCode
+ * @covers \Teknoo\East\CodeRunnerBundle\Task\PHPCode
  */
 class PHPCodeTest extends AbstractCodeTest
 {

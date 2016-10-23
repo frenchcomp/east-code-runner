@@ -46,6 +46,19 @@ class RabbitMQResultConsumerService implements ConsumerInterface
     private $logger;
 
     /**
+     * RabbitMQResultConsumerService constructor.
+     * @param RemotePHP7Runner $remotePHP7Runner
+     * @param RunnerManagerInterface $runnerManager
+     * @param LoggerInterface $logger
+     */
+    public function __construct(RemotePHP7Runner $remotePHP7Runner, RunnerManagerInterface $runnerManager, LoggerInterface $logger)
+    {
+        $this->remotePHP7Runner = $remotePHP7Runner;
+        $this->runnerManager = $runnerManager;
+        $this->logger = $logger;
+    }
+
+    /**
      * @param AMQPMessage $message
      * @return TextResult
      */

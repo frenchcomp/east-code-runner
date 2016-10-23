@@ -46,6 +46,19 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
     private $logger;
 
     /**
+     * RabbitMQStatusConsumerService constructor.
+     * @param RemotePHP7Runner $remotePHP7Runner
+     * @param RunnerManagerInterface $runnerManager
+     * @param LoggerInterface $logger
+     */
+    public function __construct(RemotePHP7Runner $remotePHP7Runner, RunnerManagerInterface $runnerManager, LoggerInterface $logger)
+    {
+        $this->remotePHP7Runner = $remotePHP7Runner;
+        $this->runnerManager = $runnerManager;
+        $this->logger = $logger;
+    }
+
+    /**
      * Method to convert the JSON representation of a StatusInterface object to an instance of this class
      * @param AMQPMessage $message
      * @return Status

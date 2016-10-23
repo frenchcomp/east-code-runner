@@ -124,7 +124,7 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
         self::assertTrue($runner->inState(Awaiting::class));
     }
 
-    public function testCanYouExecuteCodeNotRunnableByThisRunnerMissingPackage()
+    public function testCanYouExecuteCodeNotRunnableByThisRunnerMissingPackageAndExecute()
     {
         $manager = $this->createMock(RunnerManagerInterface::class);
         $runner = $this->buildRunner();
@@ -198,5 +198,58 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
 
         $runner->reset();
         self::assertTrue($runner->inState(Awaiting::class));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testExecuteCodeNotRunnableByThisRunner()
+    {
+        $manager = $this->createMock(RunnerManagerInterface::class);
+        $runner = $this->buildRunner();
+        $runner->rememberYourCurrentTask($this->createMock(TaskInterface::class));
+
+        $phpCode = new PHPCode('return 123;', [new Capability('package', 'php8')]);
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getCode')->willReturn($phpCode);
+
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $runner->execute(
+                $manager,
+                $task
+            )
+        );
+    }
+
+    public function testExecuteCodeInvalid()
+    {
+        $manager = $this->createMock(RunnerManagerInterface::class);
+        $runner = $this->buildRunner();
+
+        $phpCode = new PHPCode('return 4/0;', [new Capability('package', 'php7')]);
+
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getCode')->willReturn($phpCode);
+
+        $manager->expects($this->once())->method('pushResult')->willReturnCallback(
+            function (RunnerInterface $runner, TextResult $textResult) use ($manager) {
+                self::assertEquals('', $textResult->getOutput());
+                self::assertEquals('Division by zero', $textResult->getErrors());
+                self::assertEquals('PHP7.0', $textResult->getVersion());
+                self::assertGreaterThanOrEqual(\memory_get_usage(true), $textResult->getMemorySize());
+                self::assertGreaterThanOrEqual(0, $textResult->getTimeExecution());
+
+                return $manager;
+            }
+        );
+
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $runner->execute(
+                $manager,
+                $task
+            )
+        );
     }
 }

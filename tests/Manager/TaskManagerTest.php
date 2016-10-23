@@ -30,7 +30,7 @@ use Teknoo\East\CodeRunnerBundle\Service\DatesService;
 
 /**
  * Tests TaskManagerTest
- * @covers Teknoo\East\CodeRunnerBundle\Manager\TaskManager
+ * @covers \Teknoo\East\CodeRunnerBundle\Manager\TaskManager
  */
 class TaskManagerTest extends AbstractTaskManagerTest
 {

@@ -162,4 +162,69 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testRememberYourCurrentTaskBadTask()
+    {
+        $this->buildRunner()->rememberYourCurrentTask(
+            new \stdClass()
+        );
+    }
+
+    public function testRememberYourCurrentTask()
+    {
+        $runner = $this->buildRunner();
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $runner->rememberYourCurrentTask(
+                $this->createMock(TaskInterface::class)
+            )
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testExecuteExceptionOnBadManager()
+    {
+        $this->buildRunner()->execute(
+            new \stdClass(),
+            $this->createMock(TaskInterface::class)
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testExecuteExceptionOnBadResult()
+    {
+        $this->buildRunner()->execute(
+            $this->createMock(RunnerManagerInterface::class),
+            new \stdClass()
+        );
+    }
+
+    public function testExecuteResultBehavior()
+    {
+        $runner = $this->buildRunner();
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $runner->execute(
+                $this->createMock(RunnerManagerInterface::class),
+                $this->createMock(TaskInterface::class)
+            )
+        );
+    }
+
+    /**
+     * @exceptedException \DomainException
+     */
+    abstract public function testExecuteCodeNotRunnableByThisRunner();
+
+    /**
+     * @exceptedException \LogicException
+     */
+    abstract public function testExecuteCodeInvalid();
 }

@@ -175,4 +175,40 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
             $task->getResult()
         );
     }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testRegisterStatusExceptionOnBadStatus()
+    {
+        $this->buildTask()->registerStatus(
+            new \stdClass()
+        );
+    }
+
+    public function testRegisterStatusBehavior()
+    {
+        $task = $this->buildTask();
+        $task->setCode($this->createMock(CodeInterface::class));
+        $task->registerStatus($this->createMock(StatusInterface::class));
+        $task->registerUrl('https://teknoo.software/foo/bar');
+
+        $status = $this->createMock(StatusInterface::class);
+        self::assertInstanceOf(
+            TaskInterface::class,
+            $task->registerStatus(
+                $status
+            )
+        );
+
+        self::assertInstanceOf(
+            StatusInterface::class,
+            $task->getStatus()
+        );
+
+        self::assertEquals(
+            $status,
+            $task->getStatus()
+        );
+    }
 }

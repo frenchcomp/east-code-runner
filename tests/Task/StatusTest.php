@@ -25,7 +25,7 @@ use Teknoo\East\CodeRunnerBundle\Task\Status;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 
 /**
- * @covers Teknoo\East\CodeRunnerBundle\Task\Status
+ * @covers \Teknoo\East\CodeRunnerBundle\Task\Status
  */
 class StatusTest extends AbstractStatusTest
 {

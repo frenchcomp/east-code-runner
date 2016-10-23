@@ -30,10 +30,10 @@ use Teknoo\Tests\East\CodeRunnerBundle\Entity\Traits\PopulateEntityTrait;
 use Teknoo\Tests\East\CodeRunnerBundle\Task\AbstractTaskTest;
 
 /**
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\Task
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\States\Executed
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\States\Registered
- * @covers Teknoo\East\CodeRunnerBundle\Entity\Task\States\Unregistered
+ * @covers \Teknoo\East\CodeRunnerBundle\Entity\Task\Task
+ * @covers \Teknoo\East\CodeRunnerBundle\Entity\Task\States\Executed
+ * @covers \Teknoo\East\CodeRunnerBundle\Entity\Task\States\Registered
+ * @covers \Teknoo\East\CodeRunnerBundle\Entity\Task\States\Unregistered
  */
 class TaskTest extends AbstractTaskTest
 {
