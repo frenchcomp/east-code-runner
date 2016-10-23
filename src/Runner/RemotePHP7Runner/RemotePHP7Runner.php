@@ -159,7 +159,7 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
      */
     public function reset(): RunnerInterface
     {
-        return $this;
+        return $this->doReset();
     }
 
     /**

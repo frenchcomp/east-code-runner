@@ -21,29 +21,45 @@
  */
 namespace Teknoo\Tests\East\CodeRunnerBundle\Runner;
 
+use OldSound\RabbitMqBundle\RabbitMq\Producer;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
-use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States\Awaiting;
-use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States\Busy;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Awaiting;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Busy;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
-use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 
 /**
- * Class ClassicPHP7RunnerTest
- * @covers \Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\ClassicPHP7Runner
- * @covers \Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\States\Awaiting
- * @covers \Teknoo\East\CodeRunnerBundle\Runner\ClassicPHP7Runner\states\BUsy
+ * @covers \Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner
+ * @covers \Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\States\Awaiting
+ * @covers \Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\states\BUsy
  * @covers \Teknoo\East\CodeRunnerBundle\Runner\CheckRequirementsTrait
  */
-class ClassicPHP7RunnerTest extends AbstractRunnerTest
+class RemotePHP7RunnerTest extends AbstractRunnerTest
 {
+    /**
+     * @var Producer
+     */
+    private $taskProducer;
+
+    /**
+     * @return Producer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getProducer()
+    {
+        if (!$this->taskProducer instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->taskProducer = $this->createMock(Producer::class);
+        }
+
+        return $this->taskProducer;
+    }
+
     public function buildRunner(): RunnerInterface
     {
-        $runner = new ClassicPHP7Runner('ClassicPHP7Runner1', 'ClassicPHP7Runner', 'PHP7.0', [new Capability('package', 'eval')]);
+        $runner = new RemotePHP7Runner($this->getProducer(), 'RemotePHP7Runner1', 'RemotePHP7Runner', 'PHP7.0', [new Capability('package', 'eval')]);
         $runner->addCapability(new Capability('package', 'php7'));
 
         return $runner;
@@ -71,17 +87,10 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
         $manager->expects(self::never())
             ->method('taskRejected');
 
-        $manager->expects($this->once())->method('pushResult')->willReturnCallback(
-            function (RunnerInterface $runner, TextResult $textResult) use ($manager) {
-                self::assertEquals(45, $textResult->getOutput());
-                self::assertEquals('', $textResult->getErrors());
-                self::assertEquals('PHP7.0', $textResult->getVersion());
-                self::assertGreaterThanOrEqual(\memory_get_usage(true), $textResult->getMemorySize());
-                self::assertGreaterThanOrEqual(5000, $textResult->getTimeExecution());
-
-                return $manager;
-            }
-        );
+        $this->getProducer()
+            ->expects(self::once())
+            ->method('publish')
+            ->with(json_encode($task));
 
         self::assertInstanceOf(
             RunnerInterface::class,
@@ -114,6 +123,10 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
             ->with($runner, $task)
             ->willReturnSelf();
 
+        $this->getProducer()
+            ->expects(self::never())
+            ->method('publish');
+
         self::assertInstanceOf(
             RunnerInterface::class,
             $runner->canYouExecute(
@@ -141,6 +154,10 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
             ->method('taskRejected')
             ->with($runner, $task)
             ->willReturnSelf();
+
+        $this->getProducer()
+            ->expects(self::never())
+            ->method('publish');
 
         self::assertInstanceOf(
             RunnerInterface::class,
@@ -175,17 +192,10 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
         $manager->expects(self::never())
             ->method('taskRejected');
 
-        $manager->expects($this->once())->method('pushResult')->willReturnCallback(
-            function (RunnerInterface $runner, TextResult $textResult) use ($manager) {
-                self::assertEquals('', $textResult->getOutput());
-                self::assertEquals('Division by zero', $textResult->getErrors());
-                self::assertEquals('PHP7.0', $textResult->getVersion());
-                self::assertGreaterThanOrEqual(\memory_get_usage(true), $textResult->getMemorySize());
-                self::assertGreaterThanOrEqual(0, $textResult->getTimeExecution());
-
-                return $manager;
-            }
-        );
+        $this->getProducer()
+            ->expects(self::once())
+            ->method('publish')
+            ->with(json_encode($task));
 
         self::assertInstanceOf(
             RunnerInterface::class,
@@ -214,6 +224,10 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
         $task = $this->createMock(TaskInterface::class);
         $task->expects(self::any())->method('getCode')->willReturn($phpCode);
 
+        $this->getProducer()
+            ->expects(self::never())
+            ->method('publish');
+
         self::assertInstanceOf(
             RunnerInterface::class,
             $runner->execute(
@@ -233,17 +247,10 @@ class ClassicPHP7RunnerTest extends AbstractRunnerTest
         $task = $this->createMock(TaskInterface::class);
         $task->expects(self::any())->method('getCode')->willReturn($phpCode);
 
-        $manager->expects($this->once())->method('pushResult')->willReturnCallback(
-            function (RunnerInterface $runner, TextResult $textResult) use ($manager) {
-                self::assertEquals('', $textResult->getOutput());
-                self::assertEquals('Division by zero', $textResult->getErrors());
-                self::assertEquals('PHP7.0', $textResult->getVersion());
-                self::assertGreaterThanOrEqual(\memory_get_usage(true), $textResult->getMemorySize());
-                self::assertGreaterThanOrEqual(0, $textResult->getTimeExecution());
-
-                return $manager;
-            }
-        );
+        $this->getProducer()
+            ->expects(self::once())
+            ->method('publish')
+            ->with(json_encode($task));
 
         self::assertInstanceOf(
             RunnerInterface::class,

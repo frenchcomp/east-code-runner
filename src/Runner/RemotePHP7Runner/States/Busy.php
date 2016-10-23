@@ -46,6 +46,9 @@ class Busy implements StateInterface
          * {@inheritdoc}
          */
         return function(): RunnerInterface {
+            $this->currentTask = null;
+
+            $this->updateStates();
 
             return $this;
         };
