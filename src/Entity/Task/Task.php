@@ -46,7 +46,7 @@ use Teknoo\States\Proxy\ProxyTrait;
  * @method Task doSetCode(CodeInterface $code)
  * @method Task doRegisterUrl(string $taskUrl)
  */
-class Task implements ProxyInterface, TaskInterface, AutomatedInterface
+class Task implements ProxyInterface, TaskInterface, AutomatedInterface, \JsonSerializable
 {
     use ProxyTrait,
         AutomatedTrait;
@@ -329,5 +329,78 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
                 ->with('result', new IsInstanceOf(ResultInterface::class))
             ,
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize(): array
+    {
+        $deletedAt = null;
+        if ($this->deletedAt instanceof \DateTime) {
+            $deletedAt = $this->deletedAt->format('Y-m-d h:i:s');
+        }
+
+        return [
+            'class' => static::class,
+            'id' => $this->id,
+            'code' => $this->code,
+            'url' => $this->url,
+            'status' => $this->status,
+            'result' => $this->result,
+            'createdAt' => $this->createdAt->format('Y-m-d h:i:s'),
+            'updatedAt' => $this->updatedAt->format('Y-m-d h:i:s'),
+            'deletedAt' => $deletedAt
+        ];
+    }
+
+    /**
+     * Static method to reconstruct a PHPCode instance from its json representation
+     * @param array $values
+     * @return Task
+     */
+    public static function jsonDeserialize(array $values)
+    {
+        if (!isset($values['class']) || static::class != $values['class']) {
+            throw new \InvalidArgumentException('class is not matching with the serialized values');
+        }
+
+        $status = $values['status'];
+        if (isset($status['class'])
+            && \class_exists($statusClass = $status['class'])
+            && \is_callable($statusClass, 'jsonDeserialize')
+            && $statusClass instanceof StatusInterface) {
+
+            $statusClass = $status['class'];
+            $status = $statusClass::jsonDeserialize($status);
+        }
+
+        $result = $values['result'];
+        if (isset($result['class'])
+            && \class_exists($resultClass = $result['class'])
+            && \is_callable($resultClass, 'jsonDeserialize')
+            && $resultClass instanceof ResultInterface) {
+
+            $resultClass = $result['class'];
+            $result = $resultClass::jsonDeserialize($result);
+        }
+
+        $deletedAt = null;
+        if (!empty($values['deletedAt'])) {
+            $deletedAt = new \DateTime($values['deletedAt']);
+        }
+
+        $task = new static();
+        $task->id = $values['id'];
+        $task->code = $values['code'];
+        $task->url = $values['url'];
+        $task->status = $status;
+        $task->result = $result;
+        $task->createdAt = new \DateTime($values['createdAt']);
+        $task->updatedAt = new \DateTime($values['updatedAt']);
+        $task->deletedAt = $deletedAt;
+        $task->updateStates();
+
+        return $task;
     }
 }
