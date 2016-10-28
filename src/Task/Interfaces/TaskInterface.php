@@ -26,7 +26,7 @@ use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 /**
  * Interface to define task class, able to trace the process under all service.
  */
-interface TaskInterface
+interface TaskInterface extends \JsonSerializable
 {
     /**
      * To return the uniq identifier as UUID of the task
@@ -97,4 +97,11 @@ interface TaskInterface
      * @return TaskInterface
      */
     public function registerResult(TaskManagerInterface $taskManager, ResultInterface $result): TaskInterface;
+
+    /**
+     * Static method to reconstruct a TaskInterface instance from its json representation
+     * @param array $values
+     * @return Task
+     */
+    public static function jsonDeserialize(array $values): TaskInterface;
 }

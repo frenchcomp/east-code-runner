@@ -26,7 +26,7 @@ use Teknoo\Immutable\ImmutableInterface;
 /**
  * Interface to define, as value object, the result for task
  */
-interface ResultInterface extends ImmutableInterface
+interface ResultInterface extends ImmutableInterface, \JsonSerializable
 {
     /**
      * Standard output of the task.
@@ -62,4 +62,11 @@ interface ResultInterface extends ImmutableInterface
      * @return int
      */
     public function getTimeExecution(): int;
+
+    /**
+     * Static method to reconstruct a ResultInterface instance from its json representation
+     * @param array $values
+     * @return Task
+     */
+    public static function jsonDeserialize(array $values): ResultInterface;
 }

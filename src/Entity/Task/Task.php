@@ -46,7 +46,7 @@ use Teknoo\States\Proxy\ProxyTrait;
  * @method Task doSetCode(CodeInterface $code)
  * @method Task doRegisterUrl(string $taskUrl)
  */
-class Task implements ProxyInterface, TaskInterface, AutomatedInterface, \JsonSerializable
+class Task implements ProxyInterface, TaskInterface, AutomatedInterface
 {
     use ProxyTrait,
         AutomatedTrait;
@@ -338,7 +338,17 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface, \JsonSe
     {
         $deletedAt = null;
         if ($this->deletedAt instanceof \DateTime) {
-            $deletedAt = $this->deletedAt->format('Y-m-d h:i:s');
+            $deletedAt = $this->deletedAt->format('Y-m-d H:i:s');
+        }
+
+        $createdAt = null;
+        if ($this->createdAt instanceof \DateTime) {
+            $createdAt = $this->createdAt->format('Y-m-d H:i:s');
+        }
+
+        $updatedAt = null;
+        if ($this->updatedAt instanceof \DateTime) {
+            $updatedAt = $this->updatedAt->format('Y-m-d H:i:s');
         }
 
         return [
@@ -348,28 +358,32 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface, \JsonSe
             'url' => $this->url,
             'status' => $this->status,
             'result' => $this->result,
-            'createdAt' => $this->createdAt->format('Y-m-d h:i:s'),
-            'updatedAt' => $this->updatedAt->format('Y-m-d h:i:s'),
+            'createdAt' => $createdAt,
+            'updatedAt' => $updatedAt,
             'deletedAt' => $deletedAt
         ];
     }
 
     /**
-     * Static method to reconstruct a PHPCode instance from its json representation
-     * @param array $values
-     * @return Task
+     * {@inheritdoc}
      */
-    public static function jsonDeserialize(array $values)
+    public static function jsonDeserialize(array $values): TaskInterface
     {
         if (!isset($values['class']) || static::class != $values['class']) {
             throw new \InvalidArgumentException('class is not matching with the serialized values');
         }
 
+        $code = $values['code'];
+        if (isset($code['class'])
+            && \is_subclass_of($code['class'], CodeInterface::class)) {
+
+            $codeClass = $code['class'];
+            $code = $codeClass::jsonDeserialize($code);
+        }
+
         $status = $values['status'];
         if (isset($status['class'])
-            && \class_exists($statusClass = $status['class'])
-            && \is_callable($statusClass, 'jsonDeserialize')
-            && $statusClass instanceof StatusInterface) {
+            && \is_subclass_of($status['class'], StatusInterface::class)) {
 
             $statusClass = $status['class'];
             $status = $statusClass::jsonDeserialize($status);
@@ -377,9 +391,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface, \JsonSe
 
         $result = $values['result'];
         if (isset($result['class'])
-            && \class_exists($resultClass = $result['class'])
-            && \is_callable($resultClass, 'jsonDeserialize')
-            && $resultClass instanceof ResultInterface) {
+            && \is_subclass_of($result['class'], ResultInterface::class)) {
 
             $resultClass = $result['class'];
             $result = $resultClass::jsonDeserialize($result);
@@ -390,15 +402,26 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface, \JsonSe
             $deletedAt = new \DateTime($values['deletedAt']);
         }
 
+        $createdAt = null;
+        if (!empty($values['createdAt'])) {
+            $createdAt = new \DateTime($values['createdAt']);
+        }
+
+        $updatedAt = null;
+        if (!empty($values['updatedAt'])) {
+            $updatedAt = new \DateTime($values['updatedAt']);
+        }
+
         $task = new static();
         $task->id = $values['id'];
-        $task->code = $values['code'];
+        $task->code = $code;
         $task->url = $values['url'];
         $task->status = $status;
         $task->result = $result;
-        $task->createdAt = new \DateTime($values['createdAt']);
-        $task->updatedAt = new \DateTime($values['updatedAt']);
+        $task->createdAt = $createdAt;
+        $task->updatedAt = $updatedAt;
         $task->deletedAt = $deletedAt;
+
         $task->updateStates();
 
         return $task;

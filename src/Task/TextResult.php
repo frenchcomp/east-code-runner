@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
-class TextResult implements ResultInterface, \JsonSerializable
+class TextResult implements ResultInterface
 {
     use ImmutableTrait;
 
@@ -128,11 +128,9 @@ class TextResult implements ResultInterface, \JsonSerializable
     }
 
     /**
-     * Static method to reconstruct a TextResult instance from its json representation
-     * @param array $values
-     * @return TextResult
+     * {@inheritdoc}
      */
-    public static function jsonDeserialize(array $values)
+    public static function jsonDeserialize(array $values): ResultInterface
     {
         if (!isset($values['class']) || static::class != $values['class']) {
             throw new \InvalidArgumentException('class is not matching with the serialized values');

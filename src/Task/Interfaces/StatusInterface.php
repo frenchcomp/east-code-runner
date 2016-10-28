@@ -26,7 +26,7 @@ use Teknoo\Immutable\ImmutableInterface;
 /**
  * Interface to define value object to define a status of a task.
  */
-interface StatusInterface extends ImmutableInterface
+interface StatusInterface extends ImmutableInterface, \JsonSerializable
 {
     /**
      * Name of the status.
@@ -34,4 +34,11 @@ interface StatusInterface extends ImmutableInterface
      * @return string
      */
     public function getName(): string;
+
+    /**
+     * Static method to reconstruct a StatusInterface instance from its json representation
+     * @param array $values
+     * @return Task
+     */
+    public static function jsonDeserialize(array $values): StatusInterface;
 }

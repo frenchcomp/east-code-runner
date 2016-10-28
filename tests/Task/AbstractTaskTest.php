@@ -211,4 +211,24 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
             $task->getStatus()
         );
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeBadClass()
+    {
+        $task = $this->buildTask();
+        $className = get_class($task);
+        $className::jsonDeserialize(['class'=>'\DateTime']);
+    }
+
+    public function testJsonEncodeDecode()
+    {
+        $task = $this->buildTask();
+        $className = get_class($task);
+        self::assertEquals(
+            $task,
+            $className::jsonDeserialize(json_decode(json_encode($task), true))
+        );
+    }
 }

@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
-class PHPCode implements CodeInterface, \JsonSerializable
+class PHPCode implements CodeInterface
 {
     use ImmutableTrait;
 
@@ -80,11 +80,9 @@ class PHPCode implements CodeInterface, \JsonSerializable
     }
 
     /**
-     * Static method to reconstruct a PHPCode instance from its json representation
-     * @param array $values
-     * @return PHPCode
+     * {@inheritdoc}
      */
-    public static function jsonDeserialize(array $values)
+    public static function jsonDeserialize(array $values): CodeInterface
     {
         if (!isset($values['class']) || static::class != $values['class']) {
             throw new \InvalidArgumentException('class is not matching with the serialized values');

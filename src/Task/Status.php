@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\Task;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
-class Status implements StatusInterface, \JsonSerializable
+class Status implements StatusInterface
 {
     use ImmutableTrait;
 
@@ -64,11 +64,9 @@ class Status implements StatusInterface, \JsonSerializable
     }
 
     /**
-     * Static method to reconstruct a Status instance from its json representation
-     * @param array $values
-     * @return Status
+     * {@inheritdoc}
      */
-    public static function jsonDeserialize(array $values)
+    public static function jsonDeserialize(array $values): StatusInterface
     {
         if (!isset($values['class']) || static::class != $values['class']) {
             throw new \InvalidArgumentException('class is not matching with the serialized values');

@@ -22,6 +22,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Entity;
 
 use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
+use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
@@ -221,5 +222,31 @@ class TaskTest extends AbstractTaskTest
             $result,
             $task->getResult()
         );
+    }
+
+    public function testJsonEncodeDecodeWithTaskFulled()
+    {
+        $task = $this->buildTask();
+        $task->setCreatedAt(new \DateTime('2016-10-29', new \DateTimeZone('UTC')));
+        $task->setDeletedAt(new \DateTime('2016-10-31', new \DateTimeZone('UTC')));
+        $task->setUpdatedAt(new \DateTime('2016-11-01', new \DateTimeZone('UTC'))); //Halloween haha !
+        $task->setCode(new PHPCode('', []));
+        $task->registerUrl('http://foo.bar');
+        $task->registerStatus(new Status(''));
+        $task->registerResult(
+            $this->createMock(TaskManagerInterface::class),
+            new TextResult('', '', '', 0, 0)
+        );
+
+
+        $final = Task::jsonDeserialize(json_decode(json_encode($task), true));
+
+        self::assertEquals($task->getCode(), $final->getCode());
+        self::assertEquals($task->getCreatedAt(), $final->getCreatedAt());
+        self::assertEquals($task->getDeletedAt(), $final->getDeletedAt());
+        self::assertEquals($task->getUpdatedAt(), $final->getUpdatedAt());
+        self::assertEquals($task->getStatus(), $final->getStatus());
+        self::assertEquals($task->getResult(), $final->getResult());
+        self::assertEquals($task->getUrl(), $final->getUrl());
     }
 }
