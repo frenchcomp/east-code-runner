@@ -33,7 +33,8 @@
         "teknoo/states": "^3.0.0-alpha3",
         "teknoo/states-bundle": "^3.0.0-alpha2",
         "teknoo/states-life-cycle": "^2.0.0-alpha3",
-        "knplabs/gaufrette": "~0.2"
+        "knplabs/gaufrette": "~0.2",
+        "adambrett/shell-wrapper": "~0.7"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.4",
