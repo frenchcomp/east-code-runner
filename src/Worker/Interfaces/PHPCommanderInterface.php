@@ -19,25 +19,25 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces;
+namespace Teknoo\East\CodeRunnerBundle\Worker\Interfaces;
 
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 
 /**
- * Interface ComposerConfiguratorInterface
+ * Interface PHPCommanderInterface
  * @package Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces
  */
-interface ComposerConfiguratorInterface
+interface PHPCommanderInterface
 {
     /**
-     * @return ComposerConfiguratorInterface
+     * @return PHPCommanderInterface
      */
-    public function reset(): ComposerConfiguratorInterface;
+    public function reset(): PHPCommanderInterface;
 
     /**
      * @param CodeInterface $code
      * @param RunnerInterface $runner
-     * @return ComposerJsonGeneratorInterface
+     * @return PHPCommanderInterface
      */
-    public function configure(CodeInterface $code, RunnerInterface $runner): ComposerConfiguratorInterface;
+    public function execute(CodeInterface $code, RunnerInterface $runner): PHPCommanderInterface;
 }

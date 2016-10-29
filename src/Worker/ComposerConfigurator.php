@@ -19,15 +19,15 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner;
+namespace Teknoo\East\CodeRunnerBundle\Worker;
 
 use AdamBrett\ShellWrapper\Command;
 use AdamBrett\ShellWrapper\Command\Param;
 use AdamBrett\ShellWrapper\Runners\Runner;
 use Gaufrette\Filesystem;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\ComposerConfiguratorInterface;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\ComposerConfiguratorInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\RunnerInterface;
 
 class ComposerConfigurator implements ComposerConfiguratorInterface
 {

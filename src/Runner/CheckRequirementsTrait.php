@@ -26,7 +26,6 @@ use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
-use Teknoo\East\CodeRunnerBundle\Task\Status;
 
 /**
  * @mixin RunnerInterface

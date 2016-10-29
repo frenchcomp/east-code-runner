@@ -38,7 +38,7 @@ interface StatusInterface extends ImmutableInterface, \JsonSerializable
     /**
      * Static method to reconstruct a StatusInterface instance from its json representation
      * @param array $values
-     * @return Task
+     * @return StatusInterface
      */
     public static function jsonDeserialize(array $values): StatusInterface;
 }

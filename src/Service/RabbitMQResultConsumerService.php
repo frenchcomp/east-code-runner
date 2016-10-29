@@ -26,6 +26,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 
 class RabbitMQResultConsumerService implements ConsumerInterface
@@ -60,9 +61,9 @@ class RabbitMQResultConsumerService implements ConsumerInterface
 
     /**
      * @param AMQPMessage $message
-     * @return TextResult
+     * @return ResultInterface
      */
-    private function extractResult(AMQPMessage $message): TextResult
+    private function extractResult(AMQPMessage $message): ResultInterface
     {
         return TextResult::jsonDeserialize(json_decode($message->body, true));
     }

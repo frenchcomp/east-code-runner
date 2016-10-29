@@ -19,7 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner;
+namespace Teknoo\East\CodeRunnerBundle\Worker;
 
 use AdamBrett\ShellWrapper\Command;
 use AdamBrett\ShellWrapper\Command\Param;
@@ -29,9 +29,8 @@ use Gaufrette\Filesystem;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\TextResult;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\PHPCommanderInterface;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\PHPCommandInterface;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\PHPCommanderInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\RunnerInterface;
 
 class PHPCommander implements PHPCommanderInterface
 {
@@ -72,7 +71,6 @@ class PHPCommander implements PHPCommanderInterface
 
     /**
      * PHPCommander constructor.
-     * @param string $tempFileName
      * @param Command $phpCommand
      * @param Filesystem $fileSystem
      * @param ReturnValue|Runner $commandRunner
@@ -92,11 +90,11 @@ class PHPCommander implements PHPCommanderInterface
 
 
     /**
-     * @return PHPCommandInterface
+     * @return PHPCommanderInterface
      */
-    public function reset(): PHPCommandInterface
+    public function reset(): PHPCommanderInterface
     {
-        if (!empty($this->tempFileName) {
+        if (!empty($this->tempFileName)) {
             $this->fileSystem->delete($this->tempFileName);
             $this->tempFileName = null;
         }
@@ -111,7 +109,7 @@ class PHPCommander implements PHPCommanderInterface
     private function generatePHPScript(CodeInterface $code): string
     {
         $phpScript = '<?php'.PHP_EOL;
-        $phpScript .= 'require_once ('vendor/autoload.php');'.PHP_EOL.PHP_EOL;
+        $phpScript .= 'require_once ("vendor/autoload.php");'.PHP_EOL.PHP_EOL;
         $phpScript .= $code->getCode();
 
         return $phpScript;
@@ -140,7 +138,7 @@ class PHPCommander implements PHPCommanderInterface
 
         $this->startupTime = \microtime(true) * 1000;
 
-        $this->commandRunner->run($composerCommand);
+        $this->commandRunner->run($phpCommand);
 
         $timeAfter = \microtime(true) * 1000;
         $this->executionTime = $timeAfter - $this->startupTime;
@@ -152,7 +150,7 @@ class PHPCommander implements PHPCommanderInterface
     private function generateResult(): ResultInterface
     {
         return new TextResult(
-            $this->commandRunner->getReturnValue(),
+            (string) $this->commandRunner->getReturnValue(),
             '',
             $this->version,
             \memory_get_usage(true),
@@ -163,16 +161,16 @@ class PHPCommander implements PHPCommanderInterface
     /**
      * @param CodeInterface $code
      * @param RunnerInterface $runner
-     * @return PHPCommandInterface
+     * @return PHPCommanderInterface
      */
-    public function execute(CodeInterface $code, RunnerInterface $runner): PHPCommandInterface
+    public function execute(CodeInterface $code, RunnerInterface $runner): PHPCommanderInterface
     {
         try {
             $this->writePHPScript($code);
 
             $this->executePhpScript();
 
-            $runner->codeExecuted($this->generateResult());
+            $runner->codeExecuted($code, $this->generateResult());
         } catch (\Throwable $e) {
             $timeAfter = \microtime(true) * 1000;
             $this->executionTime = $timeAfter - $this->startupTime;
@@ -182,6 +180,7 @@ class PHPCommander implements PHPCommanderInterface
             $error .= $e->getTraceAsString();
 
             $runner->errorInCode(
+                $code,
                 new TextResult(
                     '',
                     $error,
@@ -189,7 +188,7 @@ class PHPCommander implements PHPCommanderInterface
                     \memory_get_usage(true),
                     $this->executionTime
                 )
-            )
+            );
         }
 
         return $this;

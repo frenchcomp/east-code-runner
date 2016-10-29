@@ -19,7 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces;
+namespace Teknoo\East\CodeRunnerBundle\Worker\Interfaces;
 
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;

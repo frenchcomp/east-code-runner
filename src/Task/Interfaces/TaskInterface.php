@@ -101,7 +101,7 @@ interface TaskInterface extends \JsonSerializable
     /**
      * Static method to reconstruct a TaskInterface instance from its json representation
      * @param array $values
-     * @return Task
+     * @return TaskInterface
      */
     public static function jsonDeserialize(array $values): TaskInterface;
 }

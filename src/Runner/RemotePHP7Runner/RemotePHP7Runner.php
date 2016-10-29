@@ -21,7 +21,7 @@
  */
 namespace Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner;
 
-use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\Capability;
 use Teknoo\East\CodeRunnerBundle\Runner\CheckRequirementsTrait;
@@ -69,21 +69,21 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
     private $currentTask;
 
     /**
-     * @var Producer
+     * @var ProducerInterface
      */
     private $taskProducer;
 
     /**
      * RemotePHP7Runner constructor.
      * Initialize States behavior.
-     * @param Producer $taskProducer
+     * @param ProducerInterface $taskProducer
      * @param string $identifier
      * @param string $name
      * @param string $version
      * @param array $capabilities
      */
     public function __construct(
-        Producer $taskProducer,
+        ProducerInterface $taskProducer,
         string $identifier,
         string $name,
         string $version,

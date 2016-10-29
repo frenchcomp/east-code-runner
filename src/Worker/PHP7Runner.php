@@ -19,10 +19,10 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-namespace Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner;
+namespace Teknoo\East\CodeRunnerBundle\Worker;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
-use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
@@ -30,20 +30,19 @@ use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
 use Teknoo\East\CodeRunnerBundle\Task\TextResult;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\ComposerConfiguratorInterface;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\PHPCommanderInterface;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\PHPCommandInterface;
-use Teknoo\East\CodeRunnerBundle\Worker\PHP7Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\ComposerConfiguratorInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\PHPCommanderInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\RunnerInterface;
 
 class PHP7Runner implements ConsumerInterface, RunnerInterface
 {
     /**
-     * @var Producer
+     * @var ProducerInterface
      */
     private $statusProducer;
 
     /**
-     * @var Producer
+     * @var ProducerInterface
      */
     private $resultProducer;
 
@@ -69,16 +68,16 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
 
     /**
      * PHP7Runner constructor.
-     * @param Producer $statusProducer
-     * @param Producer $resultProducer
+     * @param ProducerInterface $statusProducer
+     * @param ProducerInterface $resultProducer
      * @param LoggerInterface $logger
      * @param string $version
      * @param ComposerConfiguratorInterface $composerConfigurator
      * @param PHPCommanderInterface $phpCommander
      */
     public function __construct(
-        Producer $statusProducer,
-        Producer $resultProducer,
+        ProducerInterface $statusProducer,
+        ProducerInterface $resultProducer,
         LoggerInterface $logger,
         string $version,
         ComposerConfiguratorInterface $composerConfigurator,

@@ -66,7 +66,7 @@ interface ResultInterface extends ImmutableInterface, \JsonSerializable
     /**
      * Static method to reconstruct a ResultInterface instance from its json representation
      * @param array $values
-     * @return Task
+     * @return ResultInterface
      */
     public static function jsonDeserialize(array $values): ResultInterface;
 }

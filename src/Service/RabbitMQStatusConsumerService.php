@@ -26,6 +26,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunnerBundle\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunnerBundle\Task\Status;
 
 class RabbitMQStatusConsumerService implements ConsumerInterface
@@ -61,9 +62,9 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
     /**
      * Method to convert the JSON representation of a StatusInterface object to an instance of this class
      * @param AMQPMessage $message
-     * @return Status
+     * @return StatusInterface
      */
-    private function extractStatus(AMQPMessage $message): Status
+    private function extractStatus(AMQPMessage $message): StatusInterface
     {
         $decodedBody = json_decode($message->body, true);
         if (empty($decodedBody['class']) || !is_callable([$decodedBody['class'], 'jsonDeserialize'])) {
