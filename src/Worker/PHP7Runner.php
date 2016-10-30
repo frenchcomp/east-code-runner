@@ -131,6 +131,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
 
             $this->resultProducer->publish(json_encode($result));
             $this->statusProducer->publish(json_encode(new Status('Failure')));
+
+            return false;
         }
 
         return true;

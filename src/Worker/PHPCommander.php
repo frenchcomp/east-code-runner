@@ -34,6 +34,8 @@ use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\RunnerInterface;
 
 class PHPCommander implements PHPCommanderInterface
 {
+    const TEMP_FILE = 'my_app.php';
+
     /**
      * @var Command
      */
@@ -65,11 +67,6 @@ class PHPCommander implements PHPCommanderInterface
     private $executionTime;
 
     /**
-     * @var string
-     */
-    private $tempFileName;
-
-    /**
      * PHPCommander constructor.
      * @param Command $phpCommand
      * @param Filesystem $fileSystem
@@ -94,10 +91,7 @@ class PHPCommander implements PHPCommanderInterface
      */
     public function reset(): PHPCommanderInterface
     {
-        if (!empty($this->tempFileName)) {
-            $this->fileSystem->delete($this->tempFileName);
-            $this->tempFileName = null;
-        }
+        $this->fileSystem->delete(self::TEMP_FILE);
 
         return $this;
     }
@@ -120,12 +114,7 @@ class PHPCommander implements PHPCommanderInterface
      */
     private function writePHPScript(CodeInterface $code)
     {
-        if (!empty($this->tempFileName)) {
-            throw new \RuntimeException('Error, the commander has not been cleaned');
-        }
-
-        $this->tempFileName = $this->generatePHPScript($code);
-        $this->fileSystem->write($this->tempFileName, $this->generatePHPScript($code));
+        $this->fileSystem->write(self::TEMP_FILE, $this->generatePHPScript($code));
     }
 
     /**
@@ -134,7 +123,7 @@ class PHPCommander implements PHPCommanderInterface
     private function executePhpScript()
     {
         $phpCommand = clone $this->phpCommand;
-        $phpCommand->addParam(new Param('-f '.$this->tempFileName));
+        $phpCommand->addParam(new Param('-f '.self::TEMP_FILE));
 
         $this->startupTime = \microtime(true) * 1000;
 

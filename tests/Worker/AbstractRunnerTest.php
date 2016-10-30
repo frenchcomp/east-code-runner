@@ -37,6 +37,16 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
         $this->builderRunner()->composerIsReady(new \stdClass());
     }
 
+    public function testComposerIsReady()
+    {
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $this->builderRunner()->composerIsReady(
+                $this->createMock(CodeInterface::class)
+            )
+        );
+    }
+
     /**
      * @expectedException \Throwable
      */
@@ -53,10 +63,22 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
         $this->builderRunner()->codeExecuted($this->createMock(CodeInterface::class), new \stdClass());
     }
 
+    public function testCodeExecuted()
+    {
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $this->builderRunner()
+                ->codeExecuted(
+                    $this->createMock(CodeInterface::class),
+                    $this->createMock(ResultInterface::class)
+                )
+        );
+    }
+
     /**
      * @expectedException \Throwable
      */
-    public function testCodeErrorInCodedBadCode()
+    public function testErrorInCodedBadCode()
     {
         $this->builderRunner()->codeErrorInCoded(new \stdClass, $this->createMock(ResultInterface::class));
     }
@@ -64,8 +86,20 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Throwable
      */
-    public function testCodeErrorInCodedBadResult()
+    public function testErrorInCodedBadResult()
     {
         $this->builderRunner()->codeErrorInCoded($this->createMock(CodeInterface::class), new \stdClass());
+    }
+
+    public function testErrorInCode()
+    {
+        self::assertInstanceOf(
+            RunnerInterface::class,
+            $this->builderRunner()
+                ->errorInCode(
+                    $this->createMock(CodeInterface::class),
+                    $this->createMock(ResultInterface::class)
+                )
+        );
     }
 }

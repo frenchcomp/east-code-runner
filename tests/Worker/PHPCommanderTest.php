@@ -26,7 +26,11 @@ use AdamBrett\ShellWrapper\Runners\Exec;
 use AdamBrett\ShellWrapper\Runners\ReturnValue;
 use AdamBrett\ShellWrapper\Runners\Runner;
 use Gaufrette\Filesystem;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\CodeInterface;
+use Teknoo\East\CodeRunnerBundle\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunnerBundle\Task\TextResult;
 use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\PHPCommanderInterface;
+use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunnerBundle\Worker\PHPCommander;
 
 /**
@@ -95,4 +99,106 @@ class PHPCommanderTest extends AbstractPHPCommanderTest
         );
     }
 
+    public function testResetReturn()
+    {
+        $this->getFileSystemMock()
+            ->expects(self::once())
+            ->method('delete')
+            ->with(PHPCommander::TEMP_FILE);
+
+        parent::testResetReturn();
+    }
+
+    public function testExecute()
+    {
+        $this->getFileSystemMock()
+            ->expects(self::once())
+            ->method('write')
+            ->with(PHPCommander::TEMP_FILE, '<?php'.PHP_EOL.'require_once ("vendor/autoload.php");'.PHP_EOL.PHP_EOL.'echo "Hello World";')
+            ->willReturn(123);
+
+        $this->getCommandRunnerMock()
+            ->expects(self::once())
+            ->method('run');
+
+        $this->getCommandRunnerMock()
+            ->expects(self::once())
+            ->method('getReturnValue')
+            ->willReturn('Hello World');
+
+        $code = $this->createMock(CodeInterface::class);
+        $code->expects(self::any())->method('getCode')->willReturn('echo "Hello World";');
+        $oriCode = $code;
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::never())->method('errorInCode');
+
+        $runner->expects(self::once())
+            ->method('codeExecuted')
+            ->willReturnCallback(
+                function (CodeInterface $code, ResultInterface $result) use ($oriCode, $runner) {
+                    self::assertEquals($oriCode, $code);
+                    self::assertInstanceOf(TextResult::class, $result);
+                    self::assertEquals('Hello World', $result->getOutput());
+                    self::assertEquals('', $result->getErrors());
+
+                    return $runner;
+                }
+            );
+
+        self::assertInstanceOf(
+            PHPCommanderInterface::class,
+            $this->buildCommander()->execute(
+                $code,
+                $runner
+            )
+        );
+    }
+
+    public function testExecuteError()
+    {
+        $this->getFileSystemMock()
+            ->expects(self::once())
+            ->method('write')
+            ->with(PHPCommander::TEMP_FILE, '<?php'.PHP_EOL.'require_once ("vendor/autoload.php");'.PHP_EOL.PHP_EOL.'echo "Hello World";')
+            ->willReturn(123);
+
+        $this->getCommandRunnerMock()
+            ->expects(self::once())
+            ->method('run');
+
+        $this->getCommandRunnerMock()
+            ->expects(self::once())
+            ->method('getReturnValue')
+            ->willThrowException(new \Exception('fooBar'));
+
+        $code = $this->createMock(CodeInterface::class);
+        $code->expects(self::any())->method('getCode')->willReturn('echo "Hello World";');
+        $oriCode = $code;
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::never())->method('codeExecuted');
+
+        $runner->expects(self::once())
+            ->method('errorInCode')
+            ->willReturnCallback(
+                function (CodeInterface $code, ResultInterface $result) use ($oriCode, $runner) {
+                    self::assertEquals($oriCode, $code);
+                    self::assertInstanceOf(TextResult::class, $result);
+                    self::assertEquals('', $result->getOutput());
+                    $errors = explode(PHP_EOL, $result->getErrors());
+                    self::assertEquals('fooBar', $errors[0]);
+
+                    return $runner;
+                }
+            );
+
+        self::assertInstanceOf(
+            PHPCommanderInterface::class,
+            $this->buildCommander()->execute(
+                $code,
+                $runner
+            )
+        );
+    }
 }

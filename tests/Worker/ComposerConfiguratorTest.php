@@ -93,4 +93,29 @@ class ComposerConfiguratorTest extends AbstractComposerConfiguratorTest
             '-d foo/bar'
         );
     }
+
+    public function testResetReturn()
+    {
+        $this->getFileSystemMock()
+            ->expects(self::once())
+            ->method('delete')
+            ->with(ComposerConfigurator::COMPOSER_JSON_FILE);
+
+        parent::testResetReturn();
+    }
+
+    public function testConfigure()
+    {
+        $this->getFileSystemMock()
+            ->expects(self::once())
+            ->method('write')
+            ->with(ComposerConfigurator::COMPOSER_JSON_FILE, \json_encode(['require' => ['foo'=>'2.3.4','bar'=>'*']]))
+            ->willReturn(123);
+
+        $this->getCommandRunnerMock()
+            ->expects(self::once())
+            ->method('run');
+
+        parent::testConfigure();
+    }
 }

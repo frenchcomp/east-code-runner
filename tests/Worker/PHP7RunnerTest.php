@@ -22,7 +22,10 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\Worker;
 
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
+use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
+use Teknoo\East\CodeRunnerBundle\Entity\Task\Task;
+use Teknoo\East\CodeRunnerBundle\Task\PHPCode;
 use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\ComposerConfiguratorInterface;
 use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\PHPCommanderInterface;
 use Teknoo\East\CodeRunnerBundle\Worker\Interfaces\RunnerInterface;
@@ -119,6 +122,9 @@ class PHP7RunnerTest extends AbstractRunnerTest
         return $this->phpCommander;
     }
 
+    /**
+     * @return PHP7Runner|RunnerInterface
+     */
     public function builderRunner(): RunnerInterface
     {
         return new PHP7Runner(
@@ -128,6 +134,129 @@ class PHP7RunnerTest extends AbstractRunnerTest
             '7.0',
             $this->getComposerConfiguratorMock(),
             $this->getPhpCommanderMock()
+        );
+    }
+
+    public function testComposerIsReady()
+    {
+        $this->getPhpCommanderMock()
+            ->expects(self::once())
+            ->method('execute');
+
+        $this->getStatusProducerMock()
+            ->expects(self::once())
+            ->method('publish');
+
+        parent::testComposerIsReady();
+    }
+
+    public function testCodeExecuted()
+    {
+        $this->getResultProducerMock()
+            ->expects(self::once())
+            ->method('publish');
+
+        $this->getStatusProducerMock()
+            ->expects(self::once())
+            ->method('publish');
+
+        $this->getPhpCommanderMock()
+            ->expects(self::once())
+            ->method('reset')
+            ->willReturnSelf();
+
+        $this->getComposerConfiguratorMock()
+            ->expects(self::once())
+            ->method('reset')
+            ->willReturnSelf();
+
+        parent::testCodeExecuted();
+    }
+
+    public function testErrorInCode()
+    {
+        $this->getResultProducerMock()
+            ->expects(self::once())
+            ->method('publish');
+
+        $this->getStatusProducerMock()
+            ->expects(self::once())
+            ->method('publish');
+
+        $this->getPhpCommanderMock()
+            ->expects(self::once())
+            ->method('reset')
+            ->willReturnSelf();
+
+        $this->getComposerConfiguratorMock()
+            ->expects(self::once())
+            ->method('reset')
+            ->willReturnSelf();
+
+        parent::testErrorInCode();
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testExecuteBadMessage()
+    {
+        $this->builderRunner()->execute(new \stdClass());
+    }
+
+    public function testExecute()
+    {
+        $message = new AMQPMessage();
+        $code = new PHPCode('echo "Hello World";', []);
+        $message->body = json_encode((new Task())->setCode($code));
+
+        $this->getStatusProducerMock()
+            ->expects(self::once())
+            ->method('publish');
+
+        $runner = $this->builderRunner();
+        $this->getComposerConfiguratorMock()
+            ->expects(self::once())
+            ->method('configure')
+            ->with($code, $runner)
+            ->willReturnSelf();
+
+        $this->getResultProducerMock()
+            ->expects(self::never())
+            ->method('publish');
+
+        self::assertTrue(
+            $runner->execute($message)
+        );
+    }
+
+    public function testExecuteError()
+    {
+        $message = new AMQPMessage();
+        $code = new PHPCode('echo "Hello World";', []);
+        $message->body = json_encode((new Task())->setCode($code));
+
+        $this->getStatusProducerMock()
+            ->expects(self::exactly(2))
+            ->method('publish');
+
+        $this->getResultProducerMock()
+            ->expects(self::once())
+            ->method('publish');
+
+        $runner = $this->builderRunner();
+        $this->getComposerConfiguratorMock()
+            ->expects(self::once())
+            ->method('configure')
+            ->with($code, $runner)
+            ->willThrowException(new \Exception());
+
+        $this->getLoggerMock()
+            ->expects(self::once())
+            ->method('critical');
+
+        self::assertFalse(
+            $runner->execute($message)
         );
     }
 }
