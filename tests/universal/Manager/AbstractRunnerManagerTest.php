@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Manager;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
@@ -31,7 +32,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * To get an instance of the class to test
+     * To get an instance of the class to test.
+     *
      * @return RunnerManagerInterface
      */
     abstract public function buildManager(): RunnerManagerInterface;
@@ -51,7 +53,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
             $this->buildManager()->registerMe($this->createMock(RunnerInterface::class))
         );
     }
-    
+
     /**
      * @expectedException \Throwable
      */
@@ -92,7 +94,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPushResultReturn()
     {
-        $manager= $this->buildManager();
+        $manager = $this->buildManager();
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
         $result = $this->createMock(ResultInterface::class);
@@ -101,7 +103,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
         $runner->expects(self::any())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
                 $manager->taskAccepted($runner, $task);
 
                 return $runner;
@@ -141,7 +143,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPushResultExceptionTaskUnknown()
     {
-        $manager= $this->buildManager();
+        $manager = $this->buildManager();
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
         $result = $this->createMock(ResultInterface::class);
@@ -154,7 +156,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
-    
+
     /**
      * @expectedException \Throwable
      */
@@ -179,7 +181,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPushStatusReturn()
     {
-        $manager= $this->buildManager();
+        $manager = $this->buildManager();
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
         $status = $this->createMock(StatusInterface::class);
@@ -188,7 +190,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
         $runner->expects(self::any())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
                 $manager->taskAccepted($runner, $task);
 
                 return $runner;
@@ -228,7 +230,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPushStatusExceptionTaskUnknown()
     {
-        $manager= $this->buildManager();
+        $manager = $this->buildManager();
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
         $status = $this->createMock(StatusInterface::class);
@@ -266,14 +268,14 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testTaskAcceptedReturn()
     {
-        $manager= $this->buildManager();
+        $manager = $this->buildManager();
         $task = $this->createMock(TaskInterface::class);
 
         $runner1 = $this->createMock(RunnerInterface::class);
         $runner1->expects(self::any())->method('getIdentifier')->willReturn('runner1');
         $runner1->expects(self::any())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner1) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner1) {
                 $manager->taskAccepted($runner1, $task);
 
                 return $runner1;
@@ -339,14 +341,14 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testTaskRejectedReturn()
     {
-        $manager= $this->buildManager();
+        $manager = $this->buildManager();
         $task = $this->createMock(TaskInterface::class);
 
         $runner1 = $this->createMock(RunnerInterface::class);
         $runner1->expects(self::any())->method('getIdentifier')->willReturn('runner1');
         $runner1->expects(self::once())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner1) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner1) {
                 $manager->taskRejected($runner1, $task);
 
                 return $runner1;
@@ -366,7 +368,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
         $runner2->expects(self::any())->method('getIdentifier')->willReturn('runner2');
         $runner2->expects(self::once())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner2) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner2) {
                 $manager->taskAccepted($runner2, $task);
 
                 return $runner2;
@@ -420,7 +422,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteForMeThisTaskExceptionWhenTaskNotExecutableByAnyRunners()
     {
-        $manager= $this->buildManager();
+        $manager = $this->buildManager();
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
         $task = $this->createMock(TaskInterface::class);
@@ -428,7 +430,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
 
         $runner->expects(self::any())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
                 $manager->taskRejected($runner, $task);
 
                 return $runner;

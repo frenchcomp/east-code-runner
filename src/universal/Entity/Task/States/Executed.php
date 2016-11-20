@@ -19,13 +19,15 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Entity\Task\States;
 
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\States\State\AbstractState;
 
 /**
- * State Executed
+ * State Executed.
+ *
  * @mixin Task
  */
 class Executed extends AbstractState

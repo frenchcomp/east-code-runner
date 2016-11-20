@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Manager;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
@@ -31,7 +32,8 @@ use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
- * Test RunnerManagerTest
+ * Test RunnerManagerTest.
+ *
  * @covers \Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager
  * @covers \Teknoo\East\CodeRunner\Manager\RunnerManager\States\Running
  * @covers \Teknoo\East\CodeRunner\Manager\RunnerManager\States\Selecting
@@ -66,7 +68,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
                 ->expects(self::any())
                 ->method('offsetExists')
                 ->willReturnCallback(function ($name) use (&$repository) {
-                   return isset($repository[$name]);
+                    return isset($repository[$name]);
                 });
 
             $this->tasksByRunner
@@ -148,24 +150,23 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             $this->tasksStandbyRegistry
                 ->expects(self::any())
                 ->method('enqueue')
-                ->willReturnCallback(function (RunnerInterface $runner, TaskInterface $task)
-                use (&$queue, $tasksStandbyRegistry) {
+                ->willReturnCallback(function (RunnerInterface $runner, TaskInterface $task) use (&$queue, $tasksStandbyRegistry) {
                     $queue[$runner->getIdentifier()][] = $task;
+
                     return $tasksStandbyRegistry;
-            });
+                });
 
             $tasksStandbyRegistry = $this->tasksStandbyRegistry;
             $this->tasksStandbyRegistry
                 ->expects(self::any())
                 ->method('dequeue')
-                ->willReturnCallback(function (RunnerInterface $runner)
-                use (&$queue, $tasksStandbyRegistry) {
+                ->willReturnCallback(function (RunnerInterface $runner) use (&$queue, $tasksStandbyRegistry) {
                     if (empty($queue[$runner->getIdentifier()])) {
                         return null;
                     }
 
                     return array_shift($queue[$runner->getIdentifier()]);
-            });
+                });
         }
 
         return $this->tasksStandbyRegistry;
@@ -212,7 +213,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $runner->expects(self::any())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
                 $manager->taskAccepted($runner, $task);
 
                 return $runner;
@@ -251,7 +252,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $runner->expects(self::any())
             ->method('canYouExecute')
-            ->willReturnCallback(function(RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
                 $manager->taskAccepted($runner, $task);
 
                 return $runner;

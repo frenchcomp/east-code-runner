@@ -19,18 +19,19 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Runner\Interfaces;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
- * To define a runner able to execute tasks
+ * To define a runner able to execute tasks.
  */
 interface RunnerInterface
 {
     /**
-     * To know the unique identifier about a runner
+     * To know the unique identifier about a runner.
      *
      * @return string
      */
@@ -66,20 +67,24 @@ interface RunnerInterface
     public function reset(): RunnerInterface;
 
     /**
-     * To restore in the runner its current task in execution (for asynchronous runners)
+     * To restore in the runner its current task in execution (for asynchronous runners).
+     *
      * @param TaskInterface $task
+     *
      * @return RunnerInterface
      */
     public function rememberYourCurrentTask(TaskInterface $task): RunnerInterface;
 
     /**
-     * To check if a task is executable by the runner, the runner must recall to the manager the method accept or reject
+     * To check if a task is executable by the runner, the runner must recall to the manager the method accept or reject.
      *
      * @param RunnerManagerInterface $manager
-     * @param TaskInterface $task
+     * @param TaskInterface          $task
+     *
      * @return RunnerInterface
+     *
      * @throws \DomainException if the task is not executable by the runner
-     * @throws \LogicException if the task's code is invalid
+     * @throws \LogicException  if the task's code is invalid
      */
     public function canYouExecute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface;
 
@@ -87,8 +92,10 @@ interface RunnerInterface
      * To execute the task by the runner, the runner must call methods pushResult and pushStatus to notify the manager.
      *
      * @param RunnerManagerInterface $manager
-     * @param TaskInterface $task
+     * @param TaskInterface          $task
+     *
      * @return RunnerInterface
+     *
      * @throws \LogicException if the task's code is invalid
      */
     public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface;

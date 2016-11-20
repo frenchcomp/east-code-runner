@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
@@ -48,9 +49,10 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
 
     /**
      * TasksByRunnerRegistry constructor.
-     * @param DatesService $datesService
+     *
+     * @param DatesService            $datesService
      * @param TaskExecutionRepository $taskExecutionRepository
-     * @param EntityManager $entityManager
+     * @param EntityManager           $entityManager
      */
     public function __construct(
         DatesService $datesService,
@@ -61,7 +63,6 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
         $this->taskExecutionRepository = $taskExecutionRepository;
         $this->entityManager = $entityManager;
     }
-
 
     /**
      * {@inheritdoc}
@@ -80,6 +81,7 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
 
     /**
      * @param RunnerInterface $runner
+     *
      * @return null|TaskExecution
      */
     private function getTaskExecution(RunnerInterface $runner)
@@ -122,8 +124,9 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     }
 
     /**
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
      * @param RunnerInterface $runner
+     *
      * @return TaskExecution
      */
     private function create(TaskInterface $task, RunnerInterface $runner): TaskExecution

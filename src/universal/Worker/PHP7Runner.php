@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Worker;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -68,12 +69,13 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
 
     /**
      * PHP7Runner constructor.
-     * @param ProducerInterface $statusProducer
-     * @param ProducerInterface $resultProducer
-     * @param LoggerInterface $logger
-     * @param string $version
+     *
+     * @param ProducerInterface             $statusProducer
+     * @param ProducerInterface             $resultProducer
+     * @param LoggerInterface               $logger
+     * @param string                        $version
      * @param ComposerConfiguratorInterface $composerConfigurator
-     * @param PHPCommanderInterface $phpCommander
+     * @param PHPCommanderInterface         $phpCommander
      */
     public function __construct(
         ProducerInterface $statusProducer,
@@ -91,9 +93,9 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
         $this->phpCommander = $phpCommander;
     }
 
-
     /**
      * @param AMQPMessage $message
+     *
      * @return Task
      */
     private function extractTask(AMQPMessage $message): Task
@@ -103,6 +105,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
 
     /**
      * @param AMQPMessage $msg
+     *
      * @return bool
      */
     public function execute(AMQPMessage $msg)
@@ -113,7 +116,6 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
             $task = $this->extractTask($msg);
 
             $this->composerConfigurator->configure($task->getCode(), $this);
-
         } catch (\Throwable $e) {
             $error = $e->getMessage().PHP_EOL;
             $error .= $e->getFile().':'.$e->getLine().PHP_EOL;
@@ -140,6 +142,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
 
     /**
      * @param CodeInterface $code
+     *
      * @return RunnerInterface
      */
     public function composerIsReady(CodeInterface $code): RunnerInterface
@@ -150,9 +153,6 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
         return $this;
     }
 
-    /**
-     *
-     */
     private function reset()
     {
         $this->composerConfigurator->reset();
@@ -160,8 +160,9 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     }
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param ResultInterface $result
+     *
      * @return RunnerInterface
      */
     public function codeExecuted(CodeInterface $code, ResultInterface $result): RunnerInterface
@@ -175,8 +176,9 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     }
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param ResultInterface $result
+     *
      * @return RunnerInterface
      */
     public function errorInCode(CodeInterface $code, ResultInterface $result): RunnerInterface

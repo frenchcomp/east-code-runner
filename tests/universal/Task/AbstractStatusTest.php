@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
@@ -26,7 +27,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 abstract class AbstractStatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * To get an instance of the class to test
+     * To get an instance of the class to test.
+     *
      * @return StatusInterface
      */
     abstract public function buildStatus(): StatusInterface;
@@ -80,7 +82,7 @@ abstract class AbstractStatusTest extends \PHPUnit_Framework_TestCase
     {
         $status = $this->buildStatus();
         $className = get_class($status);
-        $className::jsonDeserialize(['class'=>'\DateTime']);
+        $className::jsonDeserialize(['class' => '\DateTime']);
     }
 
     public function testJsonEncodeDecode()

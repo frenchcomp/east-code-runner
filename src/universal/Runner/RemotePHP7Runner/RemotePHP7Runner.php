@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Runner\RemotePHP7Runner;
 
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
@@ -76,11 +77,12 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
     /**
      * RemotePHP7Runner constructor.
      * Initialize States behavior.
+     *
      * @param ProducerInterface $taskProducer
-     * @param string $identifier
-     * @param string $name
-     * @param string $version
-     * @param array $capabilities
+     * @param string            $identifier
+     * @param string            $name
+     * @param string            $version
+     * @param array             $capabilities
      */
     public function __construct(
         ProducerInterface $taskProducer,
@@ -107,12 +109,13 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
     {
         return [
             Awaiting::class,
-            Busy::class
+            Busy::class,
         ];
     }
 
     /**
      * @param Capability $capability
+     *
      * @return RemotePHP7Runner
      */
     public function addCapability(Capability $capability): RemotePHP7Runner

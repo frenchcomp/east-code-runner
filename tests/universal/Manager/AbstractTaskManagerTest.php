@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Manager;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
@@ -29,7 +30,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * To get an instance of the class to test
+     * To get an instance of the class to test.
+     *
      * @return TaskManagerInterface
      */
     abstract public function buildManager(): TaskManagerInterface;

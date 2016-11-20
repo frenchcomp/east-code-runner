@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Runner;
 
 use Teknoo\East\CodeRunner\Runner\Interfaces\CapabilityInterface;
@@ -40,8 +41,9 @@ class Capability implements CapabilityInterface
 
     /**
      * Capability constructor.
+     *
      * @param string $type
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function __construct(string $type, $value)
     {

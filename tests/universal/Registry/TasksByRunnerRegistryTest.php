@@ -19,19 +19,19 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
-use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Entity\TaskExecution;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\TasksByRunnerRegistry;
 use Teknoo\East\CodeRunner\Repository\TaskExecutionRepository;
-use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Service\DatesService;
 
 /**
- * Test TasksByRunnerRegistryTest
+ * Test TasksByRunnerRegistryTest.
+ *
  * @covers \Teknoo\East\CodeRunner\Registry\TasksByRunnerRegistry
  */
 class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
@@ -86,7 +86,7 @@ class TasksByRunnerRegistryTest extends AbstractTasksByRunnerRegistryTest
 
                     return false;
                 });
-            
+
             $this->taskExecutionRepository
                 ->expects(self::any())
                 ->method('clearExecution')

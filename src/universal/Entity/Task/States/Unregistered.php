@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Entity\Task\States;
 
 use Teknoo\East\CodeRunner\Entity\Task\Task;
@@ -28,8 +29,10 @@ use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Unregistered
+ * State Unregistered.
+ *
  * @mixin Task
+ *
  * @property StatusInterface $status
  * @property string $url
  * @property CodeInterface $code
@@ -40,7 +43,7 @@ class Unregistered implements StateInterface
 
     private function doSetCode()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (CodeInterface $code): Task {
@@ -54,7 +57,7 @@ class Unregistered implements StateInterface
 
     private function doRegisterUrl()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (string $taskUrl): Task {
@@ -68,7 +71,7 @@ class Unregistered implements StateInterface
 
     private function doRegisterStatus()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (StatusInterface $status): Task {

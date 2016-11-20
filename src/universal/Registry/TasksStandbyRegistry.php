@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
@@ -49,9 +50,10 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
 
     /**
      * TasksByRunnerRegistry constructor.
-     * @param DatesService $datesService
+     *
+     * @param DatesService          $datesService
      * @param TaskStandbyRepository $taskStandbyRepository
-     * @param EntityManager $entityManager
+     * @param EntityManager         $entityManager
      */
     public function __construct(
         DatesService $datesService,
@@ -63,9 +65,9 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
         $this->entityManager = $entityManager;
     }
 
-
     /**
      * @param RunnerInterface $runner
+     *
      * @return null|Task
      */
     private function getNextTask(RunnerInterface $runner)
@@ -90,8 +92,9 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     }
 
     /**
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
      * @param RunnerInterface $runner
+     *
      * @return TaskStandby
      */
     private function create(TaskInterface $task, RunnerInterface $runner): TaskStandby
@@ -116,6 +119,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
 
     /**
      * @param RunnerInterface $runner
+     *
      * @return null|TaskInterface
      */
     public function dequeue(RunnerInterface $runner)

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Manager\RunnerManager;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
@@ -82,9 +83,10 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
     /**
      * Manager constructor.
      * Initialize States behavior.
-     * @param TasksByRunnerRegistryInterface $tasksByRunner
+     *
+     * @param TasksByRunnerRegistryInterface       $tasksByRunner
      * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasks
-     * @param TasksStandbyRegistryInterface $tasksStandbyRegistry
+     * @param TasksStandbyRegistryInterface        $tasksStandbyRegistry
      */
     public function __construct(
         TasksByRunnerRegistryInterface $tasksByRunner,
@@ -108,7 +110,7 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
     {
         return [
             Running::class,
-            Selecting::class
+            Selecting::class,
         ];
     }
 

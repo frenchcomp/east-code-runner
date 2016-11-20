@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Runner;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
@@ -40,7 +41,7 @@ trait CheckRequirementsTrait
             $packageFound = false;
 
             /**
-             * @var CapabilityInterface $capability
+             * @var CapabilityInterface
              */
             foreach ($capabilities as $capability) {
                 if ('package' == $capability->getType() && $package == $capability) {

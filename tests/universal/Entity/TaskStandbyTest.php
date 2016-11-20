@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Entity;
 
 use Teknoo\East\CodeRunner\Entity\TaskStandby;
@@ -44,7 +45,7 @@ class TaskStandbyTest extends \PHPUnit_Framework_TestCase
     {
         self::assertEquals(
             123,
-            $this->generateEntityPopulated(['id'=>123])->getId()
+            $this->generateEntityPopulated(['id' => 123])->getId()
         );
     }
 
@@ -52,7 +53,7 @@ class TaskStandbyTest extends \PHPUnit_Framework_TestCase
     {
         self::assertEquals(
             'fooBar',
-            $this->generateEntityPopulated(['runnerIdentifier'=>'fooBar'])->getRunnerIdentifier()
+            $this->generateEntityPopulated(['runnerIdentifier' => 'fooBar'])->getRunnerIdentifier()
         );
     }
 
@@ -83,7 +84,7 @@ class TaskStandbyTest extends \PHPUnit_Framework_TestCase
         $task = $this->createMock(TaskInterface::class);
         self::assertEquals(
             $task,
-            $this->generateEntityPopulated(['task'=>$task])->getTask()
+            $this->generateEntityPopulated(['task' => $task])->getTask()
         );
     }
 
@@ -115,7 +116,7 @@ class TaskStandbyTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('2016-07-28');
         self::assertEquals(
             $date,
-            $this->generateEntityPopulated(['createdAt'=>$date])->getCreatedAt()
+            $this->generateEntityPopulated(['createdAt' => $date])->getCreatedAt()
         );
     }
 
@@ -147,7 +148,7 @@ class TaskStandbyTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('2016-07-28');
         self::assertEquals(
             $date,
-            $this->generateEntityPopulated(['updatedAt'=>$date])->getUpdatedAt()
+            $this->generateEntityPopulated(['updatedAt' => $date])->getUpdatedAt()
         );
     }
 
@@ -179,7 +180,7 @@ class TaskStandbyTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime('2016-07-28');
         self::assertEquals(
             $date,
-            $this->generateEntityPopulated(['deletedAt'=>$date])->getDeletedAt()
+            $this->generateEntityPopulated(['deletedAt' => $date])->getDeletedAt()
         );
     }
 

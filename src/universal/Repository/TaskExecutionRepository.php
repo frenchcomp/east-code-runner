@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -33,6 +34,7 @@ class TaskExecutionRepository extends EntityRepository
 
     /**
      * @param string $identifier
+     *
      * @return TaskExecution|false
      */
     private function fetchTaskExecution(string $identifier)
@@ -55,6 +57,7 @@ class TaskExecutionRepository extends EntityRepository
 
     /**
      * @param string $identifier
+     *
      * @return TaskExecution|false
      */
     public function findByRunnerIdentifier(string $identifier)
@@ -67,8 +70,10 @@ class TaskExecutionRepository extends EntityRepository
     }
 
     /**
-     * To perform a batch update request to delete all entries of task executions
+     * To perform a batch update request to delete all entries of task executions.
+     *
      * @param \DateTime $date
+     *
      * @return TaskExecutionRepository
      */
     public function clearAll(\DateTime $date): TaskExecutionRepository
@@ -91,9 +96,10 @@ class TaskExecutionRepository extends EntityRepository
     }
 
     /**
-     * To invalidate a specific cache
+     * To invalidate a specific cache.
      *
      * @param string $identifier
+     *
      * @return TaskExecutionRepository
      */
     public function clearExecution(string $identifier): TaskExecutionRepository

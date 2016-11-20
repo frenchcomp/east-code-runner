@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Worker;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
@@ -52,7 +53,7 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCodeExecutedBadCode()
     {
-        $this->builderRunner()->codeExecuted(new \stdClass, $this->createMock(ResultInterface::class));
+        $this->builderRunner()->codeExecuted(new \stdClass(), $this->createMock(ResultInterface::class));
     }
 
     /**
@@ -80,7 +81,7 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorInCodedBadCode()
     {
-        $this->builderRunner()->codeErrorInCoded(new \stdClass, $this->createMock(ResultInterface::class));
+        $this->builderRunner()->codeErrorInCoded(new \stdClass(), $this->createMock(ResultInterface::class));
     }
 
     /**

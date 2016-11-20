@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Entity\Task\States;
 
 use Teknoo\East\CodeRunner\Entity\Task\Task;
@@ -28,8 +29,10 @@ use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Registered
+ * State Registered.
+ *
  * @mixin Task
+ *
  * @property StatusInterface $status
  * @property ResultInterface $result
  */
@@ -39,7 +42,7 @@ class Registered implements StateInterface
 
     private function doRegisterStatus()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (StatusInterface $status): Task {
@@ -51,7 +54,7 @@ class Registered implements StateInterface
 
     private function doRegisterResult()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (ResultInterface $result): Task {

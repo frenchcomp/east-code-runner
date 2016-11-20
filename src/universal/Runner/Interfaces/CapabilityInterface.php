@@ -19,12 +19,13 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Runner\Interfaces;
 
 use Teknoo\Immutable\ImmutableInterface;
 
 /**
- * Interface to define as value object, capabilities of a runner
+ * Interface to define as value object, capabilities of a runner.
  */
 interface CapabilityInterface extends ImmutableInterface
 {

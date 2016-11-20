@@ -1,6 +1,6 @@
 #src/Resources/config/doctrine/task_execution.orm.yml
 Teknoo\East\CodeRunnerBundle\Entity\TaskExecution:
-type: 'entity'
+  type: 'entity'
   table: 'task_execution'
   repositoryClass: 'Teknoo\East\CodeRunnerBundle\Repository\TaskExecutionRepository'
   id:

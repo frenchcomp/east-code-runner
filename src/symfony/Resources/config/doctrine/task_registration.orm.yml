@@ -1,6 +1,6 @@
 #src/Resources/config/doctrine/task_registration.orm.yml
 Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration:
-type: 'entity'
+  type: 'entity'
   table: 'task_registration'
   repositoryClass: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository'
   id:

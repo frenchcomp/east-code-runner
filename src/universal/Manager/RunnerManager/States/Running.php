@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Manager\RunnerManager\States;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
@@ -35,7 +36,8 @@ use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Running
+ * State Running.
+ *
  * @property RunnerInterface[] $runners
  * @property TasksByRunnerRegistryInterface|TaskInterface[] $tasksByRunner
  * @property TasksManagerByTasksRegistryInterface|TaskManagerInterface[] $tasksManagerByTasks
@@ -48,11 +50,10 @@ class Running implements StateInterface
 
     private function doRegisterMe()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
-        return function (RunnerInterface $runner): RunnerManagerInterface
-        {
+        return function (RunnerInterface $runner): RunnerManagerInterface {
             $runners = $this->runners;
             $runners[$runner->getIdentifier()] = $runner;
             $this->runners = $runners;
@@ -71,7 +72,7 @@ class Running implements StateInterface
 
     private function doForgetMe()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner): RunnerManagerInterface {
@@ -88,7 +89,7 @@ class Running implements StateInterface
 
     private function clearRunner()
     {
-        /**
+        /*
          * Method to clear a runner after its execution and free memory in this runner about this task.
          *
          * @param RunnerInterface $runner
@@ -103,7 +104,7 @@ class Running implements StateInterface
 
     private function doPushResult()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface {
@@ -128,10 +129,10 @@ class Running implements StateInterface
 
     private function doPushStatus()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
-        return function (RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface{
+        return function (RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface {
             $runnerIdentifier = $runner->getIdentifier();
             if (!isset($this->tasksByRunner[$runnerIdentifier])) {
                 throw new \DomainException('Error, the task was not found for this runner');
@@ -151,7 +152,7 @@ class Running implements StateInterface
 
     private function registerTask()
     {
-        /**
+        /*
          * To register in the local area the task to be able find it in next operations
          * @param RunnerInterface $runner
          * @param TaskInterface $task

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
@@ -26,7 +27,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * To get an instance of the class to test
+     * To get an instance of the class to test.
+     *
      * @return ResultInterface
      */
     abstract public function buildResult(): ResultInterface;
@@ -112,7 +114,7 @@ abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->buildResult();
         $className = get_class($result);
-        $className::jsonDeserialize(['class'=>'\DateTime']);
+        $className::jsonDeserialize(['class' => '\DateTime']);
     }
 
     public function testJsonEncodeDecode()

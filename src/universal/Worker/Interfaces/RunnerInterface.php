@@ -19,33 +19,36 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Worker\Interfaces;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 
 /**
- * Interface RunnerInterface
- * @package Teknoo\East\CodeRunner\Worker\PHP7Runner\Interfaces
+ * Interface RunnerInterface.
  */
 interface RunnerInterface
 {
     /**
      * @param CodeInterface $code
+     *
      * @return RunnerInterface
      */
     public function composerIsReady(CodeInterface $code): RunnerInterface;
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param ResultInterface $result
+     *
      * @return RunnerInterface
      */
     public function codeExecuted(CodeInterface $code, ResultInterface $result): RunnerInterface;
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param ResultInterface $result
+     *
      * @return RunnerInterface
      */
     public function errorInCode(CodeInterface $code, ResultInterface $result): RunnerInterface;

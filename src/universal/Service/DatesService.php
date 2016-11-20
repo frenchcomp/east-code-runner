@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Service;
 
 class DatesService
@@ -30,9 +31,10 @@ class DatesService
 
     /**
      * DatesService constructor.
+     *
      * @param \DateTime|null $date
      */
-    public function __construct(\DateTime $date=null)
+    public function __construct(\DateTime $date = null)
     {
         if (!$this->date instanceof \DateTime) {
             //To prevent recall to __construct method
@@ -41,7 +43,7 @@ class DatesService
     }
 
     /**
-     * Initialize the date property value
+     * Initialize the date property value.
      */
     private function generateDateTimeInstance()
     {
@@ -62,6 +64,7 @@ class DatesService
 
     /**
      * @param \DateTime $date
+     *
      * @return DatesService
      */
     public function setDate(\DateTime $date): DatesService

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Registry\Interfaces;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
@@ -31,7 +32,7 @@ interface TasksManagerByTasksRegistryInterface extends \ArrayAccess
     public function addTaskManager(TaskManagerInterface $taskManager);
 
     /**
-     * To clear all runners memorized tasks in the persistent dbms
+     * To clear all runners memorized tasks in the persistent dbms.
      *
      * @return TasksManagerByTasksRegistryInterface
      */

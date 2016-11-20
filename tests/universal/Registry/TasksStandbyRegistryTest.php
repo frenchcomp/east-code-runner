@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
@@ -112,7 +113,7 @@ class TasksStandbyRegistryTest extends AbstractTasksStandbyRegistryTest
 
         return $this->entityManager;
     }
-    
+
     public function buildRegistry(): TasksStandbyRegistryInterface
     {
         return new TasksStandbyRegistry(

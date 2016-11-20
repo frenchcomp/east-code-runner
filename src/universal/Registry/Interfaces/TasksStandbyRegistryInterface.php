@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Registry\Interfaces;
 
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
@@ -27,22 +28,26 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 interface TasksStandbyRegistryInterface
 {
     /**
-     * To add a task in standby list of a runner
+     * To add a task in standby list of a runner.
+     *
      * @param RunnerInterface $runner
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
+     *
      * @return TasksStandbyRegistryInterface|self
      */
-    public function enqueue (RunnerInterface $runner, TaskInterface $task): TasksStandbyRegistryInterface;
+    public function enqueue(RunnerInterface $runner, TaskInterface $task): TasksStandbyRegistryInterface;
 
     /**
      * Dequeues a standby task for a runner. If there are no standby queue, the method must return null.
+     *
      * @param RunnerInterface $runner
+     *
      * @return TaskInterface|null
      */
     public function dequeue(RunnerInterface $runner);
-    
+
     /**
-     * To clear all standby tasks in the persistent dbms
+     * To clear all standby tasks in the persistent dbms.
      *
      * @return TasksStandbyRegistryInterface|self
      */

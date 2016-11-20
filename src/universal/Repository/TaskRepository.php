@@ -19,11 +19,11 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
 class TaskRepository extends EntityRepository
 {
-
 }

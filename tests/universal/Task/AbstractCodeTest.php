@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
@@ -26,7 +27,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 abstract class AbstractCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * To get an instance of the class to test
+     * To get an instance of the class to test.
+     *
      * @return CodeInterface
      */
     abstract public function buildCode(): CodeInterface;
@@ -38,7 +40,7 @@ abstract class AbstractCodeTest extends \PHPUnit_Framework_TestCase
             $this->buildCode()->getCode()
         );
     }
-    
+
     public function testGetNeededPackagesReturn()
     {
         self::assertInternalType(
@@ -88,7 +90,7 @@ abstract class AbstractCodeTest extends \PHPUnit_Framework_TestCase
     {
         $code = $this->buildCode();
         $className = get_class($code);
-        $className::jsonDeserialize(['class'=>'\DateTime']);
+        $className::jsonDeserialize(['class' => '\DateTime']);
     }
 
     public function testJsonEncodeDecode()

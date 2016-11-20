@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
@@ -68,10 +69,11 @@ class PHPCommander implements PHPCommanderInterface
 
     /**
      * PHPCommander constructor.
-     * @param Command $phpCommand
-     * @param Filesystem $fileSystem
+     *
+     * @param Command            $phpCommand
+     * @param Filesystem         $fileSystem
      * @param ReturnValue|Runner $commandRunner
-     * @param string $version
+     * @param string             $version
      */
     public function __construct(
         Command $phpCommand,
@@ -85,7 +87,6 @@ class PHPCommander implements PHPCommanderInterface
         $this->version = $version;
     }
 
-
     /**
      * @return PHPCommanderInterface
      */
@@ -98,6 +99,7 @@ class PHPCommander implements PHPCommanderInterface
 
     /**
      * @param CodeInterface $code
+     *
      * @return string
      */
     private function generatePHPScript(CodeInterface $code): string
@@ -117,9 +119,6 @@ class PHPCommander implements PHPCommanderInterface
         $this->fileSystem->write(self::TEMP_FILE, $this->generatePHPScript($code));
     }
 
-    /**
-     *
-     */
     private function executePhpScript()
     {
         $phpCommand = clone $this->phpCommand;
@@ -148,8 +147,9 @@ class PHPCommander implements PHPCommanderInterface
     }
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param RunnerInterface $runner
+     *
      * @return PHPCommanderInterface
      */
     public function execute(CodeInterface $code, RunnerInterface $runner): PHPCommanderInterface

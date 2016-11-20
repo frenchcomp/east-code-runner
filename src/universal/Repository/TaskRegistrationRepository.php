@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -33,6 +34,7 @@ class TaskRegistrationRepository extends EntityRepository
 
     /**
      * @param string $url
+     *
      * @return TaskRegistration|false
      */
     private function fetchTaskRegistration(string $url)
@@ -55,6 +57,7 @@ class TaskRegistrationRepository extends EntityRepository
 
     /**
      * @param string $url
+     *
      * @return TaskRegistration|false
      */
     public function findByTaskUrl(string $url)
@@ -64,12 +67,13 @@ class TaskRegistrationRepository extends EntityRepository
         }
 
         return $this->tasksRegistrationsList[$url];
-
     }
 
     /**
-     * To perform a batch update request to delete all entries of task executions
+     * To perform a batch update request to delete all entries of task executions.
+     *
      * @param \DateTime $date
+     *
      * @return TaskRegistrationRepository
      */
     public function clearAll(\DateTime $date): TaskRegistrationRepository
@@ -92,9 +96,10 @@ class TaskRegistrationRepository extends EntityRepository
     }
 
     /**
-     * To invalidate a specific cache
+     * To invalidate a specific cache.
      *
      * @param string $url
+     *
      * @return TaskRegistrationRepository
      */
     public function clearRegistration(string $url): TaskRegistrationRepository

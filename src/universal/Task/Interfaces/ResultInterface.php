@@ -19,12 +19,13 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Task\Interfaces;
 
 use Teknoo\Immutable\ImmutableInterface;
 
 /**
- * Interface to define, as value object, the result for task
+ * Interface to define, as value object, the result for task.
  */
 interface ResultInterface extends ImmutableInterface, \JsonSerializable
 {
@@ -64,8 +65,10 @@ interface ResultInterface extends ImmutableInterface, \JsonSerializable
     public function getTimeExecution(): int;
 
     /**
-     * Static method to reconstruct a ResultInterface instance from its json representation
+     * Static method to reconstruct a ResultInterface instance from its json representation.
+     *
      * @param array $values
+     *
      * @return ResultInterface
      */
     public static function jsonDeserialize(array $values): ResultInterface;

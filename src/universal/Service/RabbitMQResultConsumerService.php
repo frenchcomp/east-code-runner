@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Service;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -48,9 +49,10 @@ class RabbitMQResultConsumerService implements ConsumerInterface
 
     /**
      * RabbitMQResultConsumerService constructor.
-     * @param RemotePHP7Runner $remotePHP7Runner
+     *
+     * @param RemotePHP7Runner       $remotePHP7Runner
      * @param RunnerManagerInterface $runnerManager
-     * @param LoggerInterface $logger
+     * @param LoggerInterface        $logger
      */
     public function __construct(RemotePHP7Runner $remotePHP7Runner, RunnerManagerInterface $runnerManager, LoggerInterface $logger)
     {
@@ -61,6 +63,7 @@ class RabbitMQResultConsumerService implements ConsumerInterface
 
     /**
      * @param AMQPMessage $message
+     *
      * @return ResultInterface
      */
     private function extractResult(AMQPMessage $message): ResultInterface
@@ -73,6 +76,7 @@ class RabbitMQResultConsumerService implements ConsumerInterface
      * If the task is not managed by this runner, the consumer return false to requeue the message.
      *
      * @param AMQPMessage $msg
+     *
      * @return bool
      */
     public function execute(AMQPMessage $msg)

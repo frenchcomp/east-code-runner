@@ -19,21 +19,19 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\States;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunner\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
-use Teknoo\East\CodeRunner\Task\Status;
-use Teknoo\East\CodeRunner\Task\TextResult;
-use Teknoo\States\State\AbstractState;
 use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Busy
+ * State Busy.
+ *
  * @mixin RemotePHP7Runner
  */
 class Busy implements StateInterface
@@ -42,10 +40,10 @@ class Busy implements StateInterface
 
     private function doReset()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
-        return function(): RunnerInterface {
+        return function (): RunnerInterface {
             $this->currentTask = null;
 
             $this->updateStates();

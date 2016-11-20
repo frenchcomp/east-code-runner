@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Manager\Interfaces;
 
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
@@ -28,7 +29,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * A runner manager is a service able to register all available runner for a platform and dispatch execution on
- * these runner according to theirs capabilities
+ * these runner according to theirs capabilities.
  */
 interface RunnerManagerInterface
 {
@@ -36,6 +37,7 @@ interface RunnerManagerInterface
      * To register a runner in the manager to be able to send it a task to execute.
      *
      * @param RunnerInterface $runner
+     *
      * @return RunnerManagerInterface
      */
     public function registerMe(RunnerInterface $runner): RunnerManagerInterface;
@@ -45,6 +47,7 @@ interface RunnerManagerInterface
      *
      *
      * @param RunnerInterface $runner
+     *
      * @return RunnerManagerInterface
      */
     public function forgetMe(RunnerInterface $runner): RunnerManagerInterface;
@@ -54,16 +57,19 @@ interface RunnerManagerInterface
      *
      * @param RunnerInterface $runner
      * @param ResultInterface $result
+     *
      * @return RunnerManagerInterface
+     *
      * @throws \DomainException if the result is not valid for a task registered in the manager
      */
     public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface;
 
     /**
-     * To allow a runner to update a status of a task
+     * To allow a runner to update a status of a task.
      *
      * @param RunnerInterface $runner
      * @param StatusInterface $status
+     *
      * @return RunnerManagerInterface
      */
     public function pushStatus(RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface;
@@ -72,8 +78,10 @@ interface RunnerManagerInterface
      * Called by a runner to inform the manager that it accept to execute the task.
      *
      * @param RunnerInterface $runner
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
+     *
      * @return RunnerManagerInterface
+     *
      * @throws \DomainException if the result is not valid for a task registered in the manager
      */
     public function taskAccepted(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface;
@@ -82,8 +90,10 @@ interface RunnerManagerInterface
      * Called by a runner to inform the manager that it does not accept to execute the task.
      *
      * @param RunnerInterface $runner
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
+     *
      * @return RunnerManagerInterface
+     *
      * @throws \DomainException if the result is not valid for a task registered in the manager
      */
     public function taskRejected(RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface;
@@ -92,8 +102,10 @@ interface RunnerManagerInterface
      * To execute a Task, sent by a task manager on a dedicated runner.
      *
      * @param TaskManagerInterface $taskManager
-     * @param TaskInterface $task
+     * @param TaskInterface        $task
+     *
      * @return RunnerManagerInterface
+     *
      * @throws \DomainException if the task is not executable by the runner
      */
     public function executeForMeThisTask(TaskManagerInterface $taskManager, TaskInterface $task): RunnerManagerInterface;

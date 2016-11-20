@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Worker;
 
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
@@ -114,7 +115,6 @@ class PHP7RunnerTest extends AbstractRunnerTest
      */
     public function getPhpCommanderMock(): PHPCommanderInterface
     {
-
         if (!$this->phpCommander instanceof \PHPUnit_Framework_MockObject_MockObject) {
             $this->phpCommander = $this->createMock(PHPCommanderInterface::class);
         }

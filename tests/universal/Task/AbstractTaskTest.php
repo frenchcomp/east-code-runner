@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
@@ -30,7 +31,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * To get an instance of the class to test
+     * To get an instance of the class to test.
+     *
      * @return TaskInterface
      */
     abstract public function buildTask(): TaskInterface;
@@ -219,7 +221,7 @@ abstract class AbstractTaskTest extends \PHPUnit_Framework_TestCase
     {
         $task = $this->buildTask();
         $className = get_class($task);
-        $className::jsonDeserialize(['class'=>'\DateTime']);
+        $className::jsonDeserialize(['class' => '\DateTime']);
     }
 
     public function testJsonEncodeDecode()

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Worker;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
@@ -56,7 +57,7 @@ abstract class AbstractComposerConfiguratorTest extends \PHPUnit_Framework_TestC
     public function testConfigure()
     {
         $code = $this->createMock(CodeInterface::class);
-        $code->expects(self::any())->method('getNeededPackages')->willReturn(['foo'=>'2.3.4','bar'=>'*']);
+        $code->expects(self::any())->method('getNeededPackages')->willReturn(['foo' => '2.3.4', 'bar' => '*']);
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::once())->method('composerIsReady')->willReturnSelf();

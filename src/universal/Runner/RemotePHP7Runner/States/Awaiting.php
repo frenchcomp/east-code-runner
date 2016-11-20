@@ -19,22 +19,19 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\States;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
-use Teknoo\East\CodeRunner\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
-use Teknoo\East\CodeRunner\Runner\ClassicPHP7Runner\ClassicPHP7Runner;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
-use Teknoo\East\CodeRunner\Task\PHPCode;
-use Teknoo\East\CodeRunner\Task\Status;
-use Teknoo\States\State\AbstractState;
 use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Awaiting
+ * State Awaiting.
+ *
  * @mixin RemotePHP7Runner
  */
 class Awaiting implements StateInterface
@@ -43,7 +40,7 @@ class Awaiting implements StateInterface
 
     private function doReset()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (): RunnerInterface {

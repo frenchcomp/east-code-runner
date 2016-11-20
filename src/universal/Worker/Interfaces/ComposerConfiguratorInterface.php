@@ -19,13 +19,13 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Worker\Interfaces;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 
 /**
- * Interface ComposerConfiguratorInterface
- * @package Teknoo\East\CodeRunner\Worker\PHP7Runner\Interfaces
+ * Interface ComposerConfiguratorInterface.
  */
 interface ComposerConfiguratorInterface
 {
@@ -35,8 +35,9 @@ interface ComposerConfiguratorInterface
     public function reset(): ComposerConfiguratorInterface;
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param RunnerInterface $runner
+     *
      * @return ComposerConfiguratorInterface
      */
     public function configure(CodeInterface $code, RunnerInterface $runner): ComposerConfiguratorInterface;

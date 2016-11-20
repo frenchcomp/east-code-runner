@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
@@ -40,8 +41,9 @@ class PHPCode implements CodeInterface
 
     /**
      * PHPCode constructor.
+     *
      * @param string $code
-     * @param array $neededPackages
+     * @param array  $neededPackages
      */
     public function __construct(string $code, array $neededPackages)
     {
@@ -75,7 +77,7 @@ class PHPCode implements CodeInterface
         return [
             'class' => static::class,
             'neededPackages' => $this->getNeededPackages(),
-            'code' => $this->code
+            'code' => $this->code,
         ];
     }
 

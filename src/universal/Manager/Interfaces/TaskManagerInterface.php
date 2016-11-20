@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Manager\Interfaces;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
@@ -28,36 +29,39 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 interface TaskManagerInterface
 {
     /**
-     * To know the unique identifier about a runner
+     * To know the unique identifier about a runner.
      *
      * @return string
      */
     public function getIdentifier(): string;
-    
+
     /**
      * To persist a task to execute and sent it to a register.
      *
      * @param TaskInterface $task
+     *
      * @return TaskManagerInterface
      */
     public function executeMe(TaskInterface $task): TaskManagerInterface;
 
     /**
      * Called by the runner manager to inform the task manager an update about a task.
-     * Silent fail if the task is not managed by the instance
+     * Silent fail if the task is not managed by the instance.
      *
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
      * @param StatusInterface $status
+     *
      * @return TaskManagerInterface
      */
     public function taskStatusIsUpdated(TaskInterface $task, StatusInterface $status): TaskManagerInterface;
 
     /**
      * Called by the runner manager to inform the task manager an task's result.
-     * Silent fail if the task is not managed by the instance
+     * Silent fail if the task is not managed by the instance.
      *
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
      * @param ResultInterface $result
+     *
      * @return TaskManagerInterface
      */
     public function taskResultIsUpdated(TaskInterface $task, ResultInterface $result): TaskManagerInterface;
@@ -66,6 +70,7 @@ interface TaskManagerInterface
      * To close a task to execute.
      *
      * @param TaskInterface $task
+     *
      * @return TaskManagerInterface
      */
     public function forgetMe(TaskInterface $task): TaskManagerInterface;

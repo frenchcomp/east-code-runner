@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Registry;
 
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
@@ -58,7 +59,6 @@ abstract class AbstractTasksStandbyRegistryTest extends \PHPUnit_Framework_TestC
     {
         $this->buildRegistry()->dequeue(new \stdClass());
     }
-
 
     public function testQueueDequeueBehavior()
     {

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Runner;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
@@ -28,7 +29,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * To get an instance of the class to test
+     * To get an instance of the class to test.
+     *
      * @return RunnerInterface
      */
     abstract public function buildRunner(): RunnerInterface;
@@ -72,7 +74,7 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
             $this->buildRunner()->reset()
         );
     }
-    
+
     /**
      * @expectedException \Throwable
      */

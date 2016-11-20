@@ -19,13 +19,13 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Worker\Interfaces;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 
 /**
- * Interface PHPCommanderInterface
- * @package Teknoo\East\CodeRunner\Worker\PHP7Runner\Interfaces
+ * Interface PHPCommanderInterface.
  */
 interface PHPCommanderInterface
 {
@@ -35,8 +35,9 @@ interface PHPCommanderInterface
     public function reset(): PHPCommanderInterface;
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param RunnerInterface $runner
+     *
      * @return PHPCommanderInterface
      */
     public function execute(CodeInterface $code, RunnerInterface $runner): PHPCommanderInterface;

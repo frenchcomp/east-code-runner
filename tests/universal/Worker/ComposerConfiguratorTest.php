@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
@@ -109,7 +110,7 @@ class ComposerConfiguratorTest extends AbstractComposerConfiguratorTest
         $this->getFileSystemMock()
             ->expects(self::once())
             ->method('write')
-            ->with(ComposerConfigurator::COMPOSER_JSON_FILE, \json_encode(['require' => ['foo'=>'2.3.4','bar'=>'*']]))
+            ->with(ComposerConfigurator::COMPOSER_JSON_FILE, \json_encode(['require' => ['foo' => '2.3.4', 'bar' => '*']]))
             ->willReturn(123);
 
         $this->getCommandRunnerMock()

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Entity;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
@@ -73,6 +74,7 @@ class TaskExecution
 
     /**
      * @param string $runnerIdentifier
+     *
      * @return TaskExecution
      */
     public function setRunnerIdentifier(string $runnerIdentifier): TaskExecution
@@ -92,6 +94,7 @@ class TaskExecution
 
     /**
      * @param TaskInterface $task
+     *
      * @return TaskExecution
      */
     public function setTask(TaskInterface $task): TaskExecution
@@ -154,7 +157,7 @@ class TaskExecution
      *
      * @return TaskExecution
      */
-    public function setDeletedAt(\DateTime $deletedAt=null): TaskExecution
+    public function setDeletedAt(\DateTime $deletedAt = null): TaskExecution
     {
         $this->deletedAt = $deletedAt;
 

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
@@ -35,6 +36,7 @@ class Status implements StatusInterface
 
     /**
      * Status constructor.
+     *
      * @param string $name
      */
     public function __construct(string $name)
@@ -59,7 +61,7 @@ class Status implements StatusInterface
     {
         return [
             'class' => static::class,
-            'name' => $this->getName()
+            'name' => $this->getName(),
         ];
     }
 

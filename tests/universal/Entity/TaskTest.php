@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Entity;
 
 use Teknoo\East\CodeRunner\Entity\Task\Task;
@@ -60,7 +61,7 @@ class TaskTest extends AbstractTaskTest
     {
         self::assertEquals(
             123,
-            $this->generateEntityPopulated(['id'=>123])->getId()
+            $this->generateEntityPopulated(['id' => 123])->getId()
         );
     }
 
@@ -69,7 +70,7 @@ class TaskTest extends AbstractTaskTest
         $date = new \DateTime('2016-07-28');
         self::assertEquals(
             $date,
-            $this->generateEntityPopulated(['createdAt'=>$date])->getCreatedAt()
+            $this->generateEntityPopulated(['createdAt' => $date])->getCreatedAt()
         );
     }
 
@@ -101,7 +102,7 @@ class TaskTest extends AbstractTaskTest
         $date = new \DateTime('2016-07-28');
         self::assertEquals(
             $date,
-            $this->generateEntityPopulated(['updatedAt'=>$date])->getUpdatedAt()
+            $this->generateEntityPopulated(['updatedAt' => $date])->getUpdatedAt()
         );
     }
 
@@ -133,7 +134,7 @@ class TaskTest extends AbstractTaskTest
         $date = new \DateTime('2016-07-28');
         self::assertEquals(
             $date,
-            $this->generateEntityPopulated(['deletedAt'=>$date])->getDeletedAt()
+            $this->generateEntityPopulated(['deletedAt' => $date])->getDeletedAt()
         );
     }
 
@@ -200,12 +201,12 @@ class TaskTest extends AbstractTaskTest
         $result = new TextResult('foo', 'bar', '7.0', 12, 23);
 
         /**
-         * @var Task $task
+         * @var Task
          */
         $task = $this->generateEntityPopulated([
             'code' => json_decode(json_encode($code), true),
             'status' => json_decode(json_encode($status), true),
-            'result' => json_decode(json_encode($result), true)
+            'result' => json_decode(json_encode($result), true),
         ])->postLoadJsonUpdate();
 
         self::assertEquals(
@@ -237,7 +238,6 @@ class TaskTest extends AbstractTaskTest
             $this->createMock(TaskManagerInterface::class),
             new TextResult('', '', '', 0, 0)
         );
-
 
         $final = Task::jsonDeserialize(json_decode(json_encode($task), true));
 

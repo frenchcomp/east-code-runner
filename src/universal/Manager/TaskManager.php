@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Manager;
 
 use Doctrine\ORM\EntityManager;
@@ -31,7 +32,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
- * Class TaskManager
+ * Class TaskManager.
  */
 class TaskManager implements TaskManagerInterface
 {
@@ -63,10 +64,11 @@ class TaskManager implements TaskManagerInterface
     /**
      * Manager constructor.
      * Initialize States behavior.
-     * @param string $managerIdentifier
-     * @param string $urlTaskPattern
-     * @param EntityManager $entityManager
-     * @param DatesService $datesService
+     *
+     * @param string                 $managerIdentifier
+     * @param string                 $urlTaskPattern
+     * @param EntityManager          $entityManager
+     * @param DatesService           $datesService
      * @param RunnerManagerInterface $runnerManager
      */
     public function __construct(
@@ -85,6 +87,7 @@ class TaskManager implements TaskManagerInterface
 
     /**
      * @param TaskInterface $task
+     *
      * @return TaskManager
      */
     private function persistTask(TaskInterface $task): TaskManager
@@ -102,7 +105,6 @@ class TaskManager implements TaskManagerInterface
     {
         return $this->managerIdentifier;
     }
-
 
     /**
      * {@inheritdoc}
@@ -150,6 +152,7 @@ class TaskManager implements TaskManagerInterface
 
     /**
      * @param TaskInterface $task
+     *
      * @return TaskManager
      */
     private function generateUrl(TaskInterface $task): TaskManager
@@ -162,6 +165,7 @@ class TaskManager implements TaskManagerInterface
 
     /**
      * @param TaskInterface $task
+     *
      * @return TaskManager
      */
     private function dispatchToRunnerManager(TaskInterface $task): TaskManager
@@ -173,6 +177,7 @@ class TaskManager implements TaskManagerInterface
 
     /**
      * @param TaskInterface $task
+     *
      * @return TaskManager
      */
     private function doRegisterAndExecuteTask(TaskInterface $task): TaskManager
@@ -188,6 +193,7 @@ class TaskManager implements TaskManagerInterface
 
     /**
      * @param Task $task
+     *
      * @return TaskManager
      */
     private function removeTask(Task $task): TaskManager
@@ -197,5 +203,4 @@ class TaskManager implements TaskManagerInterface
 
         return $this;
     }
-
 }

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
@@ -55,11 +56,12 @@ class TextResult implements ResultInterface
 
     /**
      * TextResult constructor.
+     *
      * @param string $output
      * @param string $errors
      * @param string $versions
-     * @param int $memorySize
-     * @param int $timeExecution
+     * @param int    $memorySize
+     * @param int    $timeExecution
      */
     public function __construct(string $output, string $errors, string $versions, int $memorySize, int $timeExecution)
     {
@@ -123,7 +125,7 @@ class TextResult implements ResultInterface
             'errors' => $this->getErrors(),
             'versions' => $this->getVersion(),
             'memorySize' => $this->getMemorySize(),
-            'timeExecution' => $this->getTimeExecution()
+            'timeExecution' => $this->getTimeExecution(),
         ];
     }
 

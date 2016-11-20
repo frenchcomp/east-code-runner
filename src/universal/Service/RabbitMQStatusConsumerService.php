@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Service;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -48,9 +49,10 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
 
     /**
      * RabbitMQStatusConsumerService constructor.
-     * @param RemotePHP7Runner $remotePHP7Runner
+     *
+     * @param RemotePHP7Runner       $remotePHP7Runner
      * @param RunnerManagerInterface $runnerManager
-     * @param LoggerInterface $logger
+     * @param LoggerInterface        $logger
      */
     public function __construct(RemotePHP7Runner $remotePHP7Runner, RunnerManagerInterface $runnerManager, LoggerInterface $logger)
     {
@@ -60,8 +62,10 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
     }
 
     /**
-     * Method to convert the JSON representation of a StatusInterface object to an instance of this class
+     * Method to convert the JSON representation of a StatusInterface object to an instance of this class.
+     *
      * @param AMQPMessage $message
+     *
      * @return StatusInterface
      */
     private function extractStatus(AMQPMessage $message): StatusInterface
@@ -72,7 +76,7 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
         }
 
         /**
-         * @var $statusClassName Status::class
+         * @var Status::class
          */
         $statusClassName = $decodedBody['class'];
 
@@ -84,6 +88,7 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
      * If the task is not managed by this runner, the consumer return false to requeue the message.
      *
      * @param AMQPMessage $msg
+     *
      * @return bool
      */
     public function execute(AMQPMessage $msg)

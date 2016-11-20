@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -28,6 +29,7 @@ class TaskStandbyRepository extends EntityRepository
 {
     /**
      * @param string $identifier
+     *
      * @return TaskStandby|false
      */
     public function fetchNextTaskStandby(string $identifier)
@@ -51,8 +53,10 @@ class TaskStandbyRepository extends EntityRepository
     }
 
     /**
-     * To perform a batch update request to delete all entries of task standby
+     * To perform a batch update request to delete all entries of task standby.
+     *
      * @param \DateTime $date
+     *
      * @return TaskStandbyRepository
      */
     public function clearAll(\DateTime $date): TaskStandbyRepository

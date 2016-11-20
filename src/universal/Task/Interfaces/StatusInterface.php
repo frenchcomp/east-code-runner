@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Task\Interfaces;
 
 use Teknoo\Immutable\ImmutableInterface;
@@ -36,8 +37,10 @@ interface StatusInterface extends ImmutableInterface, \JsonSerializable
     public function getName(): string;
 
     /**
-     * Static method to reconstruct a StatusInterface instance from its json representation
+     * Static method to reconstruct a StatusInterface instance from its json representation.
+     *
      * @param array $values
+     *
      * @return StatusInterface
      */
     public static function jsonDeserialize(array $values): StatusInterface;

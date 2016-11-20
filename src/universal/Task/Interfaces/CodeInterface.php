@@ -19,13 +19,14 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Task\Interfaces;
 
 use Teknoo\Immutable\ImmutableInterface;
 
 /**
  * Interface to define values objects to store PHP code to execute. These value object can also required several PHP
- * composer packages, or PHP extensions, returned by the method getNeededPackages
+ * composer packages, or PHP extensions, returned by the method getNeededPackages.
  */
 interface CodeInterface extends ImmutableInterface, \JsonSerializable
 {
@@ -44,8 +45,10 @@ interface CodeInterface extends ImmutableInterface, \JsonSerializable
     public function getCode(): string;
 
     /**
-     * Static method to reconstruct a CodeInterface instance from its json representation
+     * Static method to reconstruct a CodeInterface instance from its json representation.
+     *
      * @param array $values
+     *
      * @return CodeInterface
      */
     public static function jsonDeserialize(array $values): CodeInterface;

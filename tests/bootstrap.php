@@ -22,13 +22,10 @@
 
 namespace Teknoo\Tests\East\CodeRunnerBundle;
 
-use Teknoo\States\Loader\FinderComposerIntegrated;
-use Teknoo\States\Loader\LoaderComposer;
-
 date_default_timezone_set('UTC');
 
 error_reporting(E_ALL | E_STRICT);
 
 ini_set('memory_limit', '16M');
 
-include(__DIR__.'/../vendor/autoload.php');
+include __DIR__.'/../vendor/autoload.php';

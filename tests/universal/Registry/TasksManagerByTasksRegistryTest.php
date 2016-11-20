@@ -19,19 +19,19 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
-use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Entity\TaskRegistration;
-use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\TasksManagerByTasksRegistry;
 use Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository;
 use Teknoo\East\CodeRunner\Service\DatesService;
 
 /**
- * Test TasksManagerByTasksRegistryTest
+ * Test TasksManagerByTasksRegistryTest.
+ *
  * @covers \Teknoo\East\CodeRunner\Registry\TasksManagerByTasksRegistry
  */
 class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistryTest

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Manager;
 
 use Doctrine\ORM\EntityManager;
@@ -29,7 +30,8 @@ use Teknoo\East\CodeRunner\Manager\TaskManager;
 use Teknoo\East\CodeRunner\Service\DatesService;
 
 /**
- * Tests TaskManagerTest
+ * Tests TaskManagerTest.
+ *
  * @covers \Teknoo\East\CodeRunner\Manager\TaskManager
  */
 class TaskManagerTest extends AbstractTaskManagerTest
@@ -88,6 +90,7 @@ class TaskManagerTest extends AbstractTaskManagerTest
     /**
      * @param string $managerIdentifier
      * @param string $urlTaskPattern
+     *
      * @return TaskManagerInterface
      */
     public function buildManager(

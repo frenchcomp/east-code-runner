@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Entity\Task;
 
 use Teknoo\East\CodeRunner\Entity\Task\States\Executed;
@@ -40,7 +41,8 @@ use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
 /**
- * Class Task
+ * Class Task.
+ *
  * @method Task doRegisterStatus(StatusInterface $status)
  * @method Task doRegisterResult(ResultInterface $result)
  * @method Task doSetCode(CodeInterface $code)
@@ -111,7 +113,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         return [
             Executed::class,
             Registered::class,
-            Unregistered::class
+            Unregistered::class,
         ];
     }
 
@@ -256,7 +258,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      *
      * @return Task
      */
-    public function setDeletedAt(\DateTime $deletedAt=null): Task
+    public function setDeletedAt(\DateTime $deletedAt = null): Task
     {
         $this->deletedAt = $deletedAt;
 
@@ -264,9 +266,10 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     }
 
     /**
-     * Method to decode a json value to php object instance after doctrine load
+     * Method to decode a json value to php object instance after doctrine load.
      *
      * @param array|\JsonSerializable $value
+     *
      * @return null|\JsonSerializable
      */
     private static function decodeJson(&$value)
@@ -313,21 +316,17 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     {
         return [
             (new Assertion([Unregistered::class]))
-                ->with('url', new IsNull())
-            ,
+                ->with('url', new IsNull()),
             (new Assertion([Unregistered::class]))
-                ->with('code', new IsNotInstanceOf(CodeInterface::class))
-            ,
+                ->with('code', new IsNotInstanceOf(CodeInterface::class)),
             (new Assertion([Registered::class]))
                 ->with('url', new IsNotNull())
                 ->with('code', new IsInstanceOf(CodeInterface::class))
-                ->with('result', new IsNotInstanceOf(ResultInterface::class))
-            ,
+                ->with('result', new IsNotInstanceOf(ResultInterface::class)),
             (new Assertion([Executed::class]))
                 ->with('url', new IsNotNull())
                 ->with('code', new IsInstanceOf(CodeInterface::class))
-                ->with('result', new IsInstanceOf(ResultInterface::class))
-            ,
+                ->with('result', new IsInstanceOf(ResultInterface::class)),
         ];
     }
 
@@ -360,7 +359,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
             'result' => $this->result,
             'createdAt' => $createdAt,
             'updatedAt' => $updatedAt,
-            'deletedAt' => $deletedAt
+            'deletedAt' => $deletedAt,
         ];
     }
 
@@ -376,7 +375,6 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         $code = $values['code'];
         if (isset($code['class'])
             && \is_subclass_of($code['class'], CodeInterface::class)) {
-
             $codeClass = $code['class'];
             $code = $codeClass::jsonDeserialize($code);
         }
@@ -384,7 +382,6 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         $status = $values['status'];
         if (isset($status['class'])
             && \is_subclass_of($status['class'], StatusInterface::class)) {
-
             $statusClass = $status['class'];
             $status = $statusClass::jsonDeserialize($status);
         }
@@ -392,7 +389,6 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         $result = $values['result'];
         if (isset($result['class'])
             && \is_subclass_of($result['class'], ResultInterface::class)) {
-
             $resultClass = $result['class'];
             $result = $resultClass::jsonDeserialize($result);
         }

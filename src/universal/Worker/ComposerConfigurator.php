@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
@@ -60,11 +61,12 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
 
     /**
      * ComposerConfigurator constructor.
-     * @param Runner $commandRunner
-     * @param Command $composerCommand
-     * @param string $composerInstruction
+     *
+     * @param Runner     $commandRunner
+     * @param Command    $composerCommand
+     * @param string     $composerInstruction
      * @param Filesystem $fileSystem
-     * @param string $composerDirectoryParam
+     * @param string     $composerDirectoryParam
      */
     public function __construct(
         Runner $commandRunner,
@@ -80,7 +82,6 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
         $this->composerDirectoryParam = $composerDirectoryParam;
     }
 
-
     /**
      * @return ComposerConfiguratorInterface
      */
@@ -93,6 +94,7 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
 
     /**
      * @param CodeInterface $code
+     *
      * @return string
      */
     private function convertToRequirePackage(CodeInterface $code): string
@@ -108,9 +110,6 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
         $this->fileSystem->write(self::COMPOSER_JSON_FILE, $this->convertToRequirePackage($code));
     }
 
-    /**
-     *
-     */
     private function runComposer()
     {
         $composerCommand = clone $this->composerCommand;
@@ -122,8 +121,9 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     }
 
     /**
-     * @param CodeInterface $code
+     * @param CodeInterface   $code
      * @param RunnerInterface $runner
+     *
      * @return ComposerConfiguratorInterface
      */
     public function configure(CodeInterface $code, RunnerInterface $runner): ComposerConfiguratorInterface

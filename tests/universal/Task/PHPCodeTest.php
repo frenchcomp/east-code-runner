@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\Tests\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
@@ -34,7 +35,7 @@ class PHPCodeTest extends AbstractCodeTest
      */
     public function buildCode(): CodeInterface
     {
-        return new PHPCode('<php phpinfo();', ['php'=>'>=7']);
+        return new PHPCode('<php phpinfo();', ['php' => '>=7']);
     }
 
     /**
@@ -42,6 +43,6 @@ class PHPCodeTest extends AbstractCodeTest
      */
     public function testValueObjectBehaviorConstructor()
     {
-        $this->buildCode()->__construct('<php phpinfo();', ['php'=>'>=7']);
+        $this->buildCode()->__construct('<php phpinfo();', ['php' => '>=7']);
     }
 }

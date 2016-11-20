@@ -19,18 +19,19 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Manager\RunnerManager\States;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
-use Teknoo\States\State\AbstractState;
 use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * Class Selecting
+ * Class Selecting.
+ *
  * @property RunnerInterface[] $runners
  * @property bool $taskAcceptedByARunner
  * @property RunnerInterface $runnerAccepted
@@ -42,7 +43,7 @@ class Selecting implements StateInterface
 
     private function doTaskAccepted()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface {
@@ -55,7 +56,7 @@ class Selecting implements StateInterface
 
     private function doTaskRejected()
     {
-        /**
+        /*
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner, TaskInterface $task): RunnerManagerInterface {
@@ -67,7 +68,7 @@ class Selecting implements StateInterface
 
     private function browseRunners()
     {
-        /**
+        /*
          * Method to browse all available runner, until any runner has accepted
          * @return \Generator
          */
@@ -84,7 +85,7 @@ class Selecting implements StateInterface
 
     private function selectRunnerToExecuteTask()
     {
-        /**
+        /*
          * To find and select the runner able to execute a task. If no runner found, the method throws the exception
          * \DomainException
          * @param TaskInterface $task
@@ -95,7 +96,7 @@ class Selecting implements StateInterface
             $this->taskAcceptedByARunner = false;
 
             foreach ($this->browseRunners() as $runner) {
-                /**
+                /*
                  * @var RunnerInterface $runner
                  */
                 $runner->canYouExecute($this, $task);

@@ -19,6 +19,7 @@
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
+
 namespace Teknoo\East\CodeRunner\Task\Interfaces;
 
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
@@ -29,7 +30,7 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 interface TaskInterface extends \JsonSerializable
 {
     /**
-     * To return the uniq identifier as UUID of the task
+     * To return the uniq identifier as UUID of the task.
      */
     public function getId(): string;
 
@@ -37,6 +38,7 @@ interface TaskInterface extends \JsonSerializable
      * To register the code, as value object, to execute.
      *
      * @param CodeInterface $code
+     *
      * @return TaskInterface
      */
     public function setCode(CodeInterface $code): TaskInterface;
@@ -45,6 +47,7 @@ interface TaskInterface extends \JsonSerializable
      * Getter to get the code to execute in a runner.
      *
      * @return CodeInterface
+     *
      * @throws \UnexpectedValueException if the code missing
      */
     public function getCode(): CodeInterface;
@@ -53,6 +56,7 @@ interface TaskInterface extends \JsonSerializable
      * Url to identify the task to execute.
      *
      * @return string
+     *
      * @throws \UnexpectedValueException if the url missing
      */
     public function getUrl(): string;
@@ -68,6 +72,7 @@ interface TaskInterface extends \JsonSerializable
      * Result of the task, as value object.
      *
      * @return ResultInterface
+     *
      * @throws \UnexpectedValueException if the result missing
      */
     public function getResult(): ResultInterface;
@@ -76,6 +81,7 @@ interface TaskInterface extends \JsonSerializable
      * To save the url allowed to this task by the task manager.
      *
      * @param string $taskUrl
+     *
      * @return TaskInterface
      */
     public function registerUrl(string $taskUrl): TaskInterface;
@@ -84,6 +90,7 @@ interface TaskInterface extends \JsonSerializable
      * To save/register the status of the task.
      *
      * @param StatusInterface $status
+     *
      * @return TaskInterface
      */
     public function registerStatus(StatusInterface $status): TaskInterface;
@@ -93,14 +100,17 @@ interface TaskInterface extends \JsonSerializable
      * available via the method getResult.
      *
      * @param TaskManagerInterface $taskManager
-     * @param ResultInterface $result
+     * @param ResultInterface      $result
+     *
      * @return TaskInterface
      */
     public function registerResult(TaskManagerInterface $taskManager, ResultInterface $result): TaskInterface;
 
     /**
-     * Static method to reconstruct a TaskInterface instance from its json representation
+     * Static method to reconstruct a TaskInterface instance from its json representation.
+     *
      * @param array $values
+     *
      * @return TaskInterface
      */
     public static function jsonDeserialize(array $values): TaskInterface;
