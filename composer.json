@@ -3,7 +3,7 @@
     "description": "East Symfony bundle to run PHP code from request in secure environment",
     "license": "MIT",
     "type": "symfony-bundle",
-    "keywords": [""],
+    "keywords": ["east","remote execution"],
     "homepage": "http://teknoo.software/code-runner",
     "authors": [
         {
