@@ -1,8 +1,8 @@
 #src/Resources/config/doctrine/task_execution.orm.yml
-Teknoo\East\CodeRunnerBundle\Entity\TaskStandby:
+Teknoo\East\CodeRunner\Entity\TaskExecution:
   type: 'entity'
   table: 'task_execution'
-  repositoryClass: 'Teknoo\East\CodeRunnerBundle\Repository\TaskStandbyRepository'
+  repositoryClass: 'Teknoo\East\CodeRunner\Repository\TaskExecutionRepository'
   id:
     id:
       type: 'integer'
@@ -34,7 +34,7 @@ Teknoo\East\CodeRunnerBundle\Entity\TaskStandby:
       column: 'deleted_at'
   manyToOne:
     task:
-      targetEntity: 'Teknoo\East\CodeRunnerBundle\Entity\Task\Task'
+      targetEntity: 'Teknoo\East\CodeRunner\Entity\Task\Task'
       joinColumn:
         name: 'task_id'
         referencedColumnName: 'id'

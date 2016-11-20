@@ -1,37 +1,37 @@
 #src/Resources/config/services.yml
 parameters:
   #Task entity
-  teknoo.east.bundle.coderunner.entity.task.class: 'Teknoo\East\CodeRunnerBundle\Entity\Task\Task'
-  teknoo.east.bundle.coderunner.entity.task_execution.class: 'Teknoo\East\CodeRunnerBundle\Entity\TaskExecution'
-  teknoo.east.bundle.coderunner.entity.task_registration.class: 'Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration'
-  teknoo.east.bundle.coderunner.entity.task_standby.class: 'Teknoo\East\CodeRunnerBundle\Entity\TaskStandby'
+  teknoo.east.bundle.coderunner.entity.task.class: 'Teknoo\East\CodeRunner\Entity\Task\Task'
+  teknoo.east.bundle.coderunner.entity.task_execution.class: 'Teknoo\East\CodeRunner\Entity\TaskExecution'
+  teknoo.east.bundle.coderunner.entity.task_registration.class: 'Teknoo\East\CodeRunner\Entity\TaskRegistration'
+  teknoo.east.bundle.coderunner.entity.task_standby.class: 'Teknoo\East\CodeRunner\Entity\TaskStandby'
 
-  teknoo.east.bundle.coderunner.entity.task.name: 'TeknooEastCodeRunnerBundle:Task'
-  teknoo.east.bundle.coderunner.entity.task_execution.name: 'TeknooEastCodeRunnerBundle:TaskExecution'
-  teknoo.east.bundle.coderunner.entity.task_registration.name: 'TeknooEastCodeRunnerBundle:TaskRegistration'
-  teknoo.east.bundle.coderunner.entity.task_standby.name: 'TeknooEastCodeRunnerBundle:TaskStandby'
+  teknoo.east.bundle.coderunner.entity.task.name: 'TeknooEastCodeRunner:Task'
+  teknoo.east.bundle.coderunner.entity.task_execution.name: 'TeknooEastCodeRunner:TaskExecution'
+  teknoo.east.bundle.coderunner.entity.task_registration.name: 'TeknooEastCodeRunner:TaskRegistration'
+  teknoo.east.bundle.coderunner.entity.task_standby.name: 'TeknooEastCodeRunner:TaskStandby'
 
   #Repository
-  teknoo.east.bundle.coderunner.repository.task.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRepository'
-  teknoo.east.bundle.coderunner.repository.task_execution.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskExecutionRepository'
-  teknoo.east.bundle.coderunner.repository.task_registration.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository'
-  teknoo.east.bundle.coderunner.repository.task_standby.class: 'Teknoo\East\CodeRunnerBundle\Repository\TaskStandbyRepository'
+  teknoo.east.bundle.coderunner.repository.task.class: 'Teknoo\East\CodeRunner\Repository\TaskRepository'
+  teknoo.east.bundle.coderunner.repository.task_execution.class: 'Teknoo\East\CodeRunner\Repository\TaskExecutionRepository'
+  teknoo.east.bundle.coderunner.repository.task_registration.class: 'Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository'
+  teknoo.east.bundle.coderunner.repository.task_standby.class: 'Teknoo\East\CodeRunner\Repository\TaskStandbyRepository'
 
   #Manager
-  teknoo.east.bundle.coderunner.manager.runners.class: 'Teknoo\East\CodeRunnerBundle\Manager\RunnerManager\RunnerManager'
-  teknoo.east.bundle.coderunner.manager.tasks.class: 'Teknoo\East\CodeRunnerBundle\Manager\TaskManager\TaskManager'
+  teknoo.east.bundle.coderunner.manager.runners.class: 'Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager'
+  teknoo.east.bundle.coderunner.manager.tasks.class: 'Teknoo\East\CodeRunner\Manager\TaskManager\TaskManager'
 
   #Registry
-  teknoo.east.bundle.coderunner.registry.tasks_by_runner.class: 'Teknoo\East\CodeRunnerBundle\Registry\TasksByRunnerRegistry'
-  teknoo.east.bundle.coderunner.registry.tasks_manager_by_task.class: 'Teknoo\East\CodeRunnerBundle\Registry\TasksManagerByTasksRegistry'
-  teknoo.east.bundle.coderunner.registry.tasks_standby.class: 'Teknoo\East\CodeRunnerBundle\Registry\TasksStandbyRegistry'
+  teknoo.east.bundle.coderunner.registry.tasks_by_runner.class: 'Teknoo\East\CodeRunner\Registry\TasksByRunnerRegistry'
+  teknoo.east.bundle.coderunner.registry.tasks_manager_by_task.class: 'Teknoo\East\CodeRunner\Registry\TasksManagerByTasksRegistry'
+  teknoo.east.bundle.coderunner.registry.tasks_standby.class: 'Teknoo\East\CodeRunner\Registry\TasksStandbyRegistry'
 
   #Runner
-  teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunnerBundle\Runner\RemotePHP7Runner\RemotePHP7Runner'
-  teknoo.east.bundle.coderunner.runner.capability.class: 'Teknoo\East\CodeRunnerBundle\Runner\Capability'
+  teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner'
+  teknoo.east.bundle.coderunner.runner.capability.class: 'Teknoo\East\CodeRunner\Runner\Capability'
 
   #Service
-  teknoo.east.bundle.coderunner.service.dates.class: 'Teknoo\East\CodeRunnerBundle\Service\DatesService'
+  teknoo.east.bundle.coderunner.service.dates.class: 'Teknoo\East\CodeRunner\Service\DatesService'
 
 services:
   #Repository

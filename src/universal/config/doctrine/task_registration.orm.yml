@@ -1,8 +1,8 @@
 #src/Resources/config/doctrine/task_registration.orm.yml
-Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration:
+Teknoo\East\CodeRunner\Entity\TaskRegistration:
   type: 'entity'
   table: 'task_registration'
-  repositoryClass: 'Teknoo\East\CodeRunnerBundle\Repository\TaskRegistrationRepository'
+  repositoryClass: 'Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository'
   id:
     id:
       type: 'integer'
@@ -34,7 +34,7 @@ Teknoo\East\CodeRunnerBundle\Entity\TaskRegistration:
       nullable: true
   manyToOne:
     task:
-      targetEntity: 'Teknoo\East\CodeRunnerBundle\Entity\Task\Task'
+      targetEntity: 'Teknoo\East\CodeRunner\Entity\Task\Task'
       joinColumn:
         name: 'task_id'
         referencedColumnName: 'id'
