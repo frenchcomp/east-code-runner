@@ -23,6 +23,7 @@
 namespace Teknoo\East\CodeRunner\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
@@ -67,14 +68,14 @@ class TaskManager implements TaskManagerInterface
      *
      * @param string                 $managerIdentifier
      * @param string                 $urlTaskPattern
-     * @param EntityManager          $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param DatesService           $datesService
      * @param RunnerManagerInterface $runnerManager
      */
     public function __construct(
         string $managerIdentifier,
         string $urlTaskPattern,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         DatesService $datesService,
         RunnerManagerInterface $runnerManager
     ) {

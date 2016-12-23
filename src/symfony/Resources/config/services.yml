@@ -20,6 +20,8 @@ parameters:
   #Manager
   teknoo.east.bundle.coderunner.manager.runners.class: 'Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager'
   teknoo.east.bundle.coderunner.manager.tasks.class: 'Teknoo\East\CodeRunner\Manager\TaskManager\TaskManager'
+  teknoo.east.bundle.coderunner.manager.tasks.identifier: 'default_task_manager'
+  teknoo.east.bundle.coderunner.manager.tasks.url: ''
 
   #Registry
   teknoo.east.bundle.coderunner.registry.tasks_by_runner.class: 'Teknoo\East\CodeRunner\Registry\TasksByRunnerRegistry'
@@ -28,6 +30,9 @@ parameters:
 
   #Runner
   teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner'
+  teknoo.east.bundle.coderunner.runner.remote_php7.identifier: 'RemotePHP7Runner'
+  teknoo.east.bundle.coderunner.runner.remote_php7.name: 'RemotePHP7Runner'
+  teknoo.east.bundle.coderunner.runner.remote_php7.version: '0.0.1'
   teknoo.east.bundle.coderunner.runner.capability.class: 'Teknoo\East\CodeRunner\Runner\Capability'
 
   #Service
@@ -112,6 +117,11 @@ services:
   teknoo.east.bundle.coderunner.runner.remote_php7:
     class: '%teknoo.east.bundle.coderunner.runner.remote_php7.class%'
     private: false
+    arguments:
+      - '@old_sound_rabbit_mq.producer'
+      - '%teknoo.east.bundle.coderunner.runner.remote_php7.identifier%'
+      - '%teknoo.east.bundle.coderunner.runner.remote_php7.name%'
+      - '%teknoo.east.bundle.coderunner.runner.remote_php7.version%'
     calls:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.composer']]
@@ -132,10 +142,16 @@ services:
   teknoo.east.bundle.coderunner.manager.tasks:
     class: '%teknoo.east.bundle.coderunner.manager.tasks%'
     private: false
+    arguments:
+      - '%teknoo.east.bundle.coderunner.manager.tasks.identifier%'
+      - '%teknoo.east.bundle.coderunner.manager.tasks.url%'
+      - '@doctrine.orm.entity_manager'
+      - '@teknoo.east.bundle.coderunner.service.dates'
+      - '@teknoo.east.bundle.coderunner.manager.runners'
     tags:
           - {name: 'teknoo.east.coderunner.task_manager'}
 
   #Service
   teknoo.east.bundle.coderunner.service.dates:
     class: '%teknoo.east.bundle.coderunner.service.dates.class%'
-    private: false
+    private: true

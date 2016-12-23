@@ -23,6 +23,7 @@
 namespace Teknoo\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Teknoo\East\CodeRunner\Entity\TaskRegistration;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
@@ -57,12 +58,12 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      *
      * @param DatesService               $datesService
      * @param TaskRegistrationRepository $taskRegistrationRepository
-     * @param EntityManager              $entityManager
+     * @param EntityManagerInterface     $entityManager
      */
     public function __construct(
         DatesService $datesService,
         TaskRegistrationRepository $taskRegistrationRepository,
-        EntityManager $entityManager
+        EntityManagerInterface $entityManager
     ) {
         $this->datesService = $datesService;
         $this->taskRegistrationRepository = $taskRegistrationRepository;

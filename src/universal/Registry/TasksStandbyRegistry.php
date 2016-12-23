@@ -23,6 +23,7 @@
 namespace Teknoo\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Entity\TaskStandby;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
@@ -53,12 +54,12 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
      *
      * @param DatesService          $datesService
      * @param TaskStandbyRepository $taskStandbyRepository
-     * @param EntityManager         $entityManager
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         DatesService $datesService,
         TaskStandbyRepository $taskStandbyRepository,
-        EntityManager $entityManager
+        EntityManagerInterface $entityManager
     ) {
         $this->datesService = $datesService;
         $this->taskStandbyRepository = $taskStandbyRepository;
