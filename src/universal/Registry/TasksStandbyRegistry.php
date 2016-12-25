@@ -52,8 +52,8 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     /**
      * TasksByRunnerRegistry constructor.
      *
-     * @param DatesService          $datesService
-     * @param TaskStandbyRepository $taskStandbyRepository
+     * @param DatesService           $datesService
+     * @param TaskStandbyRepository  $taskStandbyRepository
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(

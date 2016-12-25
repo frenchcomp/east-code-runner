@@ -57,6 +57,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 {
     /**
      * @param ContainerInterface $container
+     *
      * @return EntityManagerInterface
      */
     private static function getEntityManager(ContainerInterface $container): EntityManagerInterface
@@ -80,7 +81,8 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
-     * @param string $repositoryBundle
+     * @param string             $repositoryBundle
+     *
      * @return EntityRepository|ObjectRepository
      */
     private static function createRepository(
@@ -94,6 +96,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TaskRepository
      */
     public static function createTaskRepository(ContainerInterface $container): TaskRepository
@@ -103,6 +106,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TaskExecutionRepository
      */
     public static function createTaskExecutionRepository(ContainerInterface $container): TaskExecutionRepository
@@ -112,6 +116,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TaskRegistrationRepository
      */
     public static function createTaskRegistrationRepository(ContainerInterface $container): TaskRegistrationRepository
@@ -121,6 +126,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TaskStandbyRepository
      */
     public static function createTaskStandbyRepository(ContainerInterface $container): TaskStandbyRepository
@@ -138,6 +144,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TasksByRunnerRegistryInterface
      */
     public static function createRegistryTasksByRunner(ContainerInterface $container): TasksByRunnerRegistryInterface
@@ -151,6 +158,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TasksManagerByTasksRegistryInterface
      */
     public static function createRegistryTasksMangerByTask(
@@ -165,6 +173,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TasksStandbyRegistryInterface
      */
     public static function createRegistryTasksStandBy(
@@ -179,6 +188,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return RunnerManagerInterface
      */
     public static function createRunnerManager(ContainerInterface $container): RunnerManagerInterface
@@ -192,6 +202,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return TaskManagerInterface
      */
     public static function createTaskManager(ContainerInterface $container): TaskManagerInterface
@@ -207,6 +218,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
     /**
      * @param ContainerInterface $container
+     *
      * @return RemotePHP7Runner
      */
     public static function createRemotePHP7Runner(ContainerInterface $container): RemotePHP7Runner
@@ -219,7 +231,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
                 new Capability('language', 'php7'),
                 new Capability('feature', 'composer'),
                 new Capability('feature', 'curl'),
-                new Capability('feature', 'zip')
+                new Capability('feature', 'zip'),
             ]
         );
 
@@ -245,7 +257,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
             RunnerManagerInterface::class => [static::class, 'createRunnerManager'],
             TaskManagerInterface::class => [static::class, 'createTaskManager'],
 
-            RemotePHP7Runner::class => [static::class, 'createRemotePHP7Runner']
+            RemotePHP7Runner::class => [static::class, 'createRemotePHP7Runner'],
         ];
     }
 }

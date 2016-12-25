@@ -41,7 +41,7 @@ trait CheckRequirementsTrait
             $packageFound = false;
 
             /**
-             * @var CapabilityInterface
+             * @var CapabilityInterface $capability
              */
             foreach ($capabilities as $capability) {
                 if ('package' == $capability->getType() && $package == $capability) {
