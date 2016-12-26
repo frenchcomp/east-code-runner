@@ -1,8 +1,8 @@
-#src/Resources/config/doctrine/task_execution.orm.yml
-Teknoo\East\CodeRunner\Entity\TaskExecution:
+#src/Resources/config/doctrine/TaskRegistration.orm.yml
+Teknoo\East\CodeRunner\Entity\TaskRegistration:
   type: 'entity'
-  table: 'task_execution'
-  repositoryClass: 'Teknoo\East\CodeRunner\Repository\TaskExecutionRepository'
+  table: 'task_registration'
+  repositoryClass: 'Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository'
   id:
     id:
       type: 'integer'
@@ -12,9 +12,9 @@ Teknoo\East\CodeRunner\Entity\TaskExecution:
       field_name: 'deletedAt'
       time_aware: false
   fields:
-    runnerIdentifier:
+    taskManagerIdentifier:
       type: 'string'
-      column: 'runner_identifier'
+      column: 'task_manager_identifier'
       length: 100
     createdAt:
       type: 'datetime'
@@ -30,8 +30,8 @@ Teknoo\East\CodeRunner\Entity\TaskExecution:
           on: 'update'
     deletedAt:
       type: 'datetime'
-      nullable: true
       column: 'deleted_at'
+      nullable: true
   manyToOne:
     task:
       targetEntity: 'Teknoo\East\CodeRunner\Entity\Task\Task'

@@ -1,8 +1,8 @@
-#src/Resources/config/doctrine/task_registration.orm.yml
-Teknoo\East\CodeRunner\Entity\TaskRegistration:
+#src/Resources/config/doctrine/TaskStandby.orm.yml
+Teknoo\East\CodeRunner\Entity\TaskStandby:
   type: 'entity'
-  table: 'task_registration'
-  repositoryClass: 'Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository'
+  table: 'task_standby'
+  repositoryClass: 'Teknoo\East\CodeRunner\Repository\TaskStandbyRepository'
   id:
     id:
       type: 'integer'
@@ -12,9 +12,9 @@ Teknoo\East\CodeRunner\Entity\TaskRegistration:
       field_name: 'deletedAt'
       time_aware: false
   fields:
-    taskManagerIdentifier:
+    runnerIdentifier:
       type: 'string'
-      column: 'task_manager_identifier'
+      column: 'runner_identifier'
       length: 100
     createdAt:
       type: 'datetime'
@@ -30,8 +30,8 @@ Teknoo\East\CodeRunner\Entity\TaskRegistration:
           on: 'update'
     deletedAt:
       type: 'datetime'
-      column: 'deleted_at'
       nullable: true
+      column: 'deleted_at'
   manyToOne:
     task:
       targetEntity: 'Teknoo\East\CodeRunner\Entity\Task\Task'

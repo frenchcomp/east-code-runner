@@ -310,6 +310,18 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     }
 
     /**
+     * @return Task
+     */
+    public function prePersistJsonUpdate(): Task
+    {
+        $this->code = \json_encode($this->code);
+        $this->status = \json_encode($this->status);
+        $this->result = \json_encode($this->result);
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getStatesAssertions(): array
