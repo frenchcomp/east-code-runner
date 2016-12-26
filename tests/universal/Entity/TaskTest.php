@@ -225,6 +225,38 @@ class TaskTest extends AbstractTaskTest
         );
     }
 
+    public function testPrePersistJsonUpdate()
+    {
+        $code = new PHPCode('<?php phpinfo();', []);
+        $status = new Status('Test');
+        $result = new TextResult('foo', 'bar', '7.0', 12, 23);
+
+        /**
+         * @var Task
+         */
+        $task = $this->generateEntityPopulated([
+            'code' => $code,
+            'status' => $status,
+            'result' => $result,
+        ])->prePersistJsonUpdate();
+
+        self::assertInstanceOf(Task::class, $task);
+
+        $refObj = new \ReflectionObject($task);
+
+        $refProp = $refObj->getProperty('code');
+        $refProp->setAccessible(true);
+        self::assertEquals(\json_encode($code), $refProp->getValue($task));
+
+        $refProp = $refObj->getProperty('status');
+        $refProp->setAccessible(true);
+        self::assertEquals(\json_encode($status), $refProp->getValue($task));
+
+        $refProp = $refObj->getProperty('result');
+        $refProp->setAccessible(true);
+        self::assertEquals(\json_encode($result), $refProp->getValue($task));
+    }
+
     public function testJsonEncodeDecodeWithTaskFulled()
     {
         $task = $this->buildTask();
