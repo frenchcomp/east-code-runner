@@ -38,6 +38,11 @@ parameters:
   #Service
   teknoo.east.bundle.coderunner.service.dates.class: 'Teknoo\East\CodeRunner\Service\DatesService'
 
+  #Endpoinds
+  teknoo.east.bundle.coderunner.endpoint.delete_task.class: 'Teknoo\East\CodeRunner\EndPoint\DeleteTaskEndPoint'
+  teknoo.east.bundle.coderunner.endpoint.get_task.class: 'Teknoo\East\CodeRunner\EndPoint\GetTaskEndPoint'
+  teknoo.east.bundle.coderunner.endpoint.register_task.class: 'Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint'
+
 services:
   #Repository
   teknoo.east.bundle.coderunner.repository.task:
@@ -155,3 +160,19 @@ services:
   teknoo.east.bundle.coderunner.service.dates:
     class: '%teknoo.east.bundle.coderunner.service.dates.class%'
     private: true
+
+  #Controller endpoint
+  teknoo.east.bundle.coderunner.endpoint.delete_task:
+    class: '%teknoo.east.bundle.coderunner.endpoint.delete_task.class%'
+    tags:
+      - {name: 'east.controller.service'}
+
+  teknoo.east.bundle.coderunner.endpoint.get_task:
+    class: '%teknoo.east.bundle.coderunner.endpoint.get_task.class%'
+    tags:
+      - {name: 'east.controller.service'}
+
+  teknoo.east.bundle.coderunner.endpoint.register_task:
+    class: '%teknoo.east.bundle.coderunner.endpoint.register_task.class%'
+    tags:
+      - {name: 'east.controller.service'}

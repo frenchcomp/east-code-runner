@@ -20,41 +20,35 @@
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 
-namespace Teknoo\East\CodeRunner\Controller;
+namespace Teknoo\East\CodeRunner\EndPoint;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
-use Teknoo\East\CodeRunner\Entity\Task\Task;
-use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
-use Teknoo\East\CodeRunner\Task\PHPCode;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
-class RegisterTaskController
+class GetTaskEndPoint
 {
     use EastControllerTrait;
 
     /**
-     * @var TaskManagerInterface
+     * @var TasksRegistryInterface
      */
-    private $tasksManager;
+    private $tasksRegistry;
 
     /**
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface $client
-     * @param string $code
+     * @param string $taskId
      * @return self
      */
-    public function __invoke(ServerRequestInterface $serverRequest, ClientInterface $client, string $code)
-    {
-        $task = new Task();
-        $task->setCode(new PHPCode($code, []));
-
-        $this->tasksManager->executeMe($task);
-
-        if (empty($task->getUrl())) {
-            throw new \RuntimeException('Error, the task has no URI');
-        }
+    public function __invoke(
+        ServerRequestInterface $serverRequest,
+        ClientInterface $client,
+        string $taskId
+    ) {
+        $task = $this->tasksRegistry->get($taskId);
 
         $client->responseFromController(
             new Response(200, [], \json_encode($task))

@@ -20,53 +20,45 @@
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 
-namespace Teknoo\East\CodeRunner\Controller;
+namespace Teknoo\East\CodeRunner\EndPoint;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
+use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
-use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
-use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
+use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
-class DeleteTaskController
+class RegisterTaskEndPoint
 {
     use EastControllerTrait;
 
     /**
-     * @var TasksManagerByTasksRegistryInterface
+     * @var TaskManagerInterface
      */
-    private $tasksManagerByTasksRegistry;
-
-    /**
-     * @var TasksRegistryInterface
-     */
-    private $tasksRegistry;
+    private $tasksManager;
 
     /**
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface $client
-     * @param string $taskId
+     * @param string $code
      * @return self
      */
-    public function __invoke(
-        ServerRequestInterface $serverRequest,
-        ClientInterface $client,
-        string $taskId
-    ) {
-        $task = $this->tasksRegistry->get($taskId);
+    public function __invoke(ServerRequestInterface $serverRequest, ClientInterface $client, string $code)
+    {
+        $task = new Task();
+        $task->setCode(new PHPCode($code, []));
 
-        $manager = null;
-        if (isset($this->tasksManagerByTasksRegistry[$task])) {
-            $manager = $this->tasksManagerByTasksRegistry[$task];
+        $this->tasksManager->executeMe($task);
+
+        if (empty($task->getUrl())) {
+            throw new \RuntimeException('Error, the task has no URI');
         }
 
-        if ($manager instanceof TaskManagerInterface) {
-            $manager->forgetMe($task);
-        }
-
-        $client->responseFromController(new Response(200, [], json_encode(['success'=>true])));
+        $client->responseFromController(
+            new Response(200, [], \json_encode($task))
+        );
 
         return $this;
     }

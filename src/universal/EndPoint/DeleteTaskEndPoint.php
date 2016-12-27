@@ -20,17 +20,24 @@
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 
-namespace Teknoo\East\CodeRunner\Controller;
+namespace Teknoo\East\CodeRunner\EndPoint;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
+use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
-class GetTaskController
+class DeleteTaskEndPoint
 {
     use EastControllerTrait;
+
+    /**
+     * @var TasksManagerByTasksRegistryInterface
+     */
+    private $tasksManagerByTasksRegistry;
 
     /**
      * @var TasksRegistryInterface
@@ -50,9 +57,16 @@ class GetTaskController
     ) {
         $task = $this->tasksRegistry->get($taskId);
 
-        $client->responseFromController(
-            new Response(200, [], \json_encode($task))
-        );
+        $manager = null;
+        if (isset($this->tasksManagerByTasksRegistry[$task])) {
+            $manager = $this->tasksManagerByTasksRegistry[$task];
+        }
+
+        if ($manager instanceof TaskManagerInterface) {
+            $manager->forgetMe($task);
+        }
+
+        $client->responseFromController(new Response(200, [], json_encode(['success'=>true])));
 
         return $this;
     }
