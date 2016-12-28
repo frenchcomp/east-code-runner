@@ -6,7 +6,7 @@ parameters:
   teknoo.east.bundle.coderunner.entity.task_registration.class: 'Teknoo\East\CodeRunner\Entity\TaskRegistration'
   teknoo.east.bundle.coderunner.entity.task_standby.class: 'Teknoo\East\CodeRunner\Entity\TaskStandby'
 
-  teknoo.east.bundle.coderunner.entity.task.name: 'TeknooEastCodeRunner:Task'
+  teknoo.east.bundle.coderunner.entity.task.name: 'TeknooEastCodeRunner:Task\Task'
   teknoo.east.bundle.coderunner.entity.task_execution.name: 'TeknooEastCodeRunner:TaskExecution'
   teknoo.east.bundle.coderunner.entity.task_registration.name: 'TeknooEastCodeRunner:TaskRegistration'
   teknoo.east.bundle.coderunner.entity.task_standby.name: 'TeknooEastCodeRunner:TaskStandby'
@@ -27,6 +27,7 @@ parameters:
   teknoo.east.bundle.coderunner.registry.tasks_by_runner.class: 'Teknoo\East\CodeRunner\Registry\TasksByRunnerRegistry'
   teknoo.east.bundle.coderunner.registry.tasks_manager_by_task.class: 'Teknoo\East\CodeRunner\Registry\TasksManagerByTasksRegistry'
   teknoo.east.bundle.coderunner.registry.tasks_standby.class: 'Teknoo\East\CodeRunner\Registry\TasksStandbyRegistry'
+  teknoo.east.bundle.coderunner.registry.tasks.class: 'Teknoo\East\CodeRunner\Registry\TasksRegistry'
 
   #Runner
   teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner'
@@ -93,6 +94,11 @@ services:
       - '@teknoo.east.bundle.coderunner.repository.task_standby'
       - '@doctrine.orm.entity_manager'
     private: true
+
+  teknoo.east.bundle.coderunner.registry.tasks:
+    class: '%teknoo.east.bundle.coderunner.registry.tasks.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.repository.task'
 
   #Runner
   teknoo.east.bundle.coderunner.runner.capability.language.php7:
@@ -164,15 +170,22 @@ services:
   #Controller endpoint
   teknoo.east.bundle.coderunner.endpoint.delete_task:
     class: '%teknoo.east.bundle.coderunner.endpoint.delete_task.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.registry.tasks_manager_by_task'
+      - '@teknoo.east.bundle.coderunner.registry.tasks'
     tags:
       - {name: 'east.controller.service'}
 
   teknoo.east.bundle.coderunner.endpoint.get_task:
     class: '%teknoo.east.bundle.coderunner.endpoint.get_task.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.registry.tasks'
     tags:
       - {name: 'east.controller.service'}
 
   teknoo.east.bundle.coderunner.endpoint.register_task:
     class: '%teknoo.east.bundle.coderunner.endpoint.register_task.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.manager.tasks'
     tags:
       - {name: 'east.controller.service'}

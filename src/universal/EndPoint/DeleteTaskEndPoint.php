@@ -45,6 +45,17 @@ class DeleteTaskEndPoint
     private $tasksRegistry;
 
     /**
+     * DeleteTaskEndPoint constructor.
+     * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasksRegistry
+     * @param TasksRegistryInterface $tasksRegistry
+     */
+    public function __construct(TasksManagerByTasksRegistryInterface $tasksManagerByTasksRegistry, TasksRegistryInterface $tasksRegistry)
+    {
+        $this->tasksManagerByTasksRegistry = $tasksManagerByTasksRegistry;
+        $this->tasksRegistry = $tasksRegistry;
+    }
+
+    /**
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface $client
      * @param string $taskId
@@ -55,17 +66,27 @@ class DeleteTaskEndPoint
         ClientInterface $client,
         string $taskId
     ) {
-        $task = $this->tasksRegistry->get($taskId);
+        $task = null;
+        try {
+            $task = $this->tasksRegistry->get($taskId);
+        } catch (\DomainException $e) {
+            $client->responseFromController(new Response(404, [], json_encode(['success'=>false, 'message'=>'Task not found'])));
+
+            return $this;
+        }
 
         $manager = null;
         if (isset($this->tasksManagerByTasksRegistry[$task])) {
             $manager = $this->tasksManagerByTasksRegistry[$task];
         }
 
-        if ($manager instanceof TaskManagerInterface) {
-            $manager->forgetMe($task);
+        if (!$manager instanceof TaskManagerInterface) {
+            $client->responseFromController(new Response(404, [], json_encode(['success'=>false, 'message'=>'Task not found'])));
+
+            return $this;
         }
 
+        $manager->forgetMe($task);
         $client->responseFromController(new Response(200, [], json_encode(['success'=>true])));
 
         return $this;

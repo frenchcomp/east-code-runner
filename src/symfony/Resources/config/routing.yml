@@ -1,14 +1,14 @@
-fooPage:
+registerTask:
     path: '/task/new'
-     methods:  ['PUT', 'POST']
+    methods:  ['PUT', 'POST']
     defaults: { _controller: 'teknoo.east.bundle.coderunner.endpoint.register_task' }
 
-fooPage:
+deleteTask:
     path: '/task/{taskId}'
-     methods:  ['DELETE']
+    methods:  ['DELETE']
     defaults: { _controller: 'teknoo.east.bundle.coderunner.endpoint.delete_task' }
 
-fooPage:
+getTask:
     path: '/task/{taskId}'
-     methods:  ['GET']
+    methods:  ['GET']
     defaults: { _controller: 'teknoo.east.bundle.coderunner.endpoint.get_task' }

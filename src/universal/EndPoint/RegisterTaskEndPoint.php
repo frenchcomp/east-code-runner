@@ -40,6 +40,15 @@ class RegisterTaskEndPoint
     private $tasksManager;
 
     /**
+     * RegisterTaskEndPoint constructor.
+     * @param TaskManagerInterface $tasksManager
+     */
+    public function __construct(TaskManagerInterface $tasksManager)
+    {
+        $this->tasksManager = $tasksManager;
+    }
+
+    /**
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface $client
      * @param string $code
@@ -53,7 +62,9 @@ class RegisterTaskEndPoint
         $this->tasksManager->executeMe($task);
 
         if (empty($task->getUrl())) {
-            throw new \RuntimeException('Error, the task has no URI');
+            $client->responseFromController(new Response(501, [], json_encode(['success'=>false, 'message'=>'Task is not registered'])));
+
+            return $this;
         }
 
         $client->responseFromController(
