@@ -235,9 +235,9 @@ class TaskTest extends AbstractTaskTest
          * @var Task
          */
         $task = $this->generateEntityPopulated([
-            'code' => $code,
-            'status' => $status,
-            'result' => $result,
+            'codeInstance' => $code,
+            'statusInstance' => $status,
+            'resultInstance' => $result,
         ])->prePersistJsonUpdate();
 
         self::assertInstanceOf(Task::class, $task);

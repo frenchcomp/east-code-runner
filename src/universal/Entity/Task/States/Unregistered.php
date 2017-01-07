@@ -33,9 +33,9 @@ use Teknoo\States\State\StateTrait;
  *
  * @mixin Task
  *
- * @property StatusInterface $status
+ * @property StatusInterface $statusInstance
  * @property string $url
- * @property CodeInterface $code
+ * @property CodeInterface $codeInstance
  */
 class Unregistered implements StateInterface
 {
@@ -47,7 +47,7 @@ class Unregistered implements StateInterface
          * {@inheritdoc}
          */
         return function (CodeInterface $code): Task {
-            $this->code = $code;
+            $this->codeInstance = $code;
 
             $this->updateStates();
 
@@ -75,7 +75,7 @@ class Unregistered implements StateInterface
          * {@inheritdoc}
          */
         return function (StatusInterface $status): Task {
-            $this->status = $status;
+            $this->statusInstance = $status;
 
             return $this;
         };

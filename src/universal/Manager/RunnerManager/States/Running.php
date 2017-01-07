@@ -58,9 +58,8 @@ class Running implements StateInterface
             $runners[$runner->getIdentifier()] = $runner;
             $this->runners = $runners;
 
-            $runnerIdentifier = $runner->getIdentifier();
-            if (isset($this->tasksByRunner[$runnerIdentifier])) {
-                $taskOnThisRunner = $this->tasksByRunner[$runnerIdentifier];
+            if (isset($this->tasksByRunner[$runner])) {
+                $taskOnThisRunner = $this->tasksByRunner[$runner];
                 if ($taskOnThisRunner instanceof TaskInterface) {
                     $runner->rememberYourCurrentTask($taskOnThisRunner);
                 }
@@ -97,7 +96,7 @@ class Running implements StateInterface
          */
         return function (RunnerInterface $runner, TaskInterface $task) {
             $runner->reset();
-            unset($this->tasksByRunner[$runner->getIdentifier()]);
+            unset($this->tasksByRunner[$runner]);
             unset($this->tasksManagerByTasks[$task->getUrl()]);
         };
     }
@@ -108,12 +107,11 @@ class Running implements StateInterface
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface {
-            $runnerIdentifier = $runner->getIdentifier();
-            if (!isset($this->tasksByRunner[$runnerIdentifier])) {
+            if (!isset($this->tasksByRunner[$runner])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
 
-            $task = $this->tasksByRunner[$runnerIdentifier];
+            $task = $this->tasksByRunner[$runner];
             if (!isset($this->tasksManagerByTasks[$task->getUrl()])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
@@ -133,12 +131,11 @@ class Running implements StateInterface
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface {
-            $runnerIdentifier = $runner->getIdentifier();
-            if (!isset($this->tasksByRunner[$runnerIdentifier])) {
+            if (!isset($this->tasksByRunner[$runner])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
 
-            $task = $this->tasksByRunner[$runnerIdentifier];
+            $task = $this->tasksByRunner[$runner];
             if (!isset($this->tasksManagerByTasks[$task->getUrl()])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
@@ -171,15 +168,14 @@ class Running implements StateInterface
     public function loadNextTaskFor()
     {
         return function (RunnerInterface $runner): RunnerManager {
-            $runnerIdentifier = $runner->getIdentifier();
-            if (!isset($this->tasksByRunner[$runnerIdentifier])
-                || !$this->tasksByRunner[$runnerIdentifier] instanceof TaskInterface) {
+            if (!isset($this->tasksByRunner[$runner])
+                || !$this->tasksByRunner[$runner] instanceof TaskInterface) {
                 $taskStandBy = $this->tasksStandbyRegistry->dequeue($runner);
 
                 if ($taskStandBy instanceof TaskInterface) {
                     try {
                         $runner->execute($this, $taskStandBy);
-                        $this->tasksByRunner[$runnerIdentifier] = $taskStandBy;
+                        $this->tasksByRunner[$runner] = $taskStandBy;
                     } catch (\Throwable $e) {
                         $this->tasksStandbyRegistry->enqueue($runner, $taskStandBy);
                         throw $e;

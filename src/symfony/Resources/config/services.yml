@@ -103,25 +103,25 @@ services:
   #Runner
   teknoo.east.bundle.coderunner.runner.capability.language.php7:
     class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    argument: ['language', 'php7']
+    arguments: ['language', 'php7']
     private: true
     shared: false
 
   teknoo.east.bundle.coderunner.runner.capability.feature.composer:
     class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    argument: ['feature', 'composer']
+    arguments: ['feature', 'composer']
     private: true
     shared: false
 
   teknoo.east.bundle.coderunner.runner.capability.feature.curl:
     class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    argument: ['feature', 'curl']
+    arguments: ['feature', 'curl']
     private: true
     shared: false
 
   teknoo.east.bundle.coderunner.runner.capability.feature.zip:
     class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    argument: ['feature', 'zip']
+    arguments: ['feature', 'zip']
     private: true
     shared: false
 
@@ -133,6 +133,7 @@ services:
       - '%teknoo.east.bundle.coderunner.runner.remote_php7.identifier%'
       - '%teknoo.east.bundle.coderunner.runner.remote_php7.name%'
       - '%teknoo.east.bundle.coderunner.runner.remote_php7.version%'
+      - []
     calls:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.composer']]

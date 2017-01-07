@@ -61,6 +61,11 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     /**
      * @var CodeInterface|\JsonSerializable
      */
+    private $codeInstance;
+
+    /**
+     * @var CodeInterface|\JsonSerializable
+     */
     private $code;
 
     /**
@@ -71,7 +76,17 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     /**
      * @var StatusInterface|\JsonSerializable
      */
+    private $statusInstance;
+
+    /**
+     * @var StatusInterface|\JsonSerializable
+     */
     private $status;
+
+    /**
+     * @var ResultInterface|\JsonSerializable
+     */
+    private $resultInstance;
 
     /**
      * @var ResultInterface|\JsonSerializable
@@ -138,11 +153,11 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      */
     public function getCode(): CodeInterface
     {
-        if (!$this->code instanceof CodeInterface) {
+        if (!$this->codeInstance instanceof CodeInterface) {
             throw new \UnexpectedValueException('Code is not available');
         }
 
-        return $this->code;
+        return $this->codeInstance;
     }
 
     /**
@@ -162,11 +177,11 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      */
     public function getStatus(): StatusInterface
     {
-        if (!$this->status instanceof StatusInterface) {
+        if (!$this->statusInstance instanceof StatusInterface) {
             throw new \UnexpectedValueException('Result is not available');
         }
 
-        return $this->status;
+        return $this->statusInstance;
     }
 
     /**
@@ -174,11 +189,11 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      */
     public function getResult(): ResultInterface
     {
-        if (!$this->result instanceof ResultInterface) {
+        if (!$this->resultInstance instanceof ResultInterface) {
             throw new \UnexpectedValueException('Result is not available');
         }
 
-        return $this->result;
+        return $this->resultInstance;
     }
 
     /**
@@ -299,9 +314,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      */
     public function postLoadJsonUpdate(): Task
     {
-        $this->code = static::decodeJson($this->code);
-        $this->status = static::decodeJson($this->status);
-        $this->result = static::decodeJson($this->result);
+        $this->codeInstance = static::decodeJson($this->code);
+        $this->statusInstance = static::decodeJson($this->status);
+        $this->resultInstance = static::decodeJson($this->result);
 
         //Initialize states
         $this->updateStates();
@@ -314,9 +329,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      */
     public function prePersistJsonUpdate(): Task
     {
-        $this->code = \json_encode($this->code);
-        $this->status = \json_encode($this->status);
-        $this->result = \json_encode($this->result);
+        $this->code = \json_encode($this->codeInstance);
+        $this->status = \json_encode($this->statusInstance);
+        $this->result = \json_encode($this->resultInstance);
 
         return $this;
     }
@@ -330,15 +345,15 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
             (new Assertion([Unregistered::class]))
                 ->with('url', new IsNull()),
             (new Assertion([Unregistered::class]))
-                ->with('code', new IsNotInstanceOf(CodeInterface::class)),
+                ->with('codeInstance', new IsNotInstanceOf(CodeInterface::class)),
             (new Assertion([Registered::class]))
                 ->with('url', new IsNotNull())
-                ->with('code', new IsInstanceOf(CodeInterface::class))
-                ->with('result', new IsNotInstanceOf(ResultInterface::class)),
+                ->with('codeInstance', new IsInstanceOf(CodeInterface::class))
+                ->with('resultInstance', new IsNotInstanceOf(ResultInterface::class)),
             (new Assertion([Executed::class]))
                 ->with('url', new IsNotNull())
-                ->with('code', new IsInstanceOf(CodeInterface::class))
-                ->with('result', new IsInstanceOf(ResultInterface::class)),
+                ->with('codeInstance', new IsInstanceOf(CodeInterface::class))
+                ->with('resultInstance', new IsInstanceOf(ResultInterface::class)),
         ];
     }
 
@@ -365,10 +380,10 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         return [
             'class' => static::class,
             'id' => $this->id,
-            'code' => $this->code,
+            'code' => $this->codeInstance,
             'url' => $this->url,
-            'status' => $this->status,
-            'result' => $this->result,
+            'status' => $this->statusInstance,
+            'result' => $this->resultInstance,
             'createdAt' => $createdAt,
             'updatedAt' => $updatedAt,
             'deletedAt' => $deletedAt,
@@ -422,10 +437,10 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
 
         $task = new static();
         $task->id = $values['id'];
-        $task->code = $code;
+        $task->codeInstance = $code;
         $task->url = $values['url'];
-        $task->status = $status;
-        $task->result = $result;
+        $task->statusInstance = $status;
+        $task->resultInstance = $result;
         $task->createdAt = $createdAt;
         $task->updatedAt = $updatedAt;
         $task->deletedAt = $deletedAt;

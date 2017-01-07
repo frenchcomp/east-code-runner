@@ -33,8 +33,8 @@ use Teknoo\States\State\StateTrait;
  *
  * @mixin Task
  *
- * @property StatusInterface $status
- * @property ResultInterface $result
+ * @property StatusInterface $statusInstance
+ * @property ResultInterface $resultInstance
  */
 class Registered implements StateInterface
 {
@@ -46,7 +46,7 @@ class Registered implements StateInterface
          * {@inheritdoc}
          */
         return function (StatusInterface $status): Task {
-            $this->status = $status;
+            $this->statusInstance = $status;
 
             return $this;
         };
@@ -58,7 +58,7 @@ class Registered implements StateInterface
          * {@inheritdoc}
          */
         return function (ResultInterface $result): Task {
-            $this->result = $result;
+            $this->resultInstance = $result;
 
             $this->updateStates();
 
