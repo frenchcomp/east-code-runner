@@ -26,6 +26,8 @@
     },
     "require": {
         "php": ">=7.0",
+        "ext-mbstring": "*",
+        "ext-bcmath": "*",
         "doctrine/orm": "~2.2",
         "gedmo/doctrine-extensions": "~2.4",
         "teknoo/immutable": "^0.0.1",

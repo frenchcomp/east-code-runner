@@ -108,29 +108,29 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             $this->tasksManagerByTasks
                 ->expects(self::any())
                 ->method('offsetExists')
-                ->willReturnCallback(function ($name) use (&$repository) {
-                    return isset($repository[$name]);
+                ->willReturnCallback(function (TaskInterface $name) use (&$repository) {
+                    return isset($repository[$name->getId()]);
                 });
 
             $this->tasksManagerByTasks
                 ->expects(self::any())
                 ->method('offsetGet')
-                ->willReturnCallback(function ($name) use (&$repository) {
-                    return $repository[$name];
+                ->willReturnCallback(function (TaskInterface $name) use (&$repository) {
+                    return $repository[$name->getId()];
                 });
 
             $this->tasksManagerByTasks
                 ->expects(self::any())
                 ->method('offsetSet')
-                ->willReturnCallback(function ($name, $value) use (&$repository) {
-                    $repository[$name] = $value;
+                ->willReturnCallback(function (TaskInterface $name, $value) use (&$repository) {
+                    $repository[$name->getId()] = $value;
                 });
 
             $this->tasksManagerByTasks
                 ->expects(self::any())
                 ->method('offsetUnset')
-                ->willReturnCallback(function ($name) use (&$repository) {
-                    unset($repository[$name]);
+                ->willReturnCallback(function (TaskInterface $name) use (&$repository) {
+                    unset($repository[$name->getId()]);
                 });
         }
 

@@ -97,7 +97,7 @@ class Running implements StateInterface
         return function (RunnerInterface $runner, TaskInterface $task) {
             $runner->reset();
             unset($this->tasksByRunner[$runner]);
-            unset($this->tasksManagerByTasks[$task->getUrl()]);
+            unset($this->tasksManagerByTasks[$task]);
         };
     }
 
@@ -112,11 +112,11 @@ class Running implements StateInterface
             }
 
             $task = $this->tasksByRunner[$runner];
-            if (!isset($this->tasksManagerByTasks[$task->getUrl()])) {
+            if (!isset($this->tasksManagerByTasks[$task])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
 
-            $taskManager = $this->tasksManagerByTasks[$task->getUrl()];
+            $taskManager = $this->tasksManagerByTasks[$task];
             $taskManager->taskResultIsUpdated($task, $result);
 
             $this->clearRunner($runner, $task);
@@ -136,11 +136,11 @@ class Running implements StateInterface
             }
 
             $task = $this->tasksByRunner[$runner];
-            if (!isset($this->tasksManagerByTasks[$task->getUrl()])) {
+            if (!isset($this->tasksManagerByTasks[$task])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
 
-            $taskManager = $this->tasksManagerByTasks[$task->getUrl()];
+            $taskManager = $this->tasksManagerByTasks[$task];
             $taskManager->taskStatusIsUpdated($task, $status);
 
             return $this;
@@ -158,7 +158,7 @@ class Running implements StateInterface
          */
         return function (RunnerInterface $runner, TaskInterface $task, TaskManagerInterface $taskManager): RunnerManager {
             $this->tasksStandbyRegistry->enqueue($runner, $task);
-            $this->tasksManagerByTasks[$task->getUrl()] = $taskManager;
+            $this->tasksManagerByTasks[$task] = $taskManager;
             $this->loadNextTaskFor($runner);
 
             return $this;

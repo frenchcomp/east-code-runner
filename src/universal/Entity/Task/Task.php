@@ -314,6 +314,11 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      */
     public function postLoadJsonUpdate(): Task
     {
+        //Call the method of the trait to initialize local attributes of the proxy
+        $this->initializeProxy();
+        //Initialize tests
+        $this->updateStates();
+
         $this->codeInstance = static::decodeJson($this->code);
         $this->statusInstance = static::decodeJson($this->status);
         $this->resultInstance = static::decodeJson($this->result);
@@ -388,6 +393,17 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
             'updatedAt' => $updatedAt,
             'deletedAt' => $deletedAt,
         ];
+    }
+
+    /**
+     * To restore states after doctrine load
+     */
+    public function __wakeup()
+    {
+        //Call the method of the trait to initialize local attributes of the proxy
+        $this->initializeProxy();
+        //Initialize tests
+        $this->updateStates();
     }
 
     /**

@@ -27,6 +27,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
+use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
@@ -76,7 +77,7 @@ class DeleteTaskEndPoint
         }
 
         $manager = null;
-        if (isset($this->tasksManagerByTasksRegistry[$task])) {
+        if ($task instanceof TaskInterface && isset($this->tasksManagerByTasksRegistry[$task])) {
             $manager = $this->tasksManagerByTasksRegistry[$task];
         }
 

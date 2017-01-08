@@ -48,7 +48,7 @@ class TasksRegistry implements TasksRegistryInterface
      */
     public function get(string $taskUid): TaskInterface
     {
-        $task = $this->taskRepository->findOneBy(['id' => $taskUid]);
+        $task = $this->taskRepository->findOneBy(['id' => $taskUid, 'deletedAt' => null]);
 
         if (!$task instanceof Task) {
             throw new \DomainException('Error, the task was not found');

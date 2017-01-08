@@ -55,7 +55,7 @@ class TasksRegistryTest extends AbstractTasksRegistryTest
             ->expects(self::any())
             ->method('findOneBy')
             ->willReturnCallback(function ($name) {
-                if (['id'=>'fooBar'] == $name) {
+                if (['id'=>'fooBar', 'deletedAt' => null] == $name) {
                     return $this->createMock(Task::class);
                 }
 
