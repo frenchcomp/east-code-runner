@@ -25,20 +25,20 @@ namespace Teknoo\East\CodeRunner\Task\Interfaces;
 use Teknoo\Immutable\ImmutableInterface;
 
 /**
- * Interface to define values objects to store PHP code to execute. These value object can also required several PHP
- * composer packages, or PHP extensions, returned by the method getNeededPackages.
+ * Interface to define values objects to store code to execute. These value object can also required several
+ * capabilities like a specific platform, packages, or extensions, returned by the method getNeededCapabilities.
  */
 interface CodeInterface extends ImmutableInterface, \JsonSerializable
 {
     /**
-     * Return the list of composer package or php extensions, like under the field "require" of composer.json file.
+     * Return the list of code capabilities (like platform, extension or package needed to execute this code)
      *
      * @return array, name of package as key, version as value, support composer's syntax
      */
-    public function getNeededPackages(): array;
+    public function getNeededCapabilities(): array;
 
     /**
-     * Return the PHP code to execute.
+     * Return the code to execute.
      *
      * @return string
      */

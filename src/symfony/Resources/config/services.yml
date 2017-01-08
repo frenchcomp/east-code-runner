@@ -20,7 +20,7 @@ parameters:
   #Manager
   teknoo.east.bundle.coderunner.manager.runners.class: 'Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager'
   teknoo.east.bundle.coderunner.manager.tasks.class: 'Teknoo\East\CodeRunner\Manager\TaskManager'
-  teknoo.east.bundle.coderunner.manager.tasks.identifier: 'default_task_manager'
+  teknoo.east.bundle.coderunner.manager.tasks.identifier: ''
   teknoo.east.bundle.coderunner.manager.tasks.url: ''
 
   #Registry
@@ -30,10 +30,6 @@ parameters:
   teknoo.east.bundle.coderunner.registry.tasks.class: 'Teknoo\East\CodeRunner\Registry\TasksRegistry'
 
   #Runner
-  teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner'
-  teknoo.east.bundle.coderunner.runner.remote_php7.identifier: 'RemotePHP7Runner'
-  teknoo.east.bundle.coderunner.runner.remote_php7.name: 'RemotePHP7Runner'
-  teknoo.east.bundle.coderunner.runner.remote_php7.version: '0.0.1'
   teknoo.east.bundle.coderunner.runner.capability.class: 'Teknoo\East\CodeRunner\Runner\Capability'
 
   #Service
@@ -103,7 +99,7 @@ services:
   #Runner
   teknoo.east.bundle.coderunner.runner.capability.language.php7:
     class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    arguments: ['language', 'php7']
+    arguments: ['platform', 'php7']
     private: true
     shared: false
 
@@ -125,23 +121,6 @@ services:
     private: true
     shared: false
 
-  teknoo.east.bundle.coderunner.runner.remote_php7:
-    class: '%teknoo.east.bundle.coderunner.runner.remote_php7.class%'
-    private: false
-    arguments:
-      - '@teknoo.east.bundle.coderunner.vendor.old_sound_producer'
-      - '%teknoo.east.bundle.coderunner.runner.remote_php7.identifier%'
-      - '%teknoo.east.bundle.coderunner.runner.remote_php7.name%'
-      - '%teknoo.east.bundle.coderunner.runner.remote_php7.version%'
-      - []
-    calls:
-      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
-      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.composer']]
-      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.curl']]
-      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.zip']]
-    tags:
-      - {name: 'teknoo.east.coderunner.runner'}
-
   #Manager
   teknoo.east.bundle.coderunner.manager.runners:
     class: '%teknoo.east.bundle.coderunner.manager.runners.class%'
@@ -161,7 +140,7 @@ services:
       - '@teknoo.east.bundle.coderunner.service.dates'
       - '@teknoo.east.bundle.coderunner.manager.runners'
     tags:
-          - {name: 'teknoo.east.coderunner.task_manager'}
+      - {name: 'teknoo.east.code_runner.task_manager'}
 
   #Service
   teknoo.east.bundle.coderunner.service.dates:

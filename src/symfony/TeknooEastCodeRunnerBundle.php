@@ -22,8 +22,21 @@
 
 namespace Teknoo\East\CodeRunnerBundle;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Teknoo\East\CodeRunnerBundle\DependencyInjection\RunnerCompilerPass;
+use Teknoo\East\CodeRunnerBundle\DependencyInjection\TaskManagerCompilerPass;
 
 class TeknooEastCodeRunnerBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new RunnerCompilerPass());
+        $container->addCompilerPass(new TaskManagerCompilerPass());
+    }
 }

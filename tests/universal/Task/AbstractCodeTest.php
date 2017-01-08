@@ -41,11 +41,11 @@ abstract class AbstractCodeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetNeededPackagesReturn()
+    public function testGetNeededCapabilitiesReturn()
     {
         self::assertInternalType(
             'array',
-            $this->buildCode()->getNeededPackages()
+            $this->buildCode()->getNeededCapabilities()
         );
     }
 

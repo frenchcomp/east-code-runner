@@ -79,6 +79,14 @@ class TaskManager implements TaskManagerInterface
         DatesService $datesService,
         RunnerManagerInterface $runnerManager
     ) {
+        if (empty($managerIdentifier)) {
+            throw new \RuntimeException('Error, all task manager need a string identifier');
+        }
+
+        if (empty($urlTaskPattern)) {
+            throw new \RuntimeException("Error, the task url pattern is missing for %$managerIdentifier%");
+        }
+
         $this->managerIdentifier = $managerIdentifier;
         $this->entityManager = $entityManager;
         $this->urlTaskPattern = $urlTaskPattern;

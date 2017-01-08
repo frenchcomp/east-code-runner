@@ -99,7 +99,7 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
      */
     private function convertToRequirePackage(CodeInterface $code): string
     {
-        return \json_encode(['require' => $code->getNeededPackages()]);
+        return \json_encode(['require' => $code->getNeededCapabilities()]);
     }
 
     /**

@@ -32,7 +32,7 @@ class PHPCode implements CodeInterface
     /**
      * @var string
      */
-    private $neededPackages;
+    private $neededCapabilities;
 
     /**
      * @var string
@@ -43,11 +43,11 @@ class PHPCode implements CodeInterface
      * PHPCode constructor.
      *
      * @param string $code
-     * @param array  $neededPackages
+     * @param array  $neededCapabilities
      */
-    public function __construct(string $code, array $neededPackages)
+    public function __construct(string $code, array $neededCapabilities)
     {
-        $this->neededPackages = $neededPackages;
+        $this->neededCapabilities = $neededCapabilities;
         $this->code = $code;
 
         $this->uniqueConstructorCheck();
@@ -56,9 +56,9 @@ class PHPCode implements CodeInterface
     /**
      * {@inheritdoc}
      */
-    public function getNeededPackages(): array
+    public function getNeededCapabilities(): array
     {
-        return $this->neededPackages;
+        return $this->neededCapabilities;
     }
 
     /**
@@ -76,7 +76,7 @@ class PHPCode implements CodeInterface
     {
         return [
             'class' => static::class,
-            'neededPackages' => $this->getNeededPackages(),
+            'neededCapabilities' => $this->getNeededCapabilities(),
             'code' => $this->code,
         ];
     }
@@ -90,6 +90,6 @@ class PHPCode implements CodeInterface
             throw new \InvalidArgumentException('class is not matching with the serialized values');
         }
 
-        return new static($values['code'], $values['neededPackages']);
+        return new static($values['code'], $values['neededCapabilities']);
     }
 }

@@ -37,21 +37,21 @@ trait CheckRequirementsTrait
     {
         $capabilities = $this->getCapabilities();
 
-        foreach ($code->getNeededPackages() as $package) {
-            $packageFound = false;
+        foreach ($code->getNeededCapabilities() as $neededCapability) {
+            $capabilityFound = false;
 
             /**
              * @var CapabilityInterface $capability
              */
             foreach ($capabilities as $capability) {
-                if ('package' == $capability->getType() && $package == $capability) {
-                    $packageFound = true;
+                if ($neededCapability == $capability) {
+                    $capabilityFound = true;
                     break;
                 }
             }
 
-            if (false === $packageFound) {
-                throw new \RuntimeException("Package $package is not available");
+            if (false === $capabilityFound) {
+                throw new \RuntimeException("Capability $neededCapability is not available");
             }
         }
     }

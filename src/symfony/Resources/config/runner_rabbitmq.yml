@@ -1,6 +1,24 @@
 #src/Resources/config/runner_rabbitmq.yml
 parameters:
-  teknoo.east.bundle.coderunner.vendor.amqpc_connection.class: 'PhpAmqpLib\Connection\AMQPConnection'
-  teknoo.east.bundle.coderunner.vendor.amqpc_channel.class: 'PhpAmqpLib\Connection\AMQPChannel'
+  teknoo.east.bundle.coderunner.runner.remote_php7.class: 'Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner'
+  teknoo.east.bundle.coderunner.runner.remote_php7.identifier: 'RemotePHP7Runner'
+  teknoo.east.bundle.coderunner.runner.remote_php7.name: 'RemotePHP7Runner'
+  teknoo.east.bundle.coderunner.runner.remote_php7.version: '0.0.1'
 
 services:
+  teknoo.east.bundle.coderunner.runner.remote_php7:
+    class: '%teknoo.east.bundle.coderunner.runner.remote_php7.class%'
+    private: false
+    arguments:
+      - '@teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.task'
+      - '%teknoo.east.bundle.coderunner.runner.remote_php7.identifier%'
+      - '%teknoo.east.bundle.coderunner.runner.remote_php7.name%'
+      - '%teknoo.east.bundle.coderunner.runner.remote_php7.version%'
+      - []
+    calls:
+      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
+      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.composer']]
+      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.curl']]
+      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.zip']]
+    tags:
+      - {name: 'teknoo.east.code_runner.runner.service'}

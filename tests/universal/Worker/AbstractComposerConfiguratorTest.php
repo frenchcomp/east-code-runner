@@ -57,7 +57,7 @@ abstract class AbstractComposerConfiguratorTest extends \PHPUnit_Framework_TestC
     public function testConfigure()
     {
         $code = $this->createMock(CodeInterface::class);
-        $code->expects(self::any())->method('getNeededPackages')->willReturn(['foo' => '2.3.4', 'bar' => '*']);
+        $code->expects(self::any())->method('getNeededCapabilities')->willReturn(['foo' => '2.3.4', 'bar' => '*']);
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::once())->method('composerIsReady')->willReturnSelf();
