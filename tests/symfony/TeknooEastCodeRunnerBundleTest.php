@@ -23,10 +23,12 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Teknoo\East\CodeRunnerBundle\DependencyInjection\TeknooEastCodeRunnerExtension;
+use Teknoo\East\CodeRunnerBundle\DependencyInjection\RunnerCompilerPass;
+use Teknoo\East\CodeRunnerBundle\DependencyInjection\TaskManagerCompilerPass;
+use Teknoo\East\CodeRunnerBundle\TeknooEastCodeRunnerBundle;
 
 /**
- * Class TeknooStatesExtensionTest.
+ * Class TeknooEastCodeRunnerBundleTest.
  *
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -36,27 +38,27 @@ use Teknoo\East\CodeRunnerBundle\DependencyInjection\TeknooEastCodeRunnerExtensi
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
- * @covers \Teknoo\East\CodeRunnerBundle\DependencyInjection\TeknooEastCodeRunnerExtension
+ * @covers \Teknoo\East\CodeRunnerBundle\TeknooEastCodeRunnerBundle
  */
-class TeknooEastCodeRunnerExtensionTest extends \PHPUnit_Framework_TestCase
+class TeknooEastCodeRunnerBundleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return TeknooEastCodeRunnerExtension
+     * @return TeknooEastCodeRunnerBundle
      */
-    public function buildExtension()
+    public function buildBundle()
     {
-        return new TeknooEastCodeRunnerExtension();
+        return new TeknooEastCodeRunnerBundle();
     }
 
-    public function testLoadEmpty()
+    public function testBuild()
     {
         $containerMock = $this->createMock(ContainerBuilder::class);
 
         $containerMock
-            ->expects(self::any())
-            ->method('hasExtension')
-            ->willReturn(true);
+            ->expects(self::exactly(2))
+            ->method('addCompilerPass')
+            ->withConsecutive([new RunnerCompilerPass()], new TaskManagerCompilerPass());
 
-        $this->buildExtension()->load([], $containerMock);
+        $this->buildBundle()->build($containerMock);
     }
 }

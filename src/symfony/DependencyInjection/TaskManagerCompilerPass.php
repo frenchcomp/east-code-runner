@@ -60,5 +60,7 @@ class TaskManagerCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $this->registerManagerIntoRegistry($container);
+
+        return $this;
     }
 }

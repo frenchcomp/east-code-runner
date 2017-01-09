@@ -60,5 +60,7 @@ class RunnerCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $this->registerRunnerIntoManager($container);
+
+        return $this;
     }
 }
