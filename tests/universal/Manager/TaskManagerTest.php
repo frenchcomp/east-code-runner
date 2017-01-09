@@ -106,6 +106,34 @@ class TaskManagerTest extends AbstractTaskManagerTest
         );
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testManagerNoIdentifier()
+    {
+        new TaskManager(
+            '',
+            'http://foo.bar',
+            $this->getEntityManagerMock(),
+            $this->getDatesServiceMock(),
+            $this->getRunnerManagerMock()
+        );
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testManagerNoUrl()
+    {
+        new TaskManager(
+            'fooBar',
+            '',
+            $this->getEntityManagerMock(),
+            $this->getDatesServiceMock(),
+            $this->getRunnerManagerMock()
+        );
+    }
+
     public function testForgetMeTaskEntity()
     {
         $this->getEntityManagerMock()

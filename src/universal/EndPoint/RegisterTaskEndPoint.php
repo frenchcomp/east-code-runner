@@ -61,7 +61,9 @@ class RegisterTaskEndPoint
 
         $this->tasksManager->executeMe($task);
 
-        if (empty($task->getUrl())) {
+        try {
+            $task->getUrl();
+        } catch (\Throwable $e) {
             $client->responseFromController(new Response(501, [], json_encode(['success'=>false, 'message'=>'Task is not registered'])));
 
             return $this;

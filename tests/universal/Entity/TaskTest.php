@@ -22,6 +22,7 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Entity;
 
+use Teknoo\East\CodeRunner\Entity\Task\States\Unregistered;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
@@ -280,5 +281,14 @@ class TaskTest extends AbstractTaskTest
         self::assertEquals($task->getStatus(), $final->getStatus());
         self::assertEquals($task->getResult(), $final->getResult());
         self::assertEquals($task->getUrl(), $final->getUrl());
+    }
+
+    public function testWakeUp()
+    {
+        $task = $this->buildTask();
+        $taskSerialiazed = \serialize($task);
+        $taskExt = \unserialize($taskSerialiazed);
+
+        $taskExt->switchState(Unregistered::class);
     }
 }
