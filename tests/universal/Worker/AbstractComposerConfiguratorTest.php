@@ -26,6 +26,14 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\ComposerConfiguratorInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
+/**
+ * Class AbstractComposerConfiguratorTest
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 abstract class AbstractComposerConfiguratorTest extends \PHPUnit_Framework_TestCase
 {
     abstract public function buildConfigurator(): ComposerConfiguratorInterface;

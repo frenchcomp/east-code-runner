@@ -25,6 +25,12 @@ namespace Teknoo\Tests\East\CodeRunner\Service;
 use Teknoo\East\CodeRunner\Service\DatesService;
 
 /**
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @cover Teknoo\East\CodeRunner\Service\DatesService
  */
 class DatesServiceTest extends \PHPUnit_Framework_TestCase

@@ -30,6 +30,14 @@ use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
+/**
+ * Class RegisterTaskEndPoint
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class RegisterTaskEndPoint
 {
     use EastControllerTrait;

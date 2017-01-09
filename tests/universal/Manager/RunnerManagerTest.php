@@ -34,6 +34,11 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 /**
  * Test RunnerManagerTest.
  *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @covers \Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager
  * @covers \Teknoo\East\CodeRunner\Manager\RunnerManager\States\Running
  * @covers \Teknoo\East\CodeRunner\Manager\RunnerManager\States\Selecting

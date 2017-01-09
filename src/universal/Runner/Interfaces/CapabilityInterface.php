@@ -26,6 +26,11 @@ use Teknoo\Immutable\ImmutableInterface;
 
 /**
  * Interface to define as value object, capabilities of a runner.
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 interface CapabilityInterface extends ImmutableInterface
 {

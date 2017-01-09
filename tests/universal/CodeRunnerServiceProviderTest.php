@@ -47,6 +47,12 @@ use Teknoo\East\CodeRunner\Service\DatesService;
 
 /**
  * Class CodeRunnerServiceProviderTest
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @covers \Teknoo\East\CodeRunner\CodeRunnerServiceProvider
  */
 class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase

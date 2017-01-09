@@ -33,6 +33,12 @@ use Teknoo\Tests\East\CodeRunner\Entity\Traits\PopulateEntityTrait;
 use Teknoo\Tests\East\CodeRunner\Task\AbstractTaskTest;
 
 /**
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @covers \Teknoo\East\CodeRunner\Entity\Task\Task
  * @covers \Teknoo\East\CodeRunner\Entity\Task\States\Executed
  * @covers \Teknoo\East\CodeRunner\Entity\Task\States\Registered

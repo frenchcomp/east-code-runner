@@ -25,6 +25,14 @@ namespace Teknoo\East\CodeRunner\Runner;
 use Teknoo\East\CodeRunner\Runner\Interfaces\CapabilityInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
+/**
+ * Class Capability
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class Capability implements CapabilityInterface
 {
     use ImmutableTrait;

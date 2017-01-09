@@ -26,6 +26,14 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
+/**
+ * Class AbstractRunnerTest
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
 {
     /**

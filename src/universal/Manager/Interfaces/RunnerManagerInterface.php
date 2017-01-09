@@ -30,6 +30,11 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 /**
  * A runner manager is a service able to register all available runner for a platform and dispatch execution on
  * these runner according to theirs capabilities.
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 interface RunnerManagerInterface
 {

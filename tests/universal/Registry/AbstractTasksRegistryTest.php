@@ -25,6 +25,14 @@ namespace Teknoo\Tests\East\CodeRunner\Registry;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
+/**
+ * Class AbstractTasksRegistryTest
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 abstract class AbstractTasksRegistryTest extends \PHPUnit_Framework_TestCase
 {
     abstract public function buildRegistry(): TasksRegistryInterface;

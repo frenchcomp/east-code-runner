@@ -30,6 +30,12 @@ use Teknoo\East\CodeRunner\Service\RabbitMQResultConsumerService;
 use Teknoo\East\CodeRunner\Task\TextResult;
 
 /**
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @covers \Teknoo\East\CodeRunner\Service\RabbitMQResultConsumerService
  */
 class RabbitMQResultConsumerServiceTest extends \PHPUnit_Framework_TestCase

@@ -26,6 +26,14 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
+/**
+ * Class AbstractTasksStandbyRegistryTest
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 abstract class AbstractTasksStandbyRegistryTest extends \PHPUnit_Framework_TestCase
 {
     abstract public function buildRegistry(): TasksStandbyRegistryInterface;

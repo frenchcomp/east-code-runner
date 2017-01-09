@@ -26,6 +26,12 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 
 /**
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @covers \Teknoo\East\CodeRunner\Task\PHPCode
  */
 class PHPCodeTest extends AbstractCodeTest

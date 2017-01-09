@@ -24,6 +24,14 @@ namespace Teknoo\Tests\East\CodeRunner\Task;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 
+/**
+ * Class AbstractResultTest
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 abstract class AbstractResultTest extends \PHPUnit_Framework_TestCase
 {
     /**

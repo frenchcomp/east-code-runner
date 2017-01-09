@@ -24,6 +24,14 @@ namespace Teknoo\East\CodeRunner\Entity;
 
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
+/**
+ * Class TaskStandby
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class TaskStandby
 {
     /**

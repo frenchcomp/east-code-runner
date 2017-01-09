@@ -38,6 +38,14 @@ use Teknoo\States\LifeCycle\StatedClass\Automated\AutomatedTrait;
 use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
+/**
+ * Class RemotePHP7Runner
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInterface
 {
     use ProxyTrait,

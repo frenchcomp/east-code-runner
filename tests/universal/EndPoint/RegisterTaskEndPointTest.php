@@ -30,6 +30,12 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 
 /**
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @covers \Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint
  */
 class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase

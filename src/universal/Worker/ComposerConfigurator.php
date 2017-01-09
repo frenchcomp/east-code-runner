@@ -30,6 +30,14 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\ComposerConfiguratorInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
+/**
+ * Class ComposerConfigurator
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class ComposerConfigurator implements ComposerConfiguratorInterface
 {
     const COMPOSER_JSON_FILE = 'composer.json';

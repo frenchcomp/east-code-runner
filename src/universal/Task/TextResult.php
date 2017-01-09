@@ -25,6 +25,14 @@ namespace Teknoo\East\CodeRunner\Task;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
+/**
+ * Class TextResult
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class TextResult implements ResultInterface
 {
     use ImmutableTrait;

@@ -32,6 +32,11 @@ use Teknoo\East\CodeRunner\Service\DatesService;
 /**
  * Test TasksManagerByTasksRegistryTest.
  *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @covers \Teknoo\East\CodeRunner\Registry\TasksManagerByTasksRegistry
  */
 class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistryTest

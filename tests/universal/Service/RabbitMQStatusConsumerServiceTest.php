@@ -29,6 +29,14 @@ use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\RabbitMQStatusConsumerService;
 use Teknoo\East\CodeRunner\Task\Status;
 
+/**
+ * Class RabbitMQStatusConsumerServiceTest
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class RabbitMQStatusConsumerServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**

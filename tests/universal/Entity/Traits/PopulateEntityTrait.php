@@ -22,6 +22,14 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Entity\Traits;
 
+/**
+ * Class PopulateEntityTrait
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 trait PopulateEntityTrait
 {
     /**

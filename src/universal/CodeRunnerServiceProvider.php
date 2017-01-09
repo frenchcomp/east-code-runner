@@ -52,6 +52,11 @@ use Teknoo\East\CodeRunner\Service\DatesService;
 
 /**
  * Definition provider following PSR 11 Draft to build an universal bundle/package.
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 class CodeRunnerServiceProvider implements ServiceProvider
 {

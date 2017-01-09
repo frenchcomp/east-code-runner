@@ -27,6 +27,11 @@ use Teknoo\Immutable\ImmutableInterface;
 /**
  * Interface to define values objects to store code to execute. These value object can also required several
  * capabilities like a specific platform, packages, or extensions, returned by the method getNeededCapabilities.
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 interface CodeInterface extends ImmutableInterface, \JsonSerializable
 {

@@ -37,6 +37,12 @@ use Teknoo\States\Proxy\ProxyInterface;
 use Teknoo\States\Proxy\ProxyTrait;
 
 /**
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
  * @method RunnerManager doRegisterMe(RunnerInterface $runner)
  * @method RunnerManager doForgetMe(RunnerInterface $runner)
  * @method RunnerManager doPushResult(RunnerInterface $runner, ResultInterface $result)

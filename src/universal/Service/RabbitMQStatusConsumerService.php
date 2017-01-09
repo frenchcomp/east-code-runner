@@ -30,6 +30,14 @@ use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Status;
 
+/**
+ * Class RabbitMQStatusConsumerService
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
 class RabbitMQStatusConsumerService implements ConsumerInterface
 {
     /**
