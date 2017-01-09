@@ -25,15 +25,13 @@ namespace Teknoo\East\CodeRunner\EndPoint;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
-use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
- * Class GetTaskEndPoint
+ * Class GetTaskEndPoint.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
@@ -48,6 +46,7 @@ class GetTaskEndPoint
 
     /**
      * GetTaskEndPoint constructor.
+     *
      * @param TasksRegistryInterface $tasksRegistry
      */
     public function __construct(TasksRegistryInterface $tasksRegistry)
@@ -57,8 +56,9 @@ class GetTaskEndPoint
 
     /**
      * @param ServerRequestInterface $serverRequest
-     * @param ClientInterface $client
-     * @param string $taskId
+     * @param ClientInterface        $client
+     * @param string                 $taskId
+     *
      * @return self
      */
     public function __invoke(
@@ -69,7 +69,7 @@ class GetTaskEndPoint
         try {
             $task = $this->tasksRegistry->get($taskId);
         } catch (\DomainException $e) {
-            $client->responseFromController(new Response(404, [], json_encode(['success'=>false, 'message'=>'Task not found'])));
+            $client->responseFromController(new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found'])));
 
             return $this;
         }

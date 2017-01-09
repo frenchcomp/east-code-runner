@@ -26,10 +26,9 @@ use Doctrine\ORM\EntityRepository;
 use Teknoo\East\CodeRunner\Entity\TaskStandby;
 
 /**
- * Class TaskStandbyRepository
+ * Class TaskStandbyRepository.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */

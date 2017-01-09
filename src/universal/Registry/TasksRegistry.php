@@ -28,10 +28,9 @@ use Teknoo\East\CodeRunner\Repository\TaskRepository;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
- * Class TasksRegistry
+ * Class TasksRegistry.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
@@ -44,6 +43,7 @@ class TasksRegistry implements TasksRegistryInterface
 
     /**
      * TasksRegistry constructor.
+     *
      * @param TaskRepository $taskRepository
      */
     public function __construct(TaskRepository $taskRepository)

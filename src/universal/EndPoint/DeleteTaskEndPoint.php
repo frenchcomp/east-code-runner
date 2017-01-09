@@ -32,10 +32,9 @@ use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
- * Class DeleteTaskEndPoint
+ * Class DeleteTaskEndPoint.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
@@ -55,8 +54,9 @@ class DeleteTaskEndPoint
 
     /**
      * DeleteTaskEndPoint constructor.
+     *
      * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasksRegistry
-     * @param TasksRegistryInterface $tasksRegistry
+     * @param TasksRegistryInterface               $tasksRegistry
      */
     public function __construct(TasksManagerByTasksRegistryInterface $tasksManagerByTasksRegistry, TasksRegistryInterface $tasksRegistry)
     {
@@ -66,8 +66,9 @@ class DeleteTaskEndPoint
 
     /**
      * @param ServerRequestInterface $serverRequest
-     * @param ClientInterface $client
-     * @param string $taskId
+     * @param ClientInterface        $client
+     * @param string                 $taskId
+     *
      * @return self
      */
     public function __invoke(
@@ -79,7 +80,7 @@ class DeleteTaskEndPoint
         try {
             $task = $this->tasksRegistry->get($taskId);
         } catch (\DomainException $e) {
-            $client->responseFromController(new Response(404, [], json_encode(['success'=>false, 'message'=>'Task not found'])));
+            $client->responseFromController(new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found'])));
 
             return $this;
         }
@@ -90,13 +91,13 @@ class DeleteTaskEndPoint
         }
 
         if (!$manager instanceof TaskManagerInterface) {
-            $client->responseFromController(new Response(404, [], json_encode(['success'=>false, 'message'=>'Task not found'])));
+            $client->responseFromController(new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found'])));
 
             return $this;
         }
 
         $manager->forgetMe($task);
-        $client->responseFromController(new Response(200, [], json_encode(['success'=>true])));
+        $client->responseFromController(new Response(200, [], json_encode(['success' => true])));
 
         return $this;
     }

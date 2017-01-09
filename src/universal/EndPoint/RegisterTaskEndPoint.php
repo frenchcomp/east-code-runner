@@ -31,10 +31,9 @@ use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
- * Class RegisterTaskEndPoint
+ * Class RegisterTaskEndPoint.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
@@ -49,6 +48,7 @@ class RegisterTaskEndPoint
 
     /**
      * RegisterTaskEndPoint constructor.
+     *
      * @param TaskManagerInterface $tasksManager
      */
     public function __construct(TaskManagerInterface $tasksManager)
@@ -58,8 +58,9 @@ class RegisterTaskEndPoint
 
     /**
      * @param ServerRequestInterface $serverRequest
-     * @param ClientInterface $client
-     * @param string $code
+     * @param ClientInterface        $client
+     * @param string                 $code
+     *
      * @return self
      */
     public function __invoke(ServerRequestInterface $serverRequest, ClientInterface $client, string $code)
@@ -72,7 +73,7 @@ class RegisterTaskEndPoint
         try {
             $task->getUrl();
         } catch (\Throwable $e) {
-            $client->responseFromController(new Response(501, [], json_encode(['success'=>false, 'message'=>'Task is not registered'])));
+            $client->responseFromController(new Response(501, [], json_encode(['success' => false, 'message' => 'Task is not registered'])));
 
             return $this;
         }

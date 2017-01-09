@@ -44,7 +44,6 @@ use Teknoo\States\Proxy\ProxyTrait;
  * Class Task.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -401,7 +400,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     }
 
     /**
-     * To restore states after doctrine load
+     * To restore states after doctrine load.
      */
     public function __wakeup()
     {

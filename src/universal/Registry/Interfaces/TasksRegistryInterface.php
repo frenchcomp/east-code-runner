@@ -22,14 +22,12 @@
 
 namespace Teknoo\East\CodeRunner\Registry\Interfaces;
 
-use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
- * Interface TasksRegistryInterface
+ * Interface TasksRegistryInterface.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
@@ -37,6 +35,7 @@ interface TasksRegistryInterface
 {
     /**
      * @param string $taskUid
+     *
      * @return TaskInterface
      */
     public function get(string $taskUid): TaskInterface;

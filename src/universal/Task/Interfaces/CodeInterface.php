@@ -29,14 +29,13 @@ use Teknoo\Immutable\ImmutableInterface;
  * capabilities like a specific platform, packages, or extensions, returned by the method getNeededCapabilities.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 interface CodeInterface extends ImmutableInterface, \JsonSerializable
 {
     /**
-     * Return the list of code capabilities (like platform, extension or package needed to execute this code)
+     * Return the list of code capabilities (like platform, extension or package needed to execute this code).
      *
      * @return array, name of package as key, version as value, support composer's syntax
      */
