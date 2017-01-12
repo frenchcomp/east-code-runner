@@ -82,4 +82,34 @@ abstract class AbstractCapabilityTest extends \PHPUnit_Framework_TestCase
     {
         $this->buildCapacity()->__construct();
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeEmptyClass()
+    {
+        $capability = $this->buildCapacity();
+        $className = get_class($capability);
+        $className::jsonDeserialize([]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testJsonDeserializeBadClass()
+    {
+        $capability = $this->buildCapacity();
+        $className = get_class($capability);
+        $className::jsonDeserialize(['class' => '\DateTime']);
+    }
+
+    public function testJsonEncodeDecode()
+    {
+        $capability = $this->buildCapacity();
+        $className = get_class($capability);
+        self::assertEquals(
+            $capability,
+            $className::jsonDeserialize(json_decode(json_encode($capability), true))
+        );
+    }
 }

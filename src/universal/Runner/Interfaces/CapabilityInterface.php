@@ -31,7 +31,7 @@ use Teknoo\Immutable\ImmutableInterface;
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-interface CapabilityInterface extends ImmutableInterface
+interface CapabilityInterface extends ImmutableInterface, \JsonSerializable
 {
     /**
      * Type/identifier of the capability, like the language provided by the runner, its versions, its extensions.
@@ -46,4 +46,13 @@ interface CapabilityInterface extends ImmutableInterface
      * @return mixed
      */
     public function getValue();
+
+    /**
+     * Static method to reconstruct a Capability instance from its json representation.
+     *
+     * @param array $values
+     *
+     * @return CapabilityInterface
+     */
+    public static function jsonDeserialize(array $values): CapabilityInterface;
 }

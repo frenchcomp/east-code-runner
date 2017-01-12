@@ -22,6 +22,7 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Task;
 
+use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 
@@ -41,7 +42,7 @@ class PHPCodeTest extends AbstractCodeTest
      */
     public function buildCode(): CodeInterface
     {
-        return new PHPCode('<php phpinfo();', ['php' => '>=7']);
+        return new PHPCode('<php phpinfo();', [new Capability('platform', 'php7')]);
     }
 
     /**

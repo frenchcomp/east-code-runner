@@ -75,4 +75,28 @@ class Capability implements CapabilityInterface
     {
         return $this->value;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function jsonDeserialize(array $values): CapabilityInterface
+    {
+        if (!isset($values['class']) || static::class != $values['class']) {
+            throw new \InvalidArgumentException('class is not matching with the serialized values');
+        }
+
+        return new static($values['type'], $values['value']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'class' => static::class,
+            'type' => $this->getType(),
+            'value' => $this->getValue(),
+        ];
+    }
 }

@@ -27,10 +27,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Service\DatesService;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunner\Task\Status;
 
 /**
  * Class TaskManager.
@@ -96,6 +98,16 @@ class TaskManager implements TaskManagerInterface
         $this->urlTaskPattern = $urlTaskPattern;
         $this->datesService = $datesService;
         $this->runnerManager = $runnerManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function registerIntoMe(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface
+    {
+        $registry->addTaskManager($this);
+
+        return $this;
     }
 
     /**
@@ -184,6 +196,7 @@ class TaskManager implements TaskManagerInterface
     private function dispatchToRunnerManager(TaskInterface $task): TaskManager
     {
         $this->runnerManager->executeForMeThisTask($this, $task);
+        $this->persistTask($task);
 
         return $this;
     }
@@ -195,9 +208,9 @@ class TaskManager implements TaskManagerInterface
      */
     private function doRegisterAndExecuteTask(TaskInterface $task): TaskManager
     {
+        $task->registerStatus(new Status(Status::STATUS_REGISTERED));
         $this->persistTask($task);
         $this->generateUrl($task);
-        $this->entityManager->flush();
 
         $this->dispatchToRunnerManager($task);
 

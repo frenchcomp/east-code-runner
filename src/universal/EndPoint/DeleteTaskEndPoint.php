@@ -58,8 +58,10 @@ class DeleteTaskEndPoint
      * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasksRegistry
      * @param TasksRegistryInterface               $tasksRegistry
      */
-    public function __construct(TasksManagerByTasksRegistryInterface $tasksManagerByTasksRegistry, TasksRegistryInterface $tasksRegistry)
-    {
+    public function __construct(
+        TasksManagerByTasksRegistryInterface $tasksManagerByTasksRegistry,
+        TasksRegistryInterface $tasksRegistry
+    ) {
         $this->tasksManagerByTasksRegistry = $tasksManagerByTasksRegistry;
         $this->tasksRegistry = $tasksRegistry;
     }

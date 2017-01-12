@@ -22,6 +22,7 @@
 
 namespace Teknoo\East\CodeRunner\Manager\Interfaces;
 
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
@@ -35,6 +36,14 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
  */
 interface TaskManagerInterface
 {
+    /**
+     * To register a manager into the registry
+     *
+     * @param TasksManagerByTasksRegistryInterface $registry
+     * @return TaskManagerInterface
+     */
+    public function registerIntoMe(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface;
+
     /**
      * To know the unique identifier about a runner.
      *

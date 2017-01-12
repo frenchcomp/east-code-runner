@@ -26,6 +26,7 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunner\Task\Status;
 use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
@@ -33,7 +34,6 @@ use Teknoo\States\State\StateTrait;
  * Class Selecting.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -111,6 +111,7 @@ class Selecting implements StateInterface
                 throw new \DomainException('No runner available to execute the task');
             }
 
+            $task->registerStatus(new Status(Status::STATUS_PLANNED));
             return $this->runnerAccepted;
         };
     }

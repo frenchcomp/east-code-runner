@@ -47,15 +47,17 @@ class TaskManagerCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->findDefinition('teknoo.east.bundle.coderunner.registry.tasks_manager_by_task');
+        $registryId = 'teknoo.east.bundle.coderunner.registry.tasks_manager_by_task';
 
         $taggedServices = $container->findTaggedServiceIds('teknoo.east.code_runner.task_manager');
 
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $attributes) {
-                $definition->addMethodCall(
-                    'register',
-                    [new Reference($id)]
+                $managerDefinition = $container->findDefinition($id);
+
+                $managerDefinition->addMethodCall(
+                    'registerIntoMe',
+                    [new Reference($registryId)]
                 );
             }
         }

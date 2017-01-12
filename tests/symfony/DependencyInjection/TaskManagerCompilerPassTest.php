@@ -83,9 +83,9 @@ class TaskManagerCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->getContainerBuilderMock()
-            ->expects(self::once())
+            ->expects(self::exactly(2))
             ->method('findDefinition')
-            ->with('teknoo.east.bundle.coderunner.registry.tasks_manager_by_task')
+            ->withConsecutive(['service1'],['service2'])
             ->willReturn($def);
 
         self::assertInstanceOf(

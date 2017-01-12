@@ -291,17 +291,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
      *
      * @return null|\JsonSerializable
      */
-    private static function decodeJson(&$value)
+    private static function decodeJson(array $value)
     {
-        if ($value instanceof \JsonSerializable) {
-            return $value;
-        }
-
-        if (!\is_array($value) || empty($value['class'])) {
-            return null;
-        }
-
-        if (!\class_exists($value['class'])) {
+        if (empty($value['class']) || false === \class_exists($value['class'])) {
             return null;
         }
 
@@ -323,9 +315,17 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         //Initialize tests
         $this->updateStates();
 
-        $this->codeInstance = static::decodeJson($this->code);
-        $this->statusInstance = static::decodeJson($this->status);
-        $this->resultInstance = static::decodeJson($this->result);
+        if (!$this->codeInstance instanceof CodeInterface && \is_string($this->code)) {
+            $this->codeInstance = static::decodeJson(\json_decode($this->code, true));
+        }
+
+        if (!$this->statusInstance instanceof StatusInterface && \is_string($this->status)) {
+            $this->statusInstance = static::decodeJson(\json_decode($this->status, true));
+        }
+
+        if (!$this->resultInstance instanceof ResultInterface && \is_string($this->result)) {
+            $this->resultInstance = static::decodeJson(\json_decode($this->result, true));
+        }
 
         //Initialize states
         $this->updateStates();

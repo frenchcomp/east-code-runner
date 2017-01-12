@@ -22,6 +22,7 @@
 
 namespace Teknoo\East\CodeRunner\Task;
 
+use Teknoo\East\CodeRunner\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\Immutable\ImmutableTrait;
 
@@ -83,7 +84,7 @@ class PHPCode implements CodeInterface
     {
         return [
             'class' => static::class,
-            'neededCapabilities' => $this->getNeededCapabilities(),
+            'neededCapabilities' =>$this->getNeededCapabilities(),
             'code' => $this->code,
         ];
     }
@@ -97,6 +98,17 @@ class PHPCode implements CodeInterface
             throw new \InvalidArgumentException('class is not matching with the serialized values');
         }
 
-        return new static($values['code'], $values['neededCapabilities']);
+        $neededCapabilities = [];
+        if (!empty($values['neededCapabilities']) && \is_array($values['neededCapabilities'])) {
+            foreach ($values['neededCapabilities'] as $serializedCapability) {
+                if (isset($serializedCapability['class'])
+                    && \is_subclass_of($serializedCapability['class'], CapabilityInterface::class)) {
+                    $capabilityClass = $serializedCapability['class'];
+                    $neededCapabilities[] = $capabilityClass::jsonDeserialize($serializedCapability);
+                }
+            }
+        }
+
+        return new static($values['code'], $neededCapabilities);
     }
 }

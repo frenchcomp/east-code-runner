@@ -173,7 +173,7 @@ class TaskTest extends AbstractTaskTest
         $code = new PHPCode('<?php phpinfo();', []);
         self::assertEquals(
             $code,
-            $this->generateEntityPopulated(['code' => $code])->postLoadJsonUpdate()->getCode()
+            $this->generateEntityPopulated(['codeInstance' => $code])->postLoadJsonUpdate()->getCode()
         );
     }
 
@@ -190,7 +190,7 @@ class TaskTest extends AbstractTaskTest
      */
     public function testPostLoadJsonUpdateClassDoesNotExist()
     {
-        $this->generateEntityPopulated(['code' => json_decode(json_encode(['class' => 'fooBar']), true)])->postLoadJsonUpdate()->getCode();
+        $this->generateEntityPopulated(['code' => json_encode(['class' => 'fooBar'])])->postLoadJsonUpdate()->getCode();
     }
 
     /**
@@ -198,7 +198,7 @@ class TaskTest extends AbstractTaskTest
      */
     public function testPostLoadJsonUpdateNoCallable()
     {
-        $this->generateEntityPopulated(['code' => json_decode(json_encode(['class' => '\DateTime']), true)])->postLoadJsonUpdate()->getCode();
+        $this->generateEntityPopulated(['code' => json_encode(['class' => '\DateTime'])])->postLoadJsonUpdate()->getCode();
     }
 
     public function testPostLoadJsonUpdateNonDecoded()
@@ -211,9 +211,9 @@ class TaskTest extends AbstractTaskTest
          * @var Task
          */
         $task = $this->generateEntityPopulated([
-            'code' => json_decode(json_encode($code), true),
-            'status' => json_decode(json_encode($status), true),
-            'result' => json_decode(json_encode($result), true),
+            'code' => json_encode($code),
+            'status' => json_encode($status),
+            'result' => json_encode($result),
         ])->postLoadJsonUpdate();
 
         self::assertEquals(

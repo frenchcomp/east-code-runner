@@ -1,13 +1,13 @@
-doctrine:
-  orm:
-    mappings:
-      TeknooEastCodeRunner:
-        type: 'yml'
-        dir: "%kernel.root_dir%/../vendor/teknoo/east-code-runner/src/universal/config/doctrine"
-        is_bundle: false
-        prefix: 'Teknoo\East\CodeRunner\Entity'
-
-stof_doctrine_extensions:
-  orm:
-    default:
-      timestampable: true
+#doctrine:
+#  orm:
+#    mappings:
+#      TeknooEastCodeRunner:
+#        type: 'yml'
+#        dir: "%kernel.root_dir%/../vendor/teknoo/east-code-runner/src/universal/config/doctrine"
+#        is_bundle: false
+#        prefix: 'Teknoo\East\CodeRunner\Entity'
+#
+#stof_doctrine_extensions:
+#  orm:
+#    default:
+#      timestampable: true
