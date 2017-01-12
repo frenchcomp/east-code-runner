@@ -316,15 +316,15 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         $this->updateStates();
 
         if (!$this->codeInstance instanceof CodeInterface && \is_string($this->code)) {
-            $this->codeInstance = static::decodeJson(\json_decode($this->code, true));
+            $this->codeInstance = static::decodeJson((array) \json_decode($this->code, true));
         }
 
         if (!$this->statusInstance instanceof StatusInterface && \is_string($this->status)) {
-            $this->statusInstance = static::decodeJson(\json_decode($this->status, true));
+            $this->statusInstance = static::decodeJson((array) \json_decode($this->status, true));
         }
 
         if (!$this->resultInstance instanceof ResultInterface && \is_string($this->result)) {
-            $this->resultInstance = static::decodeJson(\json_decode($this->result, true));
+            $this->resultInstance = static::decodeJson((array) \json_decode($this->result, true));
         }
 
         //Initialize states

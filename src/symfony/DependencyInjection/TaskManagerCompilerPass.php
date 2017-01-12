@@ -24,6 +24,7 @@ namespace Teknoo\East\CodeRunnerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -51,6 +52,13 @@ class TaskManagerCompilerPass implements CompilerPassInterface
 
         $taggedServices = $container->findTaggedServiceIds('teknoo.east.code_runner.task_manager');
 
+        $endPointDeleteTaskDefinition = null;
+        if ($container->has('teknoo.east.bundle.coderunner.endpoint.delete_task')) {
+            $endPointDeleteTaskDefinition = $container->findDefinition(
+                'teknoo.east.bundle.coderunner.endpoint.delete_task'
+            );
+        }
+
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $attributes) {
                 $managerDefinition = $container->findDefinition($id);
@@ -59,6 +67,13 @@ class TaskManagerCompilerPass implements CompilerPassInterface
                     'registerIntoMe',
                     [new Reference($registryId)]
                 );
+
+                if ($endPointDeleteTaskDefinition instanceof Definition) {
+                    $endPointDeleteTaskDefinition->addMethodCall(
+                        'registerTaskManager',
+                        [new Reference($id)]
+                    );
+                }
             }
         }
     }

@@ -65,7 +65,7 @@ class TaskManagerCompilerPassTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $def = $this->createMock(Definition::class);
-        $def->expects($this->exactly(2))->method('addMethodCall')->willReturnSelf();
+        $def->expects($this->exactly(4))->method('addMethodCall')->willReturnSelf();
 
         $this->getContainerBuilderMock()
             ->expects(self::any())
@@ -77,15 +77,22 @@ class TaskManagerCompilerPassTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->getContainerBuilderMock()
-            ->expects(self::once())
+            ->expects(self::exactly(2))
             ->method('has')
-            ->with('teknoo.east.bundle.coderunner.registry.tasks_manager_by_task')
+            ->withConsecutive(
+                ['teknoo.east.bundle.coderunner.registry.tasks_manager_by_task'],
+                ['teknoo.east.bundle.coderunner.endpoint.delete_task']
+            )
             ->willReturn(true);
 
         $this->getContainerBuilderMock()
-            ->expects(self::exactly(2))
+            ->expects(self::exactly(3))
             ->method('findDefinition')
-            ->withConsecutive(['service1'],['service2'])
+            ->withConsecutive(
+                ['teknoo.east.bundle.coderunner.endpoint.delete_task'],
+                ['service1'],
+                ['service2']
+            )
             ->willReturn($def);
 
         self::assertInstanceOf(

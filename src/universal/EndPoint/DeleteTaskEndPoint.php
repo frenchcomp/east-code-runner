@@ -25,6 +25,7 @@ namespace Teknoo\East\CodeRunner\EndPoint;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunner\Manager\TaskManager;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
@@ -64,6 +65,18 @@ class DeleteTaskEndPoint
     ) {
         $this->tasksManagerByTasksRegistry = $tasksManagerByTasksRegistry;
         $this->tasksRegistry = $tasksRegistry;
+    }
+
+    /**
+     * To force registering manager into the Task Manager Registry (can be automatically performed by DI Container)
+     * @param TaskManagerInterface $taskManager
+     * @return DeleteTaskEndPoint
+     */
+    public function registerTaskManager(TaskManagerInterface $taskManager): DeleteTaskEndPoint
+    {
+        $taskManager->registerIntoMe($this->tasksManagerByTasksRegistry);
+
+        return $this;
     }
 
     /**

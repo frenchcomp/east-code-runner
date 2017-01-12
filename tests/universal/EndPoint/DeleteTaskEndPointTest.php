@@ -185,4 +185,21 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    public function testRegisterTaskManager()
+    {
+        $manager = $this->createMock(TaskManagerInterface::class);
+        $manager->expects(self::once())
+            ->method('registerIntoMe')
+            ->with($this->getTasksManagerByTasksRegistryMock())
+            ->willReturnSelf();
+
+        $endpoint = $this->buildEndPoint();
+        self::assertInstanceOf(
+            DeleteTaskEndPoint::class,
+            $endpoint->registerTaskManager(
+                $manager
+            )
+        );
+    }
 }
