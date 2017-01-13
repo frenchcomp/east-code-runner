@@ -112,6 +112,7 @@ class Selecting implements StateInterface
             }
 
             $task->registerStatus(new Status(Status::STATUS_PLANNED));
+
             return $this->runnerAccepted;
         };
     }

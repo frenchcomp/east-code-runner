@@ -84,7 +84,7 @@ class PHPCode implements CodeInterface
     {
         return [
             'class' => static::class,
-            'neededCapabilities' =>$this->getNeededCapabilities(),
+            'neededCapabilities' => $this->getNeededCapabilities(),
             'code' => $this->code,
         ];
     }

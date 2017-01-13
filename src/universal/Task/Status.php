@@ -36,10 +36,10 @@ class Status implements StatusInterface
 {
     use ImmutableTrait;
 
-    const STATUS_REGISTERED = "Registered";
-    const STATUS_PLANNED = "Planned";
-    const STATUS_EXECUTING = "Executing";
-    const STATUS_EXECUTED = "Executed";
+    const STATUS_REGISTERED = 'Registered';
+    const STATUS_PLANNED = 'Planned';
+    const STATUS_EXECUTING = 'Executing';
+    const STATUS_EXECUTED = 'Executed';
 
     /**
      * @var string

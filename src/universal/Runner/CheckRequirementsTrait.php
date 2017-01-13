@@ -45,7 +45,7 @@ trait CheckRequirementsTrait
             $capabilityFound = false;
 
             /**
-             * @var CapabilityInterface
+             * @var CapabilityInterface $capability
              */
             foreach ($capabilities as $capability) {
                 if ($neededCapability == $capability) {

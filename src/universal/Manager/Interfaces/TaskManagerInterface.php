@@ -37,9 +37,10 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 interface TaskManagerInterface
 {
     /**
-     * To register a manager into the registry
+     * To register a manager into the registry.
      *
      * @param TasksManagerByTasksRegistryInterface $registry
+     *
      * @return TaskManagerInterface
      */
     public function registerIntoMe(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface;
