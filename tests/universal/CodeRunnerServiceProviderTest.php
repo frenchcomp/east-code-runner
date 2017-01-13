@@ -37,6 +37,7 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Manager\TaskManager;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunner\Repository\TaskExecutionRepository;
 use Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository;
@@ -270,6 +271,30 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCreateRegistryTasks()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case TaskRepository::class:
+                        return $this->createMock(TaskRepository::class);
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            TasksRegistryInterface::class,
+            $this->buildProvider()->createRegistryTasks($container)
+        );
+    }
+
     public function testCreateRunnerManager()
     {
         $container = $this->createMock(ContainerInterface::class);
@@ -324,6 +349,9 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
                     case RunnerManagerInterface::class:
                         return $this->createMock(RunnerManagerInterface::class);
                         break;
+                    case TasksManagerByTasksRegistryInterface::class:
+                        return $this->createMock(TasksManagerByTasksRegistryInterface::class);
+                        break;
                 }
             });
 
@@ -350,9 +378,11 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
                     case 'teknoo.east.bundle.coderunner.runner.remote_php7.version':
                         return 'foo';
                         break;
-                    case ProducerInterface::class:
+                    case 'teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.task':
                         return $this->createMock(ProducerInterface::class);
                         break;
+                    case RunnerManagerInterface::class:
+                        return $this->createMock(RunnerManagerInterface::class);
                 }
             });
 

@@ -27,7 +27,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Entity\TaskExecution;
 use Teknoo\East\CodeRunner\Entity\TaskRegistration;
@@ -38,9 +37,11 @@ use Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\CodeRunner\Manager\TaskManager;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\TasksByRunnerRegistry;
 use Teknoo\East\CodeRunner\Registry\TasksManagerByTasksRegistry;
+use Teknoo\East\CodeRunner\Registry\TasksRegistry;
 use Teknoo\East\CodeRunner\Registry\TasksStandbyRegistry;
 use Teknoo\East\CodeRunner\Repository\TaskExecutionRepository;
 use Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository;
@@ -193,6 +194,19 @@ class CodeRunnerServiceProvider implements ServiceProvider
     /**
      * @param ContainerInterface $container
      *
+     * @return TasksRegistryInterface
+     */
+    public static function createRegistryTasks(
+        ContainerInterface $container
+    ): TasksRegistryInterface {
+        return new TasksRegistry(
+            $container->get(TaskRepository::class)
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
      * @return RunnerManagerInterface
      */
     public static function createRunnerManager(ContainerInterface $container): RunnerManagerInterface
@@ -211,13 +225,17 @@ class CodeRunnerServiceProvider implements ServiceProvider
      */
     public static function createTaskManager(ContainerInterface $container): TaskManagerInterface
     {
-        return new TaskManager(
+        $manager = new TaskManager(
             $container->get('teknoo.east.bundle.coderunner.manager.tasks.identifier'),
             $container->get('teknoo.east.bundle.coderunner.manager.tasks.url'),
             static::getEntityManager($container),
             $container->get(DatesService::class),
             $container->get(RunnerManagerInterface::class)
         );
+
+        $manager->registerIntoMe($container->get(TasksManagerByTasksRegistryInterface::class));
+
+        return $manager;
     }
 
     /**
@@ -228,16 +246,22 @@ class CodeRunnerServiceProvider implements ServiceProvider
     public static function createRemotePHP7Runner(ContainerInterface $container): RemotePHP7Runner
     {
         $runner = new RemotePHP7Runner(
-            $container->get(ProducerInterface::class),
+            $container->get('teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.task'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.identifier'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.name'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.version'), [
-                new Capability('language', 'php7'),
+                new Capability('platform', 'php7'),
                 new Capability('feature', 'composer'),
                 new Capability('feature', 'curl'),
                 new Capability('feature', 'zip'),
             ]
         );
+
+        /**
+         * @var RunnerManagerInterface $runnerManager
+         */
+        $runnerManager = $container->get(RunnerManagerInterface::class);
+        $runnerManager->registerMe($runner);
 
         return $runner;
     }
@@ -254,9 +278,11 @@ class CodeRunnerServiceProvider implements ServiceProvider
             TaskStandbyRepository::class => [static::class, 'createTaskStandbyRepository'],
 
             DatesService::class => [static::class, 'createDatesService'],
+
             TasksByRunnerRegistryInterface::class => [static::class, 'createRegistryTasksByRunner'],
             TasksManagerByTasksRegistryInterface::class => [static::class, 'createRegistryTasksMangerByTask'],
             TasksStandbyRegistryInterface::class => [static::class, 'createRegistryTasksStandBy'],
+            TasksRegistryInterface::class => [static::class, 'createRegistryTasks'],
 
             RunnerManagerInterface::class => [static::class, 'createRunnerManager'],
             TaskManagerInterface::class => [static::class, 'createTaskManager'],
