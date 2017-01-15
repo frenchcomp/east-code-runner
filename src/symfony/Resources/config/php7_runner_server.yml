@@ -5,6 +5,9 @@ parameters:
   teknoo.east.bundle.coderunner.runner.remote_php7.name: 'RemotePHP7Runner'
   teknoo.east.bundle.coderunner.runner.remote_php7.version: '0.0.1'
 
+  teknoo.east.bundle.coderunner.service.rabbit_mq_result_consumer.class: 'Teknoo\East\CodeRunner\Service\RabbitMQResultConsumerService'
+  teknoo.east.bundle.coderunner.service.rabbit_mq_status_consumer.class: 'Teknoo\East\CodeRunner\Service\RabbitMQStatusConsumerService'
+
 services:
   teknoo.east.bundle.coderunner.runner.remote_php7:
     class: '%teknoo.east.bundle.coderunner.runner.remote_php7.class%'
@@ -22,3 +25,17 @@ services:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.zip']]
     tags:
       - {name: 'teknoo.east.code_runner.runner.service'}
+
+  teknoo.east.bundle.coderunner.service.rabbit_mq_result_consumer:
+    class: '%teknoo.east.bundle.coderunner.service.rabbit_mq_result_consumer.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.runner.remote_php7'
+      - '@teknoo.east.bundle.coderunner.manager.runners'
+      - '@logger'
+
+  teknoo.east.bundle.coderunner.service.rabbit_mq_status_consumer:
+    class: '%teknoo.east.bundle.coderunner.service.rabbit_mq_status_consumer.class%'
+    arguments:
+      - '@teknoo.east.bundle.coderunner.runner.remote_php7'
+      - '@teknoo.east.bundle.coderunner.manager.runners'
+      - '@logger'
