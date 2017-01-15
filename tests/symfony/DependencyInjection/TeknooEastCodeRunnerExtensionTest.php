@@ -23,6 +23,7 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Teknoo\East\CodeRunnerBundle\DependencyInjection\TeknooEastCodeRunnerExtension;
 
 /**
@@ -55,5 +56,38 @@ class TeknooEastCodeRunnerExtensionTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->buildExtension()->load([], $containerMock);
+    }
+
+    public function testLoadFull()
+    {
+        $containerMock = $this->createMock(ContainerBuilder::class);
+
+        $containerMock
+            ->expects(self::any())
+            ->method('hasExtension')
+            ->willReturn(true);
+
+        $this->buildExtension()->load(
+            [
+                [
+                    'enable_php7_runner' => true,
+                    'tasks_managers' => [
+                        'default' => [
+                            'identifier' => 'default.foobar',
+                            'url_pattern' => 'http://foo/UUID',
+                            'service_id' => 'manager.default',
+                            'is_default' => true
+                        ],
+                        'another' => [
+                            'identifier' => 'another.foobar',
+                            'url_pattern' => 'http://foo/UUID',
+                            'service_id' => 'manager.another',
+                            'is_default' => false
+                        ]
+                    ]
+                ],
+            ],
+            $containerMock
+        );
     }
 }
