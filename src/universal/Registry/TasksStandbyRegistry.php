@@ -24,7 +24,6 @@ namespace Teknoo\East\CodeRunner\Registry;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Entity\TaskStandby;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunner\Repository\TaskStandbyRepository;
@@ -76,7 +75,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     /**
      * @param RunnerInterface $runner
      *
-     * @return null|Task
+     * @return null|TaskInterface
      */
     private function getNextTask(RunnerInterface $runner)
     {
@@ -86,6 +85,9 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
         if (!$taskStandby instanceof TaskStandby || $taskStandby->getDeletedAt() instanceof \DateTime) {
             return null;
         }
+
+        $taskStandby->setDeletedAt($this->datesService->getDate());
+        $this->save($taskStandby);
 
         return $taskStandby->getTask();
     }

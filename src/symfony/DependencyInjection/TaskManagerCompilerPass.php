@@ -49,27 +49,26 @@ class TaskManagerCompilerPass implements CompilerPassInterface
         }
 
         $registryId = 'teknoo.east.bundle.coderunner.registry.tasks_manager_by_task';
+        $registryDefinition = $container->findDefinition($registryId);
 
-        $taggedServices = $container->findTaggedServiceIds('teknoo.east.code_runner.task_manager');
-
-        $endPointDeleteTaskDefinition = null;
-        if ($container->has('teknoo.east.bundle.coderunner.endpoint.delete_task')) {
-            $endPointDeleteTaskDefinition = $container->findDefinition(
-                'teknoo.east.bundle.coderunner.endpoint.delete_task'
+        $endPointRegisterTaskDefinition = null;
+        if ($container->has('teknoo.east.bundle.coderunner.endpoint.register_task')) {
+            $endPointRegisterTaskDefinition = $container->findDefinition(
+                'teknoo.east.bundle.coderunner.endpoint.register_task'
             );
         }
 
+        $taggedServices = $container->findTaggedServiceIds('teknoo.east.code_runner.task_manager');
+
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $attributes) {
-                $managerDefinition = $container->findDefinition($id);
-
-                $managerDefinition->addMethodCall(
-                    'registerIntoMe',
-                    [new Reference($registryId)]
+                $registryDefinition->addMethodCall(
+                    'addTaskManager',
+                    [new Reference($id)]
                 );
 
-                if ($endPointDeleteTaskDefinition instanceof Definition) {
-                    $endPointDeleteTaskDefinition->addMethodCall(
+                if ($endPointRegisterTaskDefinition instanceof Definition) {
+                    $endPointRegisterTaskDefinition->addMethodCall(
                         'registerTaskManager',
                         [new Reference($id)]
                     );

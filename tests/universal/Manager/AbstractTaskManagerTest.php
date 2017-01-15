@@ -166,15 +166,4 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
             $this->buildManager()->forgetMe($this->createMock(TaskInterface::class))
         );
     }
-
-    public function testRegisterIntoMe()
-    {
-        $registry = $this->createMock(TasksManagerByTasksRegistryInterface::class);
-        $registry->expects(self::once())->method('addTaskManager')->willReturnSelf();
-
-        self::assertInstanceOf(
-            TaskManagerInterface::class,
-            $this->buildManager()->registerIntoMe($registry)
-        );
-    }
 }

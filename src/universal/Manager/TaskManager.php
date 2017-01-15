@@ -69,6 +69,11 @@ class TaskManager implements TaskManagerInterface
     private $runnerManager;
 
     /**
+     * @var TasksManagerByTasksRegistryInterface[]
+     */
+    private $registries = [];
+
+    /**
      * Manager constructor.
      * Initialize States behavior.
      *
@@ -76,14 +81,12 @@ class TaskManager implements TaskManagerInterface
      * @param string                 $urlTaskPattern
      * @param EntityManagerInterface $entityManager
      * @param DatesService           $datesService
-     * @param RunnerManagerInterface $runnerManager
      */
     public function __construct(
         string $managerIdentifier,
         string $urlTaskPattern,
         EntityManagerInterface $entityManager,
-        DatesService $datesService,
-        RunnerManagerInterface $runnerManager
+        DatesService $datesService
     ) {
         if (empty($managerIdentifier)) {
             throw new \RuntimeException('Error, all task manager need a string identifier');
@@ -97,15 +100,24 @@ class TaskManager implements TaskManagerInterface
         $this->entityManager = $entityManager;
         $this->urlTaskPattern = $urlTaskPattern;
         $this->datesService = $datesService;
-        $this->runnerManager = $runnerManager;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function registerIntoMe(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface
+    public function registerRunnerManager(RunnerManagerInterface $runnerManager): TaskManagerInterface
     {
-        $registry->addTaskManager($this);
+        $this->runnerManager = $runnerManager;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addRegistry(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface
+    {
+        $this->registries[] = $registry;
 
         return $this;
     }
@@ -195,8 +207,12 @@ class TaskManager implements TaskManagerInterface
      */
     private function dispatchToRunnerManager(TaskInterface $task): TaskManager
     {
-        $this->runnerManager->executeForMeThisTask($this, $task);
-        $this->persistTask($task);
+        if ($this->runnerManager instanceof RunnerManagerInterface) {
+            $this->runnerManager->executeForMeThisTask($this, $task);
+            $this->persistTask($task);
+        } else {
+            throw new \RuntimeException('Error, no Runner manager referenced');
+        }
 
         return $this;
     }
@@ -211,6 +227,10 @@ class TaskManager implements TaskManagerInterface
         $task->registerStatus(new Status(Status::STATUS_REGISTERED));
         $this->persistTask($task);
         $this->generateUrl($task);
+
+        foreach ($this->registries as $registry) {
+            $registry[$task] = $this;
+        }
 
         $this->dispatchToRunnerManager($task);
 

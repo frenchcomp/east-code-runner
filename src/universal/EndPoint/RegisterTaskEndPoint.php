@@ -25,6 +25,7 @@ namespace Teknoo\East\CodeRunner\EndPoint;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
+use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
@@ -47,13 +48,24 @@ class RegisterTaskEndPoint
     private $tasksManager;
 
     /**
-     * RegisterTaskEndPoint constructor.
-     *
-     * @param TaskManagerInterface $tasksManager
+     * @var RunnerManagerInterface
      */
-    public function __construct(TaskManagerInterface $tasksManager)
+    private $runnerManager;
+
+    /**
+     * RegisterTaskEndPoint constructor.
+     * @param RunnerManagerInterface $runnerManager
+     */
+    public function __construct(RunnerManagerInterface $runnerManager)
+    {
+        $this->runnerManager = $runnerManager;
+    }
+
+    public function registerTaskManager(TaskManagerInterface $tasksManager): RegisterTaskEndPoint
     {
         $this->tasksManager = $tasksManager;
+
+        return $this;
     }
 
     /**
@@ -68,6 +80,7 @@ class RegisterTaskEndPoint
         $task = new Task();
         $task->setCode(new PHPCode($code, []));
 
+        $this->tasksManager->registerRunnerManager($this->runnerManager);
         $this->tasksManager->executeMe($task);
 
         try {

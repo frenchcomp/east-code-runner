@@ -233,8 +233,6 @@ class CodeRunnerServiceProvider implements ServiceProvider
             $container->get(RunnerManagerInterface::class)
         );
 
-        $manager->registerIntoMe($container->get(TasksManagerByTasksRegistryInterface::class));
-
         return $manager;
     }
 

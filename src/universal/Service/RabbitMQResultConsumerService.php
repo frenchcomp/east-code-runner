@@ -97,8 +97,6 @@ class RabbitMQResultConsumerService implements ConsumerInterface
             $this->runnerManager->pushResult($this->remotePHP7Runner, $textResult);
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
-
-            return false;
         }
 
         return true;

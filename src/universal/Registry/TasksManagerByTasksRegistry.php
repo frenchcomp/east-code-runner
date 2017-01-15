@@ -83,6 +83,7 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     public function addTaskManager(TaskManagerInterface $taskManager)
     {
         $this->tasksManagersList[$taskManager->getIdentifier()] = $taskManager;
+        $taskManager->addRegistry($this);
     }
 
     /**

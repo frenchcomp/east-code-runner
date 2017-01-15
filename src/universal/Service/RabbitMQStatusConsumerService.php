@@ -109,8 +109,6 @@ class RabbitMQStatusConsumerService implements ConsumerInterface
             $this->runnerManager->pushStatus($this->remotePHP7Runner, $status);
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
-
-            return false;
         }
 
         return true;

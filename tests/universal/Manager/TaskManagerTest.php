@@ -102,13 +102,12 @@ class TaskManagerTest extends AbstractTaskManagerTest
         string $managerIdentifier = 'managerId',
         string $urlTaskPattern = 'https://foo.bar/task/UUID'
     ): TaskManagerInterface {
-        return new TaskManager(
+        return (new TaskManager(
             $managerIdentifier,
             $urlTaskPattern,
             $this->getEntityManagerMock(),
-            $this->getDatesServiceMock(),
-            $this->getRunnerManagerMock()
-        );
+            $this->getDatesServiceMock()
+        ))->registerRunnerManager($this->getRunnerManagerMock());
     }
 
     /**

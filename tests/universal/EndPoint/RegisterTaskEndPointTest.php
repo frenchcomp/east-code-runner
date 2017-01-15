@@ -25,6 +25,7 @@ namespace Teknoo\Tests\East\CodeRunner\EndPoint;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint;
+use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
@@ -46,6 +47,22 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
     private $tasksManager;
 
     /**
+     * @var RunnerManagerInterface
+     */
+    private $runnerManager;
+
+    /**
+     * @return RunnerManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getRunnerManagerMock(): RunnerManagerInterface
+    {
+        if (!$this->runnerManager instanceof RunnerManagerInterface) {
+            $this->runnerManager = $this->createMock(RunnerManagerInterface::class);
+        }
+
+        return $this->runnerManager;
+    }
+    /**
      * @return TaskManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     public function getTasksManagerMock(): TaskManagerInterface
@@ -62,7 +79,8 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
      */
     public function buildEndPoint()
     {
-        return new RegisterTaskEndPoint($this->getTasksManagerMock());
+        return (new RegisterTaskEndPoint($this->getRunnerManagerMock()))
+            ->registerTaskManager($this->getTasksManagerMock());
     }
 
     public function testTaskError()

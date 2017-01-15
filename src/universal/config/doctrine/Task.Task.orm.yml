@@ -44,4 +44,4 @@ Teknoo\East\CodeRunner\Entity\Task\Task:
   lifecycleCallbacks:
     postLoad: [ 'postLoadJsonUpdate' ]
     prePersist: [ 'prePersistJsonUpdate' ]
-    preUpdate: [ 'prePersistJsonUpdate' ]
+    preFlush: [ 'prePersistJsonUpdate' ]

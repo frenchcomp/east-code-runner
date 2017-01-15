@@ -67,20 +67,6 @@ class DeleteTaskEndPoint
     }
 
     /**
-     * To force registering manager into the Task Manager Registry (can be automatically performed by DI Container).
-     *
-     * @param TaskManagerInterface $taskManager
-     *
-     * @return DeleteTaskEndPoint
-     */
-    public function registerTaskManager(TaskManagerInterface $taskManager): DeleteTaskEndPoint
-    {
-        $taskManager->registerIntoMe($this->tasksManagerByTasksRegistry);
-
-        return $this;
-    }
-
-    /**
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client
      * @param string                 $taskId

@@ -139,7 +139,6 @@ services:
       - '%teknoo.east.bundle.coderunner.manager.tasks.url%'
       - '@doctrine.orm.entity_manager'
       - '@teknoo.east.bundle.coderunner.service.dates'
-      - '@teknoo.east.bundle.coderunner.manager.runners'
 
   #Service
   teknoo.east.bundle.coderunner.service.dates:
@@ -165,6 +164,6 @@ services:
   teknoo.east.bundle.coderunner.endpoint.register_task:
     class: '%teknoo.east.bundle.coderunner.endpoint.register_task.class%'
     arguments:
-      - '@teknoo.east.bundle.coderunner.manager.tasks.default'
+      - '@teknoo.east.bundle.coderunner.manager.runners'
     tags:
       - {name: 'east.controller.service'}

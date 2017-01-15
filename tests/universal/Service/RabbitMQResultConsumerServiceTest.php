@@ -109,7 +109,7 @@ class RabbitMQResultConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertFalse($this->buildService()->execute($message));
+        self::assertTrue($this->buildService()->execute($message));
     }
 
     public function testExecuteBadBehaviorOfManager()
@@ -126,7 +126,7 @@ class RabbitMQResultConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertFalse($this->buildService()->execute($message));
+        self::assertTrue($this->buildService()->execute($message));
     }
 
     public function testExecute()

@@ -162,7 +162,6 @@ class Running implements StateInterface
          */
         return function (RunnerInterface $runner, TaskInterface $task, TaskManagerInterface $taskManager): RunnerManager {
             $this->tasksStandbyRegistry->enqueue($runner, $task);
-            $this->tasksManagerByTasks[$task] = $taskManager;
             $this->loadNextTaskFor($runner);
 
             return $this;

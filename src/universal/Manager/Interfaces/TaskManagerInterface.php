@@ -37,20 +37,21 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 interface TaskManagerInterface
 {
     /**
-     * To register a manager into the registry.
-     *
-     * @param TasksManagerByTasksRegistryInterface $registry
-     *
-     * @return TaskManagerInterface
-     */
-    public function registerIntoMe(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface;
-
-    /**
      * To know the unique identifier about a runner.
      *
      * @return string
      */
     public function getIdentifier(): string;
+
+    /**
+     * To register the registry in manager
+     *
+     * @param TasksManagerByTasksRegistryInterface $registry
+     * @return TaskManagerInterface
+     */
+    public function addRegistry(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface;
+
+    public function registerRunnerManager(RunnerManagerInterface $runnerManager): TaskManagerInterface;
 
     /**
      * To persist a task to execute and sent it to a register.
