@@ -245,6 +245,9 @@ class TaskManager implements TaskManagerInterface
     private function removeTask(Task $task): TaskManager
     {
         $task->setDeletedAt($this->datesService->getDate());
+        foreach ($this->registries as $registry) {
+            unset($registry[$task]);
+        }
         $this->persistTask($task);
 
         return $this;

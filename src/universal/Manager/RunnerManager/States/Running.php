@@ -101,7 +101,6 @@ class Running implements StateInterface
         return function (RunnerInterface $runner, TaskInterface $task) {
             $runner->reset();
             unset($this->tasksByRunner[$runner]);
-            unset($this->tasksManagerByTasks[$task]);
         };
     }
 

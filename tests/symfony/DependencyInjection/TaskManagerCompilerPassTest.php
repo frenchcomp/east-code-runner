@@ -65,7 +65,7 @@ class TaskManagerCompilerPassTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $def = $this->createMock(Definition::class);
-        $def->expects($this->exactly(2))->method('addMethodCall')->willReturnSelf();
+        $def->expects($this->exactly(4))->method('addMethodCall')->willReturnSelf();
 
         $this->getContainerBuilderMock()
             ->expects(self::any())
@@ -85,10 +85,11 @@ class TaskManagerCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->getContainerBuilderMock()
-            ->expects(self::exactly(1))
+            ->expects(self::exactly(2))
             ->method('findDefinition')
             ->withConsecutive(
-                ['teknoo.east.bundle.coderunner.registry.tasks_manager_by_task']
+                ['teknoo.east.bundle.coderunner.registry.tasks_manager_by_task'],
+                ['teknoo.east.bundle.coderunner.endpoint.register_task']
             )
             ->willReturn($def);
 
