@@ -99,9 +99,9 @@ class PHPCommanderTest extends AbstractPHPCommanderTest
     public function buildCommander(): PHPCommanderInterface
     {
         return new PHPCommander(
+            $this->getCommandRunnerMock(),
             $this->getPhpCommandMock(),
             $this->getFileSystemMock(),
-            $this->getCommandRunnerMock(),
             '7.0'
         );
     }

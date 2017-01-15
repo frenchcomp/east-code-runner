@@ -49,21 +49,57 @@ class TeknooEastCodeRunnerExtension extends Extension
         $loader->load('services.yml');
         $loader->load('doctrine.config.yml');
 
-        //To load automatically the PHP 7 runner
-        if (!empty($config['enable_php7_runner'])) {
-            $loader->load('runner_rabbitmq.yml');
+        if (!empty($config['php7_runner'])) {
+            $php7RunnerConfig = $config['php7_runner'];
+
+            //To load automatically the PHP 7 runner
+            if (!empty($php7RunnerConfig['enable_server'])) {
+                $loader->load('php7_runner_server.yml');
+            }
+
+            if (!empty($php7RunnerConfig['enable_worker'])) {
+                $loader->load('php7_runner_worker.yml');
+            }
+
+            if (!empty($php7RunnerConfig['work_directory'])) {
+                $container->setParameter(
+                    'teknoo.east.bundle.coderunner.worker.work_directory',
+                    $php7RunnerConfig['work_directory']
+                );
+            }
+
+            if (!empty($php7RunnerConfig['composer_command'])) {
+                $container->setParameter(
+                    'teknoo.east.bundle.coderunner.worker.composer.configuration.command',
+                    $php7RunnerConfig['composer_command']
+                );
+            }
+
+            if (!empty($php7RunnerConfig['composer_instruction'])) {
+                $container->setParameter(
+                    'teknoo.east.bundle.coderunner.worker.composer.configuration.instruction',
+                    $php7RunnerConfig['composer_instruction']
+                );
+            }
+
+            if (!empty($php7RunnerConfig['php_command'])) {
+                $container->setParameter(
+                    'teknoo.east.bundle.coderunner.worker.php_commander.command',
+                    $php7RunnerConfig['php_command']
+                );
+            }
         }
 
         //To define tasks managers
         if (!empty($config['tasks_managers'])) {
             foreach ($config['tasks_managers'] as $definitionValues) {
                 //Extends abstract
-                $taskManagerDefinition = new DefinitionDecorator('teknoo.east.bundle.coderunner.manager.tasks.abstract');
-                $taskManagerDefinition->replaceArgument(0, $definitionValues['identifier']);
-                $taskManagerDefinition->replaceArgument(1, $definitionValues['url_pattern']);
+                $taskManagerDef = new DefinitionDecorator('teknoo.east.bundle.coderunner.manager.tasks.abstract');
+                $taskManagerDef->replaceArgument(0, $definitionValues['identifier']);
+                $taskManagerDef->replaceArgument(1, $definitionValues['url_pattern']);
                 //Add tags to register them into registry
-                $taskManagerDefinition->addTag('teknoo.east.code_runner.task_manager');
-                $container->setDefinition($definitionValues['service_id'], $taskManagerDefinition);
+                $taskManagerDef->addTag('teknoo.east.code_runner.task_manager');
+                $container->setDefinition($definitionValues['service_id'], $taskManagerDef);
 
                 //To use this manager into registry end point
                 if (!empty($definitionValues['is_default'])) {

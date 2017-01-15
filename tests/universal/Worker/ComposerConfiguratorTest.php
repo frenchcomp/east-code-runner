@@ -95,8 +95,8 @@ class ComposerConfiguratorTest extends AbstractComposerConfiguratorTest
         return new ComposerConfigurator(
             $this->getCommandRunnerMock(),
             $this->getComposerCommandMock(),
-            'install',
             $this->getFileSystemMock(),
+            'install',
             '-d foo/bar'
         );
     }

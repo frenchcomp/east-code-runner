@@ -83,9 +83,9 @@ class PHPCommander implements PHPCommanderInterface
      * @param string             $version
      */
     public function __construct(
+        Runner $commandRunner,
         Command $phpCommand,
         Filesystem $fileSystem,
-        Runner $commandRunner,
         string $version
     ) {
         $this->phpCommand = $phpCommand;

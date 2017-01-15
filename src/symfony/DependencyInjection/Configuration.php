@@ -53,8 +53,17 @@ class Configuration implements ConfigurationInterface
                             ->booleanNode('is_default')->defaultValue(false)->end()
                         ->end()
                     ->end()//Prototype
-                ->end() //tasks_manager
-                ->booleanNode('enable_php7_runner')->defaultValue(false)->end()
+                ->end() //tasks_managers
+                ->arrayNode('php7_runner')
+                    ->children()
+                        ->booleanNode('enable_server')->defaultValue(false)->end()
+                        ->booleanNode('enable_worker')->defaultValue(false)->end()
+                        ->scalarNode('work_directory')->defaultValue('/tmp/php7-runner')->end()
+                        ->scalarNode('composer_command')->defaultValue('')->end()
+                        ->scalarNode('composer_instruction')->defaultValue('install')->end()
+                        ->scalarNode('php_command')->defaultValue('')->end()
+                    ->end()
+                ->end()
             ->end(); //root
 
         return $treeBuilder;

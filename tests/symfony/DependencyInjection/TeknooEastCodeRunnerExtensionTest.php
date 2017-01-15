@@ -70,7 +70,14 @@ class TeknooEastCodeRunnerExtensionTest extends \PHPUnit_Framework_TestCase
         $this->buildExtension()->load(
             [
                 [
-                    'enable_php7_runner' => true,
+                    'php7_runner' => [
+                        'enable_server' => true,
+                        'enable_worker' => true,
+                        'work_directory' => '/tmp/php7-runner',
+                        'composer_command' => 'composer',
+                        'composer_instruction' => 'install',
+                        'php_command' => 'php'
+                    ],
                     'tasks_managers' => [
                         'default' => [
                             'identifier' => 'default.foobar',

@@ -78,8 +78,8 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     public function __construct(
         Runner $commandRunner,
         Command $composerCommand,
-        string $composerInstruction,
         Filesystem $fileSystem,
+        string $composerInstruction,
         string $composerDirectoryParam
     ) {
         $this->commandRunner = $commandRunner;
