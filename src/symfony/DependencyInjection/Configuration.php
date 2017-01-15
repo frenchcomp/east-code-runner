@@ -40,7 +40,22 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('teknoo_east_code_runner');
+        $rootNode = $treeBuilder->root('teknoo_east_code_runner');
+
+        $rootNode
+            ->children()
+                ->arrayNode('tasks_managers')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('service_id')->isRequired()->end()
+                            ->scalarNode('identifier')->isRequired()->end()
+                            ->scalarNode('url_pattern')->isRequired()->end()
+                            ->booleanNode('is_default')->defaultValue(false)->end()
+                        ->end()
+                    ->end()//Prototype
+                ->end() //tasks_manager
+                ->booleanNode('enable_php7_runner')->defaultValue(false)->end()
+            ->end(); //root
 
         return $treeBuilder;
     }
