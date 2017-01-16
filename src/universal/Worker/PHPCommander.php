@@ -23,7 +23,7 @@
 namespace Teknoo\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
-use AdamBrett\ShellWrapper\Command\Param;
+use AdamBrett\ShellWrapper\Command\Argument;
 use AdamBrett\ShellWrapper\Runners\ReturnValue;
 use AdamBrett\ShellWrapper\Runners\Runner;
 use Gaufrette\Filesystem;
@@ -129,7 +129,7 @@ class PHPCommander implements PHPCommanderInterface
     private function executePhpScript()
     {
         $phpCommand = clone $this->phpCommand;
-        $phpCommand->addParam(new Param('-f '.self::TEMP_FILE));
+        $phpCommand->addArgument(new Argument('-f '.self::TEMP_FILE));
 
         $this->startupTime = \microtime(true) * 1000;
 

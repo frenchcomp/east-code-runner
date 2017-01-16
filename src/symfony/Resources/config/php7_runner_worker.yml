@@ -1,6 +1,6 @@
 #src/symfony/Resources/config/php7_runner_worker.yml
 parameters:
-  teknoo.east.bundle.coderunner.worker.vendor.shell.runner.class: 'AdamBrett\ShellWrapper\Runners\ShellExec'
+  teknoo.east.bundle.coderunner.worker.vendor.shell.runner.class: 'AdamBrett\ShellWrapper\Runners\Exec'
   teknoo.east.bundle.coderunner.worker.vendor.shell.command.class: 'AdamBrett\ShellWrapper\Command'
   teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem.class: 'Gaufrette\Filesystem'
   teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter.class: 'Gaufrette\Adapter\Local'

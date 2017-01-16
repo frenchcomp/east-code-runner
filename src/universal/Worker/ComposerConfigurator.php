@@ -23,7 +23,7 @@
 namespace Teknoo\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
-use AdamBrett\ShellWrapper\Command\Param;
+use AdamBrett\ShellWrapper\Command\Argument;
 use AdamBrett\ShellWrapper\Runners\Runner;
 use Gaufrette\Filesystem;
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
@@ -120,9 +120,9 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     private function runComposer()
     {
         $composerCommand = clone $this->composerCommand;
-        $composerCommand->addParam(new Param($this->composerInstruction));
-        $composerCommand->addParam(new Param('--no-interaction'));
-        $composerCommand->addParam(new Param($this->composerDirectoryParam));
+        $composerCommand->addArgument(new Argument($this->composerInstruction));
+        $composerCommand->addArgument(new Argument('--no-interaction'));
+        $composerCommand->addArgument(new Argument('--working-dir '.$this->composerDirectoryParam));
 
         $this->commandRunner->run($composerCommand);
     }
