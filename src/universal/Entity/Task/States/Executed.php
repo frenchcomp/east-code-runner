@@ -22,7 +22,10 @@
 
 namespace Teknoo\East\CodeRunner\Entity\Task\States;
 
-use Teknoo\States\State\AbstractState;
+use Teknoo\East\CodeRunner\Entity\Task\Task;
+use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
+use Teknoo\States\State\StateInterface;
+use Teknoo\States\State\StateTrait;
 
 /**
  * State Executed.
@@ -32,7 +35,22 @@ use Teknoo\States\State\AbstractState;
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
  * @mixin \Teknoo\East\CodeRunner\Entity\Task\Task
+ *
+ * @property StatusInterface $statusInstance
  */
-class Executed extends AbstractState
+class Executed implements StateInterface
 {
+    use StateTrait;
+
+    private function doRegisterStatus()
+    {
+        /**
+         * {@inheritdoc}
+         */
+        return function (StatusInterface $status): Task {
+            $this->statusInstance = $status;
+
+            return $this;
+        };
+    }
 }

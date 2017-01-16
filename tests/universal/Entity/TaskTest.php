@@ -277,6 +277,7 @@ class TaskTest extends AbstractTaskTest
             $this->createMock(TaskManagerInterface::class),
             new TextResult('', '', '', 0, 0)
         );
+        $task->registerStatus(new Status('Final', true));
 
         $final = Task::jsonDeserialize(json_decode(json_encode($task), true));
 
