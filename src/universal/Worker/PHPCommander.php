@@ -162,7 +162,7 @@ class PHPCommander implements PHPCommanderInterface
     private function generateResult(): ResultInterface
     {
         return new TextResult(
-            (string) $this->commandRunner->getReturnValue(),
+            (string) \implode(PHP_EOL, (array) $this->commandRunner->getOutput()),
             '',
             $this->version,
             \memory_get_usage(true),

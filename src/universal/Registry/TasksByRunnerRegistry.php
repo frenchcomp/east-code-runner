@@ -143,6 +143,8 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
         $taskExecution->setTask($task);
         $taskExecution->setRunnerIdentifier($runner->getIdentifier());
 
+        $this->taskExecutionRepository->clearExecution($runner->getIdentifier());
+
         return $taskExecution;
     }
 
@@ -178,6 +180,8 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
         $taskExecution = $this->getTaskExecution($offset);
 
         if ($taskExecution instanceof TaskExecution) {
+            $this->taskExecutionRepository->clearExecution($offset->getIdentifier());
+
             $taskExecution->setDeletedAt($this->datesService->getDate());
 
             $this->save($taskExecution);

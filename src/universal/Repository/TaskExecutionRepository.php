@@ -50,6 +50,8 @@ class TaskExecutionRepository extends EntityRepository
         $queryBuilder->innerJoin('te.task', 't');
         $queryBuilder->addSelect('t');
         $queryBuilder->andWhere('te.runnerIdentifier = :runnerIdentifier');
+        $queryBuilder->andWhere('te.deletedAt is null');
+        $queryBuilder->andWhere('t.deletedAt is null');
         $queryBuilder->setParameter('runnerIdentifier', $identifier);
 
         $query = $queryBuilder->getQuery();
@@ -70,7 +72,13 @@ class TaskExecutionRepository extends EntityRepository
     public function findByRunnerIdentifier(string $identifier)
     {
         if (!isset($this->tasksExecutionsList[$identifier])) {
-            $this->tasksExecutionsList[$identifier] = $this->fetchTaskExecution($identifier);
+            $result = $this->fetchTaskExecution($identifier);;
+
+            if ($result instanceof TaskExecution) {
+                $this->tasksExecutionsList[$identifier] = $result;
+            }
+
+            return $result;
         }
 
         return $this->tasksExecutionsList[$identifier];

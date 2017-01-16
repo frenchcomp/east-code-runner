@@ -83,7 +83,7 @@ class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistr
 
             $this->taskRegistrationRepository
                 ->expects(self::any())
-                ->method('findByTaskUrl')
+                ->method('findByTaskId')
                 ->willReturnCallback(function ($identifer) {
                     if (isset($this->taskRegistrationList[$identifer])) {
                         return $this->taskRegistrationList[$identifer];
@@ -128,7 +128,7 @@ class TasksManagerByTasksRegistryTest extends AbstractTasksManagerByTasksRegistr
                 ->expects(self::any())
                 ->method('persist')
                 ->willReturnCallback(function (TaskRegistration $registration) {
-                    $this->taskRegistrationList[$registration->getTask()->getUrl()] = $registration;
+                    $this->taskRegistrationList[$registration->getTask()->getId()] = $registration;
                 });
         }
 

@@ -46,6 +46,7 @@ class TaskStandbyRepository extends EntityRepository
         $queryBuilder->addSelect('t');
         $queryBuilder->andWhere('ts.runnerIdentifier = :runnerIdentifier');
         $queryBuilder->andWhere('ts.deletedAt is null');
+        $queryBuilder->andWhere('t.deletedAt is null');
         $queryBuilder->setParameter('runnerIdentifier', $identifier);
         $queryBuilder->orderBy('ts.createdAt', 'ASC');
         $queryBuilder->setMaxResults(1);

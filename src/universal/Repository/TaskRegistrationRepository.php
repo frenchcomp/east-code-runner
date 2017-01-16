@@ -40,17 +40,19 @@ class TaskRegistrationRepository extends EntityRepository
     private $tasksRegistrationsList = [];
 
     /**
-     * @param string $url
+     * @param string $id
      *
      * @return TaskRegistration|false
      */
-    private function fetchTaskRegistration(string $url)
+    private function fetchTaskRegistration(string $id)
     {
         $queryBuilder = $this->createQueryBuilder('tr');
         $queryBuilder->innerJoin('tr.task', 't');
         $queryBuilder->addSelect('t');
-        $queryBuilder->andWhere('t.url = :url');
-        $queryBuilder->setParameter('url', $url);
+        $queryBuilder->andWhere('t.id = :idTask');
+        $queryBuilder->andWhere('tr.deletedAt is null');
+        $queryBuilder->andWhere('t.deletedAt is null');
+        $queryBuilder->setParameter('idTask', $id);
 
         $query = $queryBuilder->getQuery();
         $taskRegistration = $query->getOneOrNullResult();
@@ -63,17 +65,23 @@ class TaskRegistrationRepository extends EntityRepository
     }
 
     /**
-     * @param string $url
+     * @param string $id
      *
      * @return TaskRegistration|false
      */
-    public function findByTaskUrl(string $url)
+    public function findByTaskId(string $id)
     {
-        if (!isset($this->tasksRegistrationsList[$url])) {
-            $this->tasksRegistrationsList[$url] = $this->fetchTaskRegistration($url);
+        if (!isset($this->tasksRegistrationsList[$id])) {
+            $result = $this->fetchTaskRegistration($id);;
+
+            if ($result instanceof TaskRegistration) {
+                $this->tasksRegistrationsList[$id] = $result;
+            }
+
+            return $result;
         }
 
-        return $this->tasksRegistrationsList[$url];
+        return $this->tasksRegistrationsList[$id];
     }
 
     /**
@@ -105,14 +113,14 @@ class TaskRegistrationRepository extends EntityRepository
     /**
      * To invalidate a specific cache.
      *
-     * @param string $url
+     * @param string $id
      *
      * @return TaskRegistrationRepository
      */
-    public function clearRegistration(string $url): TaskRegistrationRepository
+    public function clearRegistration(string $id): TaskRegistrationRepository
     {
-        if (isset($this->tasksRegistrationsList[$url])) {
-            unset($this->tasksRegistrationsList[$url]);
+        if (isset($this->tasksRegistrationsList[$id])) {
+            unset($this->tasksRegistrationsList[$id]);
         }
 
         return $this;

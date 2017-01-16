@@ -80,11 +80,11 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
         $manager3->expects(self::any())->method('getIdentifier')->willReturn('manager3');
 
         $task1 = $this->createMock(TaskInterface::class);
-        $task1->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task1');
+        $task1->expects(self::any())->method('getId')->willReturn('https://teknoo.software/task1');
         $task2 = $this->createMock(TaskInterface::class);
-        $task2->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task2');
+        $task2->expects(self::any())->method('getId')->willReturn('https://teknoo.software/task2');
         $task3 = $this->createMock(TaskInterface::class);
-        $task3->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task3');
+        $task3->expects(self::any())->method('getId')->willReturn('https://teknoo.software/task3');
 
         $registry = $this->buildRegistry();
         $registry->addTaskManager($manager1);
@@ -135,7 +135,7 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
         $manager1->expects(self::any())->method('getIdentifier')->willReturn('manager1');
 
         $task1 = $this->createMock(TaskInterface::class);
-        $task1->expects(self::any())->method('getUrl')->willReturn('https://teknoo.software/task1');
+        $task1->expects(self::any())->method('getId')->willReturn('https://teknoo.software/task1');
 
         $registry = $this->buildRegistry();
 
@@ -156,7 +156,7 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
 
         $task = $this->createMock(TaskInterface::class);
         $task->expects(self::any())
-            ->method('getUrl')
+            ->method('getId')
             ->willReturn('fooBar');
 
         $manager = $this->createMock(TaskManagerInterface::class);

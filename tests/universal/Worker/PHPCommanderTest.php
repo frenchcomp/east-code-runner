@@ -142,8 +142,8 @@ class PHPCommanderTest extends AbstractPHPCommanderTest
 
         $this->getCommandRunnerMock()
             ->expects(self::once())
-            ->method('getReturnValue')
-            ->willReturn('Hello World');
+            ->method('getOutput')
+            ->willReturn(['Hello World']);
 
         $code = $this->createMock(CodeInterface::class);
         $code->expects(self::any())->method('getCode')->willReturn('<?php echo "Hello World";');
@@ -188,7 +188,7 @@ class PHPCommanderTest extends AbstractPHPCommanderTest
 
         $this->getCommandRunnerMock()
             ->expects(self::once())
-            ->method('getReturnValue')
+            ->method('getOutput')
             ->willThrowException(new \Exception('fooBar'));
 
         $code = $this->createMock(CodeInterface::class);

@@ -95,8 +95,8 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
             throw new \InvalidArgumentException();
         }
 
-        $url = $offset->getUrl();
-        $taskRegistration = $this->taskRegistrationRepository->findByTaskUrl($url);
+        $id = $offset->getId();
+        $taskRegistration = $this->taskRegistrationRepository->findByTaskId($id);
 
         return $taskRegistration instanceof TaskRegistration && !$taskRegistration->getDeletedAt() instanceof \DateTime;
     }
@@ -108,8 +108,8 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      */
     private function getTaskRegistration(TaskInterface $task)
     {
-        $url = $task->getUrl();
-        $taskRegistration = $this->taskRegistrationRepository->findByTaskUrl($url);
+        $id = $task->getId();
+        $taskRegistration = $this->taskRegistrationRepository->findByTaskId($id);
 
         if (!$taskRegistration instanceof TaskRegistration || $taskRegistration->getDeletedAt() instanceof \DateTime) {
             return null;
@@ -163,6 +163,8 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
         $taskExecution->setTask($task);
         $taskExecution->setTaskManagerIdentifier($manager->getIdentifier());
 
+        $this->taskRegistrationRepository->clearRegistration($task->getId());
+
         return $taskExecution;
     }
 
@@ -198,12 +200,13 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
         $taskRegistration = $this->getTaskRegistration($offset);
 
         if ($taskRegistration instanceof TaskRegistration) {
+            $this->taskRegistrationRepository->clearRegistration($offset->getId());
             $taskRegistration->setDeletedAt($this->datesService->getDate());
 
             $this->save($taskRegistration);
         }
 
-        $this->taskRegistrationRepository->clearRegistration($offset->getUrl());
+        $this->taskRegistrationRepository->clearRegistration($offset->getId());
     }
 
     /**
