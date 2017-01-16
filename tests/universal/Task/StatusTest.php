@@ -41,7 +41,7 @@ class StatusTest extends AbstractStatusTest
      */
     public function buildStatus(): StatusInterface
     {
-        return new Status('Pending');
+        return new Status('Pending', true);
     }
 
     /**

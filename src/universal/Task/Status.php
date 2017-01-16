@@ -47,13 +47,19 @@ class Status implements StatusInterface
     private $name;
 
     /**
+     * @var bool
+     */
+    private $isFinal = false;
+
+    /**
      * Status constructor.
      *
      * @param string $name
      */
-    public function __construct(string $name)
+    public function __construct(string $name, bool $isFinal=false)
     {
         $this->name = $name;
+        $this->isFinal = $isFinal;
 
         $this->uniqueConstructorCheck();
     }
@@ -69,11 +75,20 @@ class Status implements StatusInterface
     /**
      * {@inheritdoc}
      */
+    public function isFinal(): bool
+    {
+        return $this->isFinal;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function jsonSerialize(): array
     {
         return [
             'class' => static::class,
             'name' => $this->getName(),
+            'isFinal' => $this->isFinal(),
         ];
     }
 
@@ -86,6 +101,6 @@ class Status implements StatusInterface
             throw new \InvalidArgumentException('class is not matching with the serialized values');
         }
 
-        return new static($values['name']);
+        return new static($values['name'], !empty($values['isFinal']));
     }
 }

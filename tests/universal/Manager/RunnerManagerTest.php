@@ -29,6 +29,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
@@ -309,6 +310,67 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->loadNextTasks()
+        );
+    }
+
+    public function testPushStatusReturn()
+    {
+        $this->getTasksByRunnerMock()
+            ->expects(self::never())
+            ->method('offsetUnset');
+
+        parent::testPushStatusReturn();
+    }
+
+    public function testPushStatusReturnFinal()
+    {
+        $manager = $this->buildManager();
+
+        $this->getTasksByRunnerMock()
+            ->expects(self::once())
+            ->method('offsetUnset');
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
+        $status = $this->createMock(StatusInterface::class);
+        $status->expects(self::any())->method('isFinal')->willReturn(true);
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('url');
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $runner->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe(
+                $runner
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $task
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->pushStatus(
+                $runner,
+                $status
+            )
         );
     }
 }

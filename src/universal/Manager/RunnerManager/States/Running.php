@@ -122,8 +122,6 @@ class Running implements StateInterface
             $taskManager = $this->tasksManagerByTasks[$task];
             $taskManager->taskResultIsUpdated($task, $result);
 
-            $this->clearRunner($runner, $task);
-
             return $this;
         };
     }
@@ -145,6 +143,10 @@ class Running implements StateInterface
 
             $taskManager = $this->tasksManagerByTasks[$task];
             $taskManager->taskStatusIsUpdated($task, $status);
+
+            if ($status->isFinal()) {
+                $this->clearRunner($runner, $task);
+            }
 
             return $this;
         };

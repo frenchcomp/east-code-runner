@@ -167,7 +167,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     public function codeExecuted(CodeInterface $code, ResultInterface $result): RunnerInterface
     {
         $this->returnProducer->publish(json_encode($result));
-        $this->returnProducer->publish(json_encode(new Status('Finished')));
+        $this->returnProducer->publish(json_encode(new Status('Finished', true)));
 
         $this->reset();
 
@@ -183,7 +183,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     public function errorInCode(CodeInterface $code, ResultInterface $result): RunnerInterface
     {
         $this->returnProducer->publish(json_encode($result));
-        $this->returnProducer->publish(json_encode(new Status('Failure')));
+        $this->returnProducer->publish(json_encode(new Status('Failure', true)));
 
         $this->reset();
 

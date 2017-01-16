@@ -49,6 +49,14 @@ abstract class AbstractStatusTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetNameFinal()
+    {
+        self::assertInternalType(
+            'bool',
+            $this->buildStatus()->isFinal()
+        );
+    }
+
     /**
      * @expectedException \Teknoo\Immutable\Exception\ImmutableException
      */
