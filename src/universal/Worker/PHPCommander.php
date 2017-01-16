@@ -24,6 +24,7 @@ namespace Teknoo\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
 use AdamBrett\ShellWrapper\Command\SubCommand;
+use AdamBrett\ShellWrapper\Runners\Exec;
 use AdamBrett\ShellWrapper\Runners\ReturnValue;
 use AdamBrett\ShellWrapper\Runners\Runner;
 use Gaufrette\Filesystem;
@@ -55,7 +56,7 @@ class PHPCommander implements PHPCommanderInterface
     private $fileSystem;
 
     /**
-     * @var Runner|ReturnValue
+     * @var Exec|Runner|ReturnValue
      */
     private $commandRunner;
 

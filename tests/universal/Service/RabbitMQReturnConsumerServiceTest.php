@@ -24,9 +24,11 @@ namespace Teknoo\Tests\East\CodeRunner\Service;
 
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
+use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
-use Teknoo\East\CodeRunner\Service\RabbitMQResultConsumerService;
+use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
+use Teknoo\East\CodeRunner\Task\Status;
 use Teknoo\East\CodeRunner\Task\TextResult;
 
 /**
@@ -36,9 +38,9 @@ use Teknoo\East\CodeRunner\Task\TextResult;
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
- * @covers \Teknoo\East\CodeRunner\Service\RabbitMQResultConsumerService
+ * @covers \Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService
  */
-class RabbitMQResultConsumerServiceTest extends \PHPUnit_Framework_TestCase
+class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var RemotePHP7Runner
@@ -92,11 +94,11 @@ class RabbitMQResultConsumerServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return RabbitMQResultConsumerService
+     * @return RabbitMQReturnConsumerService
      */
     public function buildService()
     {
-        return new RabbitMQResultConsumerService(
+        return new RabbitMQReturnConsumerService(
             $this->getRemotePHP7Runner(),
             $this->getRunnerManager(),
             $this->getLogger()
@@ -129,7 +131,27 @@ class RabbitMQResultConsumerServiceTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($this->buildService()->execute($message));
     }
 
-    public function testExecute()
+    public function testExecuteBadMessageClass()
+    {
+        $message = new AMQPMessage();
+        $message->body = json_encode(['foo'=>'bar']);
+
+        $this->getLogger()->expects(self::once())->method('critical');
+
+        self::assertTrue($this->buildService()->execute($message));
+    }
+
+    public function testExecuteBadMessageNotManager()
+    {
+        $message = new AMQPMessage();
+        $message->body = json_encode(new Task());
+
+        $this->getLogger()->expects(self::once())->method('critical');
+
+        self::assertTrue($this->buildService()->execute($message));
+    }
+
+    public function testExecuteResult()
     {
         $result = new TextResult('foo', 'bar', '7.1', 123, 345);
         $message = new AMQPMessage();
@@ -139,6 +161,23 @@ class RabbitMQResultConsumerServiceTest extends \PHPUnit_Framework_TestCase
             ->expects(self::once())
             ->method('pushResult')
             ->with($this->getRemotePHP7Runner(), $result)
+            ->willReturnSelf();
+
+        $this->getLogger()->expects(self::never())->method('critical');
+
+        self::assertTrue($this->buildService()->execute($message));
+    }
+
+    public function testExecuteStatus()
+    {
+        $status = new Status('foo');
+        $message = new AMQPMessage();
+        $message->body = json_encode($status);
+
+        $this->getRunnerManager()
+            ->expects(self::once())
+            ->method('pushStatus')
+            ->with($this->getRemotePHP7Runner(), $status)
             ->willReturnSelf();
 
         $this->getLogger()->expects(self::never())->method('critical');

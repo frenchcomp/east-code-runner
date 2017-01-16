@@ -28,16 +28,17 @@ use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
+use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\TextResult;
 
 /**
- * Class RabbitMQResultConsumerService.
+ * Class RabbitMQReturnConsumerService.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-class RabbitMQResultConsumerService implements ConsumerInterface
+class RabbitMQReturnConsumerService implements ConsumerInterface
 {
     /**
      * @var RemotePHP7Runner
@@ -72,13 +73,40 @@ class RabbitMQResultConsumerService implements ConsumerInterface
     }
 
     /**
+     * @param array $values
+     * @return ResultInterface|StatusInterface
+     * @throws \DomainException if the class is not managed here
+     * @throws \InvalidArgumentException when the value not embedded the class
+     */
+    private function jsonDeserialize(array $values)
+    {
+        if (!isset($values['class']) || !\class_exists($values['class'])) {
+            throw new \InvalidArgumentException('class is not matching with the serialized values');
+        }
+
+        if (\is_subclass_of($values['class'], StatusInterface::class)) {
+            $statusClass = $values['class'];
+            return $statusClass::jsonDeserialize($values);
+        }
+
+        if (\is_subclass_of($values['class'], ResultInterface::class)) {
+            $resultClass = $values['class'];
+            return $resultClass::jsonDeserialize($values);
+        }
+
+        throw new \DomainException($values['class'].' is not managed her');
+    }
+
+    /**
      * @param AMQPMessage $message
      *
-     * @return ResultInterface
+     * @return ResultInterface|StatusInterface
+     * @throws \DomainException if the class is not managed here
+     * @throws \InvalidArgumentException when the value not embedded the class
      */
-    private function extractResult(AMQPMessage $message): ResultInterface
+    private function extractObject(AMQPMessage $message)
     {
-        return TextResult::jsonDeserialize(json_decode($message->body, true));
+        return $this->jsonDeserialize(json_decode($message->body, true));
     }
 
     /**
@@ -92,9 +120,15 @@ class RabbitMQResultConsumerService implements ConsumerInterface
     public function execute(AMQPMessage $msg)
     {
         try {
-            $textResult = $this->extractResult($msg);
+            $object = $this->extractObject($msg);
 
-            $this->runnerManager->pushResult($this->remotePHP7Runner, $textResult);
+            if ($object instanceof ResultInterface) {
+                $this->runnerManager->pushResult($this->remotePHP7Runner, $object);
+            }
+
+            if ($object instanceof StatusInterface) {
+                $this->runnerManager->pushStatus($this->remotePHP7Runner, $object);
+            }
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
         }

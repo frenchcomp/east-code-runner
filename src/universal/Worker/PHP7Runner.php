@@ -47,12 +47,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     /**
      * @var ProducerInterface
      */
-    private $statusProducer;
-
-    /**
-     * @var ProducerInterface
-     */
-    private $resultProducer;
+    private $returnProducer;
 
     /**
      * @var LoggerInterface
@@ -77,23 +72,20 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     /**
      * PHP7Runner constructor.
      *
-     * @param ProducerInterface             $statusProducer
-     * @param ProducerInterface             $resultProducer
+     * @param ProducerInterface             $returnProducer
      * @param LoggerInterface               $logger
      * @param string                        $version
      * @param ComposerConfiguratorInterface $composerConfigurator
      * @param PHPCommanderInterface         $phpCommander
      */
     public function __construct(
-        ProducerInterface $statusProducer,
-        ProducerInterface $resultProducer,
+        ProducerInterface $returnProducer,
         LoggerInterface $logger,
         string $version,
         ComposerConfiguratorInterface $composerConfigurator,
         PHPCommanderInterface $phpCommander
     ) {
-        $this->statusProducer = $statusProducer;
-        $this->resultProducer = $resultProducer;
+        $this->returnProducer = $returnProducer;
         $this->logger = $logger;
         $this->version = $version;
         $this->composerConfigurator = $composerConfigurator;
@@ -120,7 +112,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
         try {
             $this->reset();
 
-            $this->statusProducer->publish(json_encode(new Status('Prepare')));
+            $this->returnProducer->publish(json_encode(new Status('Prepare')));
 
             $task = $this->extractTask($msg);
 
@@ -140,8 +132,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
                 0
             );
 
-            $this->resultProducer->publish(json_encode($result));
-            $this->statusProducer->publish(json_encode(new Status('Failure')));
+            $this->returnProducer->publish(json_encode($result));
+            $this->returnProducer->publish(json_encode(new Status('Failure')));
         }
 
         return true;
@@ -154,7 +146,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
      */
     public function composerIsReady(CodeInterface $code): RunnerInterface
     {
-        $this->statusProducer->publish(json_encode(new Status('Executing')));
+        $this->returnProducer->publish(json_encode(new Status('Executing')));
         $this->phpCommander->execute($code, $this);
 
         return $this;
@@ -174,8 +166,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
      */
     public function codeExecuted(CodeInterface $code, ResultInterface $result): RunnerInterface
     {
-        $this->resultProducer->publish(json_encode($result));
-        $this->statusProducer->publish(json_encode(new Status('Finished')));
+        $this->returnProducer->publish(json_encode($result));
+        $this->returnProducer->publish(json_encode(new Status('Finished')));
 
         $this->reset();
 
@@ -190,8 +182,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
      */
     public function errorInCode(CodeInterface $code, ResultInterface $result): RunnerInterface
     {
-        $this->resultProducer->publish(json_encode($result));
-        $this->statusProducer->publish(json_encode(new Status('Failure')));
+        $this->returnProducer->publish(json_encode($result));
+        $this->returnProducer->publish(json_encode(new Status('Failure')));
 
         $this->reset();
 

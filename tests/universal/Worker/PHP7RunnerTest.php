@@ -46,12 +46,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
     /**
      * @var ProducerInterface
      */
-    private $statusProducer;
-
-    /**
-     * @var ProducerInterface
-     */
-    private $resultProducer;
+    private $returnProducer;
 
     /**
      * @var LoggerInterface
@@ -71,25 +66,13 @@ class PHP7RunnerTest extends AbstractRunnerTest
     /**
      * @return ProducerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function getStatusProducerMock(): ProducerInterface
+    public function getReturnProducerMock(): ProducerInterface
     {
-        if (!$this->statusProducer instanceof \PHPUnit_Framework_MockObject_MockObject) {
-            $this->statusProducer = $this->createMock(ProducerInterface::class);
+        if (!$this->returnProducer instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->returnProducer = $this->createMock(ProducerInterface::class);
         }
 
-        return $this->statusProducer;
-    }
-
-    /**
-     * @return ProducerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    public function getResultProducerMock(): ProducerInterface
-    {
-        if (!$this->resultProducer instanceof \PHPUnit_Framework_MockObject_MockObject) {
-            $this->resultProducer = $this->createMock(ProducerInterface::class);
-        }
-
-        return $this->resultProducer;
+        return $this->returnProducer;
     }
 
     /**
@@ -134,8 +117,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
     public function builderRunner(): RunnerInterface
     {
         return new PHP7Runner(
-            $this->getStatusProducerMock(),
-            $this->getResultProducerMock(),
+            $this->getReturnProducerMock(),
             $this->getLoggerMock(),
             '7.0',
             $this->getComposerConfiguratorMock(),
@@ -149,7 +131,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
             ->expects(self::once())
             ->method('execute');
 
-        $this->getStatusProducerMock()
+        $this->getReturnProducerMock()
             ->expects(self::once())
             ->method('publish');
 
@@ -158,12 +140,8 @@ class PHP7RunnerTest extends AbstractRunnerTest
 
     public function testCodeExecuted()
     {
-        $this->getResultProducerMock()
-            ->expects(self::once())
-            ->method('publish');
-
-        $this->getStatusProducerMock()
-            ->expects(self::once())
+        $this->getReturnProducerMock()
+            ->expects(self::exactly(2))
             ->method('publish');
 
         $this->getPhpCommanderMock()
@@ -181,12 +159,8 @@ class PHP7RunnerTest extends AbstractRunnerTest
 
     public function testErrorInCode()
     {
-        $this->getResultProducerMock()
-            ->expects(self::once())
-            ->method('publish');
-
-        $this->getStatusProducerMock()
-            ->expects(self::once())
+        $this->getReturnProducerMock()
+            ->expects(self::exactly(2))
             ->method('publish');
 
         $this->getPhpCommanderMock()
@@ -216,7 +190,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
         $code = new PHPCode('echo "Hello World";', []);
         $message->body = json_encode((new Task())->setCode($code));
 
-        $this->getStatusProducerMock()
+        $this->getReturnProducerMock()
             ->expects(self::once())
             ->method('publish');
 
@@ -226,10 +200,6 @@ class PHP7RunnerTest extends AbstractRunnerTest
             ->method('configure')
             ->with($code, $runner)
             ->willReturnSelf();
-
-        $this->getResultProducerMock()
-            ->expects(self::never())
-            ->method('publish');
 
         self::assertTrue(
             $runner->execute($message)
@@ -242,12 +212,8 @@ class PHP7RunnerTest extends AbstractRunnerTest
         $code = new PHPCode('echo "Hello World";', []);
         $message->body = json_encode((new Task())->setCode($code));
 
-        $this->getStatusProducerMock()
-            ->expects(self::exactly(2))
-            ->method('publish');
-
-        $this->getResultProducerMock()
-            ->expects(self::once())
+        $this->getReturnProducerMock()
+            ->expects(self::exactly(3))
             ->method('publish');
 
         $runner = $this->builderRunner();

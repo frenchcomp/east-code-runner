@@ -64,8 +64,7 @@ services:
   teknoo.east.bundle.coderunner.worker.php7_runner:
     class: '%teknoo.east.bundle.coderunner.worker.php7_runner.class%'
     arguments:
-      - '@teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.status'
-      - '@teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.result'
+      - '@teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.return'
       - '@logger'
       - '%teknoo.east.bundle.coderunner.worker.version%'
       - '@teknoo.east.bundle.coderunner.worker.composer.configuration'
