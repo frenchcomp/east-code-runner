@@ -59,6 +59,7 @@ services:
       - '@teknoo.east.bundle.coderunner.worker.vendor.shell.php_commander.command'
       - '@teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem'
       - '%teknoo.east.bundle.coderunner.worker.version%'
+      - '%teknoo.east.bundle.coderunner.worker.work_directory%'
 
   teknoo.east.bundle.coderunner.worker.php7_runner:
     class: '%teknoo.east.bundle.coderunner.worker.php7_runner.class%'

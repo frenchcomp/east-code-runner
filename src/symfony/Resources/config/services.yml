@@ -99,25 +99,7 @@ services:
   #Runner
   teknoo.east.bundle.coderunner.runner.capability.language.php7:
     class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    arguments: ['platform', 'php7']
-    private: true
-    shared: false
-
-  teknoo.east.bundle.coderunner.runner.capability.feature.composer:
-    class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    arguments: ['feature', 'composer']
-    private: true
-    shared: false
-
-  teknoo.east.bundle.coderunner.runner.capability.feature.curl:
-    class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    arguments: ['feature', 'curl']
-    private: true
-    shared: false
-
-  teknoo.east.bundle.coderunner.runner.capability.feature.zip:
-    class: '%teknoo.east.bundle.coderunner.runner.capability.class%'
-    arguments: ['feature', 'zip']
+    arguments: ['php', '>=7']
     private: true
     shared: false
 

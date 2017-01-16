@@ -51,6 +51,12 @@ interface TaskManagerInterface
      */
     public function addRegistry(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface;
 
+    /**
+     * To register the runner manager to contact to run a task for this manager
+     *
+     * @param RunnerManagerInterface $runnerManager
+     * @return TaskManagerInterface
+     */
     public function registerRunnerManager(RunnerManagerInterface $runnerManager): TaskManagerInterface;
 
     /**

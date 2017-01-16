@@ -20,9 +20,6 @@ services:
       - []
     calls:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
-      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.composer']]
-      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.curl']]
-      - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.feature.zip']]
     tags:
       - {name: 'teknoo.east.code_runner.runner.service'}
 

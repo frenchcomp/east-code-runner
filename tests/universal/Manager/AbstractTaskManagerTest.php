@@ -22,6 +22,7 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Manager;
 
+use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
@@ -69,7 +70,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecuteMeMustCallregisterUrl()
+    public function testExecuteMeMustCallRegisterUrl()
     {
         $manager = $this->buildManager();
         $task = $this->createMock(TaskInterface::class);
@@ -164,6 +165,22 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(
             TaskManagerInterface::class,
             $this->buildManager()->forgetMe($this->createMock(TaskInterface::class))
+        );
+    }
+
+    public function testRegisterRunnerManager()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->registerRunnerManager($this->createMock(RunnerManagerInterface::class))
+        );
+    }
+
+    public function testAddRegistry()
+    {
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $this->buildManager()->addRegistry($this->createMock(TasksManagerByTasksRegistryInterface::class))
         );
     }
 }

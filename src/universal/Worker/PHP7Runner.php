@@ -118,6 +118,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     public function execute(AMQPMessage $msg)
     {
         try {
+            $this->reset();
+
             $this->statusProducer->publish(json_encode(new Status('Prepare')));
 
             $task = $this->extractTask($msg);

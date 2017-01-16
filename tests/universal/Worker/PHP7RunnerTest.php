@@ -261,7 +261,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
             ->expects(self::once())
             ->method('critical');
 
-        self::assertFalse(
+        self::assertTrue(
             $runner->execute($message)
         );
     }

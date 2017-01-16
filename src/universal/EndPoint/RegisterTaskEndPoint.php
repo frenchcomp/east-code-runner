@@ -27,6 +27,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
@@ -78,7 +79,7 @@ class RegisterTaskEndPoint
     public function __invoke(ServerRequestInterface $serverRequest, ClientInterface $client, string $code)
     {
         $task = new Task();
-        $task->setCode(new PHPCode($code, []));
+        $task->setCode(new PHPCode($code, [new Capability('php', '>=7')]));
 
         $this->tasksManager->registerRunnerManager($this->runnerManager);
         $this->tasksManager->executeMe($task);

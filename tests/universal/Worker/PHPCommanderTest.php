@@ -102,8 +102,20 @@ class PHPCommanderTest extends AbstractPHPCommanderTest
             $this->getCommandRunnerMock(),
             $this->getPhpCommandMock(),
             $this->getFileSystemMock(),
-            '7.0'
+            '7.0',
+            '/tmp/php'
         );
+    }
+
+    public function testResetException()
+    {
+        $this->getFileSystemMock()
+            ->expects(self::once())
+            ->method('delete')
+            ->with(PHPCommander::TEMP_FILE)
+            ->willThrowException(new \Exception('fooBar'));
+
+        parent::testResetReturn();
     }
 
     public function testResetReturn()
@@ -134,7 +146,7 @@ class PHPCommanderTest extends AbstractPHPCommanderTest
             ->willReturn('Hello World');
 
         $code = $this->createMock(CodeInterface::class);
-        $code->expects(self::any())->method('getCode')->willReturn('echo "Hello World";');
+        $code->expects(self::any())->method('getCode')->willReturn('<?php echo "Hello World";');
         $oriCode = $code;
 
         $runner = $this->createMock(RunnerInterface::class);

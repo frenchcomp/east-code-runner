@@ -23,7 +23,7 @@
 namespace Teknoo\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
-use AdamBrett\ShellWrapper\Command\Argument;
+use AdamBrett\ShellWrapper\Command\SubCommand;
 use AdamBrett\ShellWrapper\Runners\ReturnValue;
 use AdamBrett\ShellWrapper\Runners\Runner;
 use Gaufrette\Filesystem;
@@ -74,6 +74,11 @@ class PHPCommander implements PHPCommanderInterface
      */
     private $executionTime;
 
+    /***
+     * @var string
+     */
+    private $phpWorkDirectory;
+
     /**
      * PHPCommander constructor.
      *
@@ -81,17 +86,20 @@ class PHPCommander implements PHPCommanderInterface
      * @param Filesystem         $fileSystem
      * @param ReturnValue|Runner $commandRunner
      * @param string             $version
+     * @param string             $phpWorkDirectory
      */
     public function __construct(
         Runner $commandRunner,
         Command $phpCommand,
         Filesystem $fileSystem,
-        string $version
+        string $version,
+        string $phpWorkDirectory
     ) {
         $this->phpCommand = $phpCommand;
         $this->fileSystem = $fileSystem;
         $this->commandRunner = $commandRunner;
         $this->version = $version;
+        $this->phpWorkDirectory = $phpWorkDirectory;
     }
 
     /**
@@ -99,7 +107,11 @@ class PHPCommander implements PHPCommanderInterface
      */
     public function reset(): PHPCommanderInterface
     {
-        $this->fileSystem->delete(self::TEMP_FILE);
+        try {
+            $this->fileSystem->delete(self::TEMP_FILE);
+        } catch (\Throwable $e) {
+            /* Do nothing */
+        }
 
         return $this;
     }
@@ -113,7 +125,12 @@ class PHPCommander implements PHPCommanderInterface
     {
         $phpScript = '<?php'.PHP_EOL;
         $phpScript .= 'require_once ("vendor/autoload.php");'.PHP_EOL.PHP_EOL;
-        $phpScript .= $code->getCode();
+        $code = \rtrim($code->getCode(), ' '.PHP_EOL);
+        if (0 === \strpos($code, '<?php')) {
+            $code = \trim(\substr($code, \strlen('<?php')));
+        }
+
+        $phpScript .= $code;
 
         return $phpScript;
     }
@@ -123,13 +140,13 @@ class PHPCommander implements PHPCommanderInterface
      */
     private function writePHPScript(CodeInterface $code)
     {
-        $this->fileSystem->write(self::TEMP_FILE, $this->generatePHPScript($code));
+        $this->fileSystem->write(self::TEMP_FILE, $this->generatePHPScript($code), true);
     }
 
     private function executePhpScript()
     {
         $phpCommand = clone $this->phpCommand;
-        $phpCommand->addArgument(new Argument('-f '.self::TEMP_FILE));
+        $phpCommand->addSubCommand(new SubCommand('-f '.$this->phpWorkDirectory.DIRECTORY_SEPARATOR.self::TEMP_FILE));
 
         $this->startupTime = \microtime(true) * 1000;
 

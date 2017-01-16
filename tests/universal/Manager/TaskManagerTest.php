@@ -27,7 +27,9 @@ use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Manager\TaskManager;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Service\DatesService;
+use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Tests TaskManagerTest.
@@ -55,6 +57,11 @@ class TaskManagerTest extends AbstractTaskManagerTest
      * @var RunnerManagerInterface
      */
     private $runnerManager;
+
+    /**
+     * @var TasksManagerByTasksRegistryInterface
+     */
+    private $tasksManagerByTasksRegistry;
 
     /**
      * @return EntityManager|\PHPUnit_Framework_MockObject_MockObject
@@ -93,6 +100,18 @@ class TaskManagerTest extends AbstractTaskManagerTest
     }
 
     /**
+     * @return TasksManagerByTasksRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getTasksManagerByTasksRegistry(): TasksManagerByTasksRegistryInterface
+    {
+        if (!$this->tasksManagerByTasksRegistry instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->tasksManagerByTasksRegistry = $this->createMock(TasksManagerByTasksRegistryInterface::class);
+        }
+
+        return $this->tasksManagerByTasksRegistry;
+    }
+
+    /**
      * @param string $managerIdentifier
      * @param string $urlTaskPattern
      *
@@ -107,7 +126,8 @@ class TaskManagerTest extends AbstractTaskManagerTest
             $urlTaskPattern,
             $this->getEntityManagerMock(),
             $this->getDatesServiceMock()
-        ))->registerRunnerManager($this->getRunnerManagerMock());
+        ))->registerRunnerManager($this->getRunnerManagerMock())
+            ->addRegistry($this->getTasksManagerByTasksRegistry());
     }
 
     /**
@@ -147,6 +167,31 @@ class TaskManagerTest extends AbstractTaskManagerTest
         self::assertInstanceOf(
             TaskManagerInterface::class,
             $this->buildManager()->forgetMe($this->createMock(Task::class))
+        );
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testExecuteMeNoRunner()
+    {
+        $manager = new TaskManager(
+            'managerId',
+            'https://foo.bar/task/UUID',
+            $this->getEntityManagerMock(),
+            $this->getDatesServiceMock()
+        );
+        $manager->addRegistry($this->getTasksManagerByTasksRegistry());;
+        $task = $this->createMock(TaskInterface::class);
+
+        $task->expects(self::once())
+            ->method('registerUrl')
+            ->with(new \PHPUnit_Framework_Constraint_Not(self::isEmpty()))
+            ->willReturnSelf();
+
+        self::assertInstanceOf(
+            TaskManagerInterface::class,
+            $manager->executeMe($task)
         );
     }
 }

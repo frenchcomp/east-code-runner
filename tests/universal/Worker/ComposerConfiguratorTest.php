@@ -111,6 +111,17 @@ class ComposerConfiguratorTest extends AbstractComposerConfiguratorTest
         parent::testResetReturn();
     }
 
+    public function testResetException()
+    {
+        $this->getFileSystemMock()
+            ->expects(self::once())
+            ->method('delete')
+            ->with(ComposerConfigurator::COMPOSER_JSON_FILE)
+            ->willThrowException(new \Exception('fooBar'));
+
+        parent::testResetReturn();
+    }
+
     public function testConfigure()
     {
         $this->getFileSystemMock()

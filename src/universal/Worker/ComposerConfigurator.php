@@ -23,9 +23,10 @@
 namespace Teknoo\East\CodeRunner\Worker;
 
 use AdamBrett\ShellWrapper\Command;
-use AdamBrett\ShellWrapper\Command\Argument;
+use AdamBrett\ShellWrapper\Command\SubCommand;
 use AdamBrett\ShellWrapper\Runners\Runner;
 use Gaufrette\Filesystem;
+use Teknoo\East\CodeRunner\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\ComposerConfiguratorInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
@@ -94,7 +95,11 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
      */
     public function reset(): ComposerConfiguratorInterface
     {
-        $this->fileSystem->delete(self::COMPOSER_JSON_FILE);
+        try {
+            $this->fileSystem->delete(self::COMPOSER_JSON_FILE);
+        } catch (\Throwable $e) {
+            /* Do nothing */
+        }
 
         return $this;
     }
@@ -106,7 +111,14 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
      */
     private function convertToRequirePackage(CodeInterface $code): string
     {
-        return \json_encode(['require' => $code->getNeededCapabilities()]);
+        $require = [];
+        /**
+         * @var CapabilityInterface $capability
+         */
+        foreach ($code->getNeededCapabilities() as $capability) {
+            $require[$capability->getType()] = $capability->getValue();
+        }
+        return \json_encode(['require' => $require]);
     }
 
     /**
@@ -114,15 +126,15 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
      */
     private function generateComposerFile(CodeInterface $code)
     {
-        $this->fileSystem->write(self::COMPOSER_JSON_FILE, $this->convertToRequirePackage($code));
+        $this->fileSystem->write(self::COMPOSER_JSON_FILE, $this->convertToRequirePackage($code), true);
     }
 
     private function runComposer()
     {
         $composerCommand = clone $this->composerCommand;
-        $composerCommand->addArgument(new Argument($this->composerInstruction));
-        $composerCommand->addArgument(new Argument('--no-interaction'));
-        $composerCommand->addArgument(new Argument('--working-dir '.$this->composerDirectoryParam));
+        $composerCommand->addSubCommand(new SubCommand($this->composerInstruction));
+        $composerCommand->addSubCommand(new SubCommand('--no-interaction'));
+        $composerCommand->addSubCommand(new SubCommand('--working-dir '.$this->composerDirectoryParam));
 
         $this->commandRunner->run($composerCommand);
     }

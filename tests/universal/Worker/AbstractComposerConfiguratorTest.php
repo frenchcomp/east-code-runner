@@ -22,6 +22,7 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Worker;
 
+use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\ComposerConfiguratorInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
@@ -65,7 +66,10 @@ abstract class AbstractComposerConfiguratorTest extends \PHPUnit_Framework_TestC
     public function testConfigure()
     {
         $code = $this->createMock(CodeInterface::class);
-        $code->expects(self::any())->method('getNeededCapabilities')->willReturn(['foo' => '2.3.4', 'bar' => '*']);
+        $code->expects(self::any())->method('getNeededCapabilities')->willReturn([
+            new Capability('foo', '2.3.4'),
+            new Capability('bar', '*')
+        ]);
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::once())->method('composerIsReady')->willReturnSelf();
