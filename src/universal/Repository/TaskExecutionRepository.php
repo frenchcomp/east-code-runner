@@ -53,6 +53,7 @@ class TaskExecutionRepository extends EntityRepository
         $queryBuilder->andWhere('te.deletedAt is null');
         $queryBuilder->andWhere('t.deletedAt is null');
         $queryBuilder->setParameter('runnerIdentifier', $identifier);
+        $queryBuilder->setMaxResults(1);
 
         $query = $queryBuilder->getQuery();
         $taskExecution = $query->getOneOrNullResult();

@@ -53,6 +53,7 @@ class TaskRegistrationRepository extends EntityRepository
         $queryBuilder->andWhere('tr.deletedAt is null');
         $queryBuilder->andWhere('t.deletedAt is null');
         $queryBuilder->setParameter('idTask', $id);
+        $queryBuilder->setMaxResults(1);
 
         $query = $queryBuilder->getQuery();
         $taskRegistration = $query->getOneOrNullResult();
