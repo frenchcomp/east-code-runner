@@ -72,7 +72,7 @@ class TaskExecutionRepository extends EntityRepository
     public function findByRunnerIdentifier(string $identifier)
     {
         if (!isset($this->tasksExecutionsList[$identifier])) {
-            $result = $this->fetchTaskExecution($identifier);;
+            $result = $this->fetchTaskExecution($identifier);
 
             if ($result instanceof TaskExecution) {
                 $this->tasksExecutionsList[$identifier] = $result;

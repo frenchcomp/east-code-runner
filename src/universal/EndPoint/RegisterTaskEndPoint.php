@@ -55,6 +55,7 @@ class RegisterTaskEndPoint
 
     /**
      * RegisterTaskEndPoint constructor.
+     *
      * @param RunnerManagerInterface $runnerManager
      */
     public function __construct(RunnerManagerInterface $runnerManager)

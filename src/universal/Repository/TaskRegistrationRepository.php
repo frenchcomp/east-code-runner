@@ -72,7 +72,7 @@ class TaskRegistrationRepository extends EntityRepository
     public function findByTaskId(string $id)
     {
         if (!isset($this->tasksRegistrationsList[$id])) {
-            $result = $this->fetchTaskRegistration($id);;
+            $result = $this->fetchTaskRegistration($id);
 
             if ($result instanceof TaskRegistration) {
                 $this->tasksRegistrationsList[$id] = $result;

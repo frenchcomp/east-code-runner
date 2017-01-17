@@ -41,7 +41,7 @@ interface StatusInterface extends ImmutableInterface, \JsonSerializable
     public function getName(): string;
 
     /**
-     * To know if the status is the final status or not
+     * To know if the status is the final status or not.
      *
      * @return bool
      */

@@ -44,17 +44,19 @@ interface TaskManagerInterface
     public function getIdentifier(): string;
 
     /**
-     * To register the registry in manager
+     * To register the registry in manager.
      *
      * @param TasksManagerByTasksRegistryInterface $registry
+     *
      * @return TaskManagerInterface
      */
     public function addRegistry(TasksManagerByTasksRegistryInterface $registry): TaskManagerInterface;
 
     /**
-     * To register the runner manager to contact to run a task for this manager
+     * To register the runner manager to contact to run a task for this manager.
      *
      * @param RunnerManagerInterface $runnerManager
+     *
      * @return TaskManagerInterface
      */
     public function registerRunnerManager(RunnerManagerInterface $runnerManager): TaskManagerInterface;

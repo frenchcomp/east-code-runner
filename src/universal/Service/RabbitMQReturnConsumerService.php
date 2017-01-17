@@ -29,7 +29,6 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
-use Teknoo\East\CodeRunner\Task\TextResult;
 
 /**
  * Class RabbitMQReturnConsumerService.
@@ -74,8 +73,10 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
 
     /**
      * @param array $values
+     *
      * @return ResultInterface|StatusInterface
-     * @throws \DomainException if the class is not managed here
+     *
+     * @throws \DomainException          if the class is not managed here
      * @throws \InvalidArgumentException when the value not embedded the class
      */
     private function jsonDeserialize(array $values)
@@ -86,11 +87,13 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
 
         if (\is_subclass_of($values['class'], StatusInterface::class)) {
             $statusClass = $values['class'];
+
             return $statusClass::jsonDeserialize($values);
         }
 
         if (\is_subclass_of($values['class'], ResultInterface::class)) {
             $resultClass = $values['class'];
+
             return $resultClass::jsonDeserialize($values);
         }
 
@@ -101,7 +104,8 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
      * @param AMQPMessage $message
      *
      * @return ResultInterface|StatusInterface
-     * @throws \DomainException if the class is not managed here
+     *
+     * @throws \DomainException          if the class is not managed here
      * @throws \InvalidArgumentException when the value not embedded the class
      */
     private function extractObject(AMQPMessage $message)

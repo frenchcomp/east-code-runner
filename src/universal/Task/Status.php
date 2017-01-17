@@ -55,8 +55,9 @@ class Status implements StatusInterface
      * Status constructor.
      *
      * @param string $name
+     * @param bool $isFinal
      */
-    public function __construct(string $name, bool $isFinal=false)
+    public function __construct(string $name, bool $isFinal = false)
     {
         $this->name = $name;
         $this->isFinal = $isFinal;

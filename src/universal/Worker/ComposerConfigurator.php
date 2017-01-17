@@ -118,6 +118,7 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
         foreach ($code->getNeededCapabilities() as $capability) {
             $require[$capability->getType()] = $capability->getValue();
         }
+
         return \json_encode(['require' => $require]);
     }
 
