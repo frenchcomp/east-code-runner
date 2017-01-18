@@ -30,6 +30,7 @@ use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
  * Class GetTaskEndPoint.
+ * End point, used by East Foundation to allow an user to get a task, its state and its result.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -55,6 +56,8 @@ class GetTaskEndPoint
     }
 
     /**
+     * To allow East processor to execute this endpoint like a method
+     *
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client
      * @param string                 $taskId
@@ -66,6 +69,7 @@ class GetTaskEndPoint
         ClientInterface $client,
         string $taskId
     ) {
+        //Retrieve the task from the task registry
         try {
             $task = $this->tasksRegistry->get($taskId);
         } catch (\DomainException $e) {

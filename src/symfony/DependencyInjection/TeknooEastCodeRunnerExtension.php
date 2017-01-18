@@ -29,6 +29,10 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
+ * This is the class that loads and manages your bundle configuration.
+ *
+ * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ *
  * Class TeknooEastCodeRunnerExtension.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -49,6 +53,7 @@ class TeknooEastCodeRunnerExtension extends Extension
         $loader->load('services.yml');
         $loader->load('doctrine.config.yml');
 
+        //To configure PHP7 Runner service
         if (!empty($config['php7_runner'])) {
             $php7RunnerConfig = $config['php7_runner'];
 

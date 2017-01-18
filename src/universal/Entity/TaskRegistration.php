@@ -26,6 +26,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Class TaskRegistration.
+ * Entity to persist the manager registering a task. The manager is identified by it's id defined in the platform
+ * configuration.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

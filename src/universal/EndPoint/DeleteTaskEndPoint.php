@@ -33,6 +33,7 @@ use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
  * Class DeleteTaskEndPoint.
+ * End point, used by East Foundation to allow an user to remove a task into the platform and ask its execution.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -67,6 +68,8 @@ class DeleteTaskEndPoint
     }
 
     /**
+     * To allow East processor to execute this endpoint like a method
+     *
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client
      * @param string                 $taskId
@@ -78,6 +81,7 @@ class DeleteTaskEndPoint
         ClientInterface $client,
         string $taskId
     ) {
+        //Retrieve the task from the task registry<
         $task = null;
         try {
             $task = $this->tasksRegistry->get($taskId);
@@ -87,6 +91,7 @@ class DeleteTaskEndPoint
             return $this;
         }
 
+        //Retrieve the manager from the manager registry
         $manager = null;
         if ($task instanceof TaskInterface && isset($this->tasksManagerByTasksRegistry[$task])) {
             $manager = $this->tasksManagerByTasksRegistry[$task];
@@ -98,6 +103,7 @@ class DeleteTaskEndPoint
             return $this;
         }
 
+        //Ask manager to forget the task
         $manager->forgetMe($task);
         $client->responseFromController(new Response(200, [], json_encode(['success' => true])));
 

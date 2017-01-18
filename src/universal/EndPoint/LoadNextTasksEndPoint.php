@@ -30,6 +30,8 @@ use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
  * Class LoadNextTasksEndPoint.
+ * End point, used by East Foundation to allow developer to create a cron request to ask platfrom to switch to next
+ * stand by tasks when a runner idle and are not automatically switched to new task.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -55,6 +57,8 @@ class LoadNextTasksEndPoint
     }
 
     /**
+     * To allow East processor to execute this endpoint like a method
+     *
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client
      *

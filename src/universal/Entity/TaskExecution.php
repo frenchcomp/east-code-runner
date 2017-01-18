@@ -26,6 +26,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Class TaskExecution.
+ * Entity to persist the current execution attributed to a runner. The runner is identified by its id defined in the
+ * platform configuration.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -160,6 +162,8 @@ class TaskExecution
     }
 
     /**
+     * To update the deletedAt field to soft delete the execution
+     *
      * @param \DateTime|null $deletedAt
      *
      * @return TaskExecution

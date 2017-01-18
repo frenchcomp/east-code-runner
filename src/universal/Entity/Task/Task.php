@@ -42,6 +42,8 @@ use Teknoo\States\Proxy\ProxyTrait;
 
 /**
  * Class Task.
+ * Default implementation of TaskInterface, using States pattern with the Teknoo States library to manage each state and
+ * status of a task in this library workflow. States are automatically applied with the states Lifecycable extension.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -68,7 +70,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     private $codeInstance;
 
     /**
-     * @var CodeInterface|\JsonSerializable
+     * Json representation of $codeInstance, automatically converted
+     *
+     * @var string
      */
     private $code;
 
@@ -83,7 +87,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     private $statusInstance;
 
     /**
-     * @var StatusInterface|\JsonSerializable
+     * Json representation of $statusInstance, automatically converted
+     *
+     * @var string
      */
     private $status;
 
@@ -93,7 +99,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     private $resultInstance;
 
     /**
-     * @var ResultInterface|\JsonSerializable
+     * Json representation of $result, automatically converted
+     *
+     * @var string
      */
     private $result;
 
@@ -423,6 +431,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         if (isset($code['class'])
             && \is_subclass_of($code['class'], CodeInterface::class)) {
             $codeClass = $code['class'];
+            /**
+             * @var CodeInterface $codeClass
+             */
             $code = $codeClass::jsonDeserialize($code);
         }
 
@@ -430,6 +441,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         if (isset($status['class'])
             && \is_subclass_of($status['class'], StatusInterface::class)) {
             $statusClass = $status['class'];
+            /**
+             * @var StatusInterface $statusClass
+             */
             $status = $statusClass::jsonDeserialize($status);
         }
 
@@ -437,6 +451,9 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
         if (isset($result['class'])
             && \is_subclass_of($result['class'], ResultInterface::class)) {
             $resultClass = $result['class'];
+            /**
+             * @var ResultInterface $resultClass
+             */
             $result = $resultClass::jsonDeserialize($result);
         }
 

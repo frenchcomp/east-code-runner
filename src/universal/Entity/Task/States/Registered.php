@@ -30,6 +30,7 @@ use Teknoo\States\State\StateTrait;
 
 /**
  * State Registered.
+ * State enable only when the task has not been executed but is registered into task manager
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -46,8 +47,10 @@ class Registered implements StateInterface
 
     private function doRegisterStatus()
     {
-        /*
-         * {@inheritdoc}
+        /**
+         * To be able to change the status of the task
+         * @param StatusInterface $status
+         * @return Task
          */
         return function (StatusInterface $status): Task {
             $this->statusInstance = $status;
@@ -58,8 +61,10 @@ class Registered implements StateInterface
 
     private function doRegisterResult()
     {
-        /*
-         * {@inheritdoc}
+        /**
+         * To be able to register the result from the runner for this task
+         * @param ResultInterface $result
+         * @return Task
          */
         return function (ResultInterface $result): Task {
             $this->resultInstance = $result;

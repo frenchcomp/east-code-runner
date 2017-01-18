@@ -29,6 +29,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class TaskManagerCompilerPass.
+ * Compiler pass to configure service container to inject in the manager registry, all tasks manager tagged with
+ * `teknoo.east.code_runner.task_manager`. These manager are also registered into the end point "register_task".
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

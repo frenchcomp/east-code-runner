@@ -49,7 +49,6 @@ interface RunnerManagerInterface
     /**
      * To forget a runner from this manager, all tasks in execution are lost.
      *
-     *
      * @param RunnerInterface $runner
      *
      * @return RunnerManagerInterface

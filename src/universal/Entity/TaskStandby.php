@@ -26,6 +26,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Class TaskStandby.
+ * To persist the list of tasks, attributed to a runner, pending to be processed by the runner because it's execute
+ * another task. he runner is identified by its id defined in the platform configuration.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

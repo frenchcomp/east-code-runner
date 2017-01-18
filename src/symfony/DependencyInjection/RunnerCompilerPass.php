@@ -28,6 +28,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class RunnerCompilerPass.
+ * Compiler pass to configure service container to inject in all runner managers, all runners tagged with
+ * `teknoo.east.code_runner.runner.service`
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -36,6 +38,9 @@ use Symfony\Component\DependencyInjection\Reference;
 class RunnerCompilerPass implements CompilerPassInterface
 {
     /**
+     * To configure service container to inject in all runner managers, all runners tagged with
+     * `teknoo.east.code_runner.runner.service`
+     *
      * @param ContainerBuilder $container
      *
      * @throws \Exception when a tag is incomplete

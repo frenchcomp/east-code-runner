@@ -34,6 +34,7 @@ use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
  * Class RegisterTaskEndPoint.
+ * End point, used by East Foundation to allow an user to register a task into the platform and ask its execution.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -63,6 +64,10 @@ class RegisterTaskEndPoint
         $this->runnerManager = $runnerManager;
     }
 
+    /**
+     * @param TaskManagerInterface $tasksManager
+     * @return RegisterTaskEndPoint
+     */
     public function registerTaskManager(TaskManagerInterface $tasksManager): RegisterTaskEndPoint
     {
         $this->tasksManager = $tasksManager;
@@ -71,6 +76,8 @@ class RegisterTaskEndPoint
     }
 
     /**
+     * To allow East processor to execute this endpoint like a method
+     *
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client
      * @param string                 $code

@@ -37,6 +37,8 @@ use Teknoo\States\State\StateTrait;
 
 /**
  * State Running.
+ * RunnerManager's state to manage task registration from task manager, and return from runner to update tasks via tasks
+ * manager.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -54,7 +56,7 @@ class Running implements StateInterface
 
     private function doRegisterMe()
     {
-        /*
+        /**
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner): RunnerManagerInterface {
@@ -75,7 +77,7 @@ class Running implements StateInterface
 
     private function doForgetMe()
     {
-        /*
+        /**
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner): RunnerManagerInterface {
@@ -92,7 +94,7 @@ class Running implements StateInterface
 
     private function clearRunner()
     {
-        /*
+        /**
          * Method to clear a runner after its execution and free memory in this runner about this task.
          *
          * @param RunnerInterface $runner
@@ -107,7 +109,7 @@ class Running implements StateInterface
 
     private function doPushResult()
     {
-        /*
+        /**
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface {
@@ -129,7 +131,7 @@ class Running implements StateInterface
 
     private function doPushStatus()
     {
-        /*
+        /**
          * {@inheritdoc}
          */
         return function (RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface {
@@ -155,7 +157,7 @@ class Running implements StateInterface
 
     private function registerTask()
     {
-        /*
+        /**
          * To register in the local area the task to be able find it in next operations
          * @param RunnerInterface $runner
          * @param TaskInterface $task
@@ -176,6 +178,11 @@ class Running implements StateInterface
 
     public function loadNextTaskFor()
     {
+        /**
+         * To ask a specific runner if it idles to start another task in its list.
+         * @param RunnerInterface $runner
+         * @return RunnerManager
+         */
         return function (RunnerInterface $runner): RunnerManager {
             if (!isset($this->tasksByRunner[$runner])
                 || !$this->tasksByRunner[$runner] instanceof TaskInterface) {
@@ -198,6 +205,10 @@ class Running implements StateInterface
 
     public function loadNextTasks()
     {
+        /**
+         * To browse all runner to check if they idle and ask them to start another task.
+         * @return RunnerManager
+         */
         return function (): RunnerManager {
             foreach ($this->runners as $runner) {
                 $this->loadNextTaskFor($runner);

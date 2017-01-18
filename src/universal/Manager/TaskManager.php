@@ -36,6 +36,8 @@ use Teknoo\East\CodeRunner\Task\Status;
 
 /**
  * Class TaskManager.
+ * Default TaskManagerInterface implementation to manage task in the platform (task registration, execution via the
+ * Runner Manager and update task's result and task's status from Runner Manager).
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
