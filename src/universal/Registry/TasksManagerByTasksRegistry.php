@@ -33,6 +33,10 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Class TasksManagerByTasksRegistry.
+ * Default implementation of TasksManagerByTasksRegistryInterface to persist the task manager managing a task.
+ * The registry is usable via an array access behavior, with tasks as key, to return and manipulate managers. Manager
+ * are identified by their id referenced in the platform, but manager must be referenced into the registry.
+ * The registry use TaskRegistration entity to persist and manage the relation.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -102,6 +106,8 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     }
 
     /**
+     * To extract a task from a TaskRegistration entity
+     *
      * @param TaskInterface $task
      *
      * @return null|TaskRegistration
@@ -152,6 +158,8 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     }
 
     /**
+     * To create a new TaskRegistration instance to persist the manager owning a task
+     *
      * @param TaskInterface        $task
      * @param TaskManagerInterface $manager
      *

@@ -32,6 +32,9 @@ use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 
 /**
  * Class RabbitMQReturnConsumerService.
+ * AMQP Consumer service, to listen the queue used by the RemotePHP7Runner's worker to return to this platform status
+ * and tasks' results. Resulst and status use the same chanel, the service dispatches them to good Runner manager's
+ * methods. Objects are serialized in JSON format and are automatically deserialized by the service.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -72,6 +75,8 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
     }
 
     /**
+     * Method to retrieve the original class from the JSON Serialized object (defined in its attribute class), and if
+     * the object implements StatusInterface of ResultInterface, unserialize them
      * @param array $values
      *
      * @return ResultInterface|StatusInterface
@@ -101,6 +106,8 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
     }
 
     /**
+     * To retrieve and extract, from the AMQP message, the object passed by the woerker
+     *
      * @param AMQPMessage $message
      *
      * @return ResultInterface|StatusInterface

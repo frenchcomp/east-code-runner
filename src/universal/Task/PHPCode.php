@@ -28,6 +28,7 @@ use Teknoo\Immutable\ImmutableTrait;
 
 /**
  * Class PHPCode.
+ * Default implementation of CodeInterface to represent a PHP script to execute, as Value Object (aka Immutable).
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

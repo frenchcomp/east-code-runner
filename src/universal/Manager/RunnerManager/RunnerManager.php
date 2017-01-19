@@ -41,8 +41,9 @@ use Teknoo\States\Proxy\ProxyTrait;
  * Default implementation of RunnerManagerInterface to manage RunnerInterface implementation to dispatch tasks to
  * execute on an runner able to execute thems (check needed capacities).
  *
- * A runner instance can work in two mode : Running (To accept tasks and manage return of runners to update
- * task's result or task's status). And Selecting, to dispatch a task to a valid runner;
+ * A manager instance can work in two mode : Running (To accept tasks and manage return of runners to update
+ * task's result or task's status). And Selecting, to dispatch a task to a valid runner. These modes are managed
+ * using States pattern with the Teknoo States library
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

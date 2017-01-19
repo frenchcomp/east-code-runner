@@ -29,6 +29,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Class TasksRegistry.
+ * Default implementation of TasksRegistryInterface to return a specific task identfied by its uuid.
+ * This repository reuse Task's entity.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

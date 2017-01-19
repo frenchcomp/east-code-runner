@@ -27,6 +27,7 @@ use Teknoo\East\CodeRunner\Entity\TaskRegistration;
 
 /**
  * Class TaskRegistrationRepository.
+ * Registry to manage TaskRegistration Entity
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -40,6 +41,9 @@ class TaskRegistrationRepository extends EntityRepository
     private $tasksRegistrationsList = [];
 
     /**
+     * To return a TaskRegistration, from the task's identifier. If there are no TaskExecution found, the method returns
+     * false.
+     *
      * @param string $id
      *
      * @return TaskRegistration|false
@@ -66,6 +70,9 @@ class TaskRegistrationRepository extends EntityRepository
     }
 
     /**
+     * To get a TaskExecution from the Runner's identifier. If the TaskExecution has been already fetched, the repository
+     * use it's cache.
+     *
      * @param string $id
      *
      * @return TaskRegistration|false

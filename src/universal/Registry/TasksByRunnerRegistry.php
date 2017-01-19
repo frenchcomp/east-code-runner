@@ -33,6 +33,9 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Class TasksByRunnerRegistry.
+ * Default implementation of TasksByRunnerRegistryInterface to persist the task currently executed by a runner.
+ * The registry is usable via an array access behavior, with runners as key, to return and manipulate tasks.
+ * The registry use TaskExecution entity to persist and manage the relation.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -132,6 +135,8 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     }
 
     /**
+     * To create a new TaskExecution instance to persist the runner executing a task
+     *
      * @param TaskInterface   $task
      * @param RunnerInterface $runner
      *

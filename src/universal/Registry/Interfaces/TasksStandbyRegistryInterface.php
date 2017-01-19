@@ -27,6 +27,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Interface TasksStandbyRegistryInterface.
+ * Interface to define a registry able to manage the stand by queue of a runner, to return the next task to execute.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

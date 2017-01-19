@@ -25,7 +25,7 @@ namespace Teknoo\East\CodeRunner\Runner\Interfaces;
 use Teknoo\Immutable\ImmutableInterface;
 
 /**
- * Interface to define as value object, capabilities of a runner.
+ * Interface to define as value object, capabilities of a runner, needed by tasks to be executed.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

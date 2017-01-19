@@ -27,6 +27,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 
 /**
  * Interface RunnerInterface.
+ * Interface to build a worker, dedicated to a runner into a Code Runner platform, working with PHP and Composer to
+ * execute some tasks into a secured and isolated environment.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -35,6 +37,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 interface RunnerInterface
 {
     /**
+     * To be notified when Composer is ready.
+     *
      * @param CodeInterface $code
      *
      * @return RunnerInterface
@@ -42,6 +46,8 @@ interface RunnerInterface
     public function composerIsReady(CodeInterface $code): RunnerInterface;
 
     /**
+     * To be notified when the PHP Script is executed
+     *
      * @param CodeInterface   $code
      * @param ResultInterface $result
      *
@@ -50,6 +56,8 @@ interface RunnerInterface
     public function codeExecuted(CodeInterface $code, ResultInterface $result): RunnerInterface;
 
     /**
+     * To be notified when an error has been occurred during a PHP script execution?
+     *
      * @param CodeInterface   $code
      * @param ResultInterface $result
      *

@@ -29,6 +29,8 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 
 /**
+ * Trait to provide to runners the business logic to accept or reject a task after checks its requirements.
+ *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
@@ -37,6 +39,12 @@ use Teknoo\East\CodeRunner\Task\PHPCode;
  */
 trait CheckRequirementsTrait
 {
+    /**
+     * Method to check if all requirements needed by the task is available on the runner
+     *
+     * @param PHPCode $code
+     * @throws \RuntimeException
+     */
     private function checkRequirements(PHPCode $code)
     {
         $capabilities = $this->getCapabilities();
@@ -60,6 +68,12 @@ trait CheckRequirementsTrait
         }
     }
 
+    /**
+     * To indicate to the manager that the task has been rejected by the runner
+     *
+     * @param RunnerManagerInterface $manager
+     * @param TaskInterface $task
+     */
     private function rejectTask(RunnerManagerInterface $manager, TaskInterface $task)
     {
         $manager->taskRejected($this, $task);
@@ -67,6 +81,12 @@ trait CheckRequirementsTrait
         $this->updateStates();
     }
 
+    /**
+     * To indicate to the manager that the task has been accepted by the runner
+     *
+     * @param RunnerManagerInterface $manager
+     * @param TaskInterface $task
+     */
     private function acceptTask(RunnerManagerInterface $manager, TaskInterface $task)
     {
         $manager->taskAccepted($this, $task);

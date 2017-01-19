@@ -27,6 +27,7 @@ use Teknoo\Immutable\ImmutableTrait;
 
 /**
  * Class TextResult.
+ * Default implementation of ResultInterface to manage task's result under text format, aka immutable Value Object.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

@@ -24,6 +24,8 @@ namespace Teknoo\East\CodeRunner\Registry\Interfaces;
 
 /**
  * Interface TasksByRunnerRegistryInterface.
+ * Interface to define a registry able to persist the task currently executed by a runner.
+ * The registry is usable via an array access behavior, with runners as key, to return and manipulate tasks.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

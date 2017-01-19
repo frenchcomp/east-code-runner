@@ -33,6 +33,9 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 
 /**
  * Class TasksStandbyRegistry.
+ * Default implementation of TasksStandbyRegistryInterface to manage the stand by queue of a runner,
+ * to return the next task to execute.
+ * The registry use TasksStandby entity to persist and manage the relation.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -46,7 +49,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     private $datesService;
 
     /**
-     * @var TaskStandbyRepository
+     * @var TasksStandbyRegistry
      */
     private $taskStandbyRepository;
 
@@ -73,6 +76,8 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     }
 
     /**
+     * To deqeue from the runner's list the next task to execute for a runner
+     *
      * @param RunnerInterface $runner
      *
      * @return null|TaskInterface
@@ -102,6 +107,8 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     }
 
     /**
+     *To create a new TaskStandby instance to persist the runner to a task
+     *
      * @param TaskInterface   $task
      * @param RunnerInterface $runner
      *
@@ -128,9 +135,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     }
 
     /**
-     * @param RunnerInterface $runner
-     *
-     * @return null|TaskInterface
+     * {@inheritdoc}
      */
     public function dequeue(RunnerInterface $runner)
     {

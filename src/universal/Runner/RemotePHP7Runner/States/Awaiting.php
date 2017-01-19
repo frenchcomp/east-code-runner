@@ -30,7 +30,7 @@ use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Awaiting.
+ * State Awaiting of RemotePHP7Runner to accept new task to execute on the runner.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -54,6 +54,9 @@ class Awaiting implements StateInterface
 
     private function doExecute()
     {
+        /**
+         * To execute the task on the runner
+         */
         return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {
             $this->currentTask = $task;
             $this->updateStates();

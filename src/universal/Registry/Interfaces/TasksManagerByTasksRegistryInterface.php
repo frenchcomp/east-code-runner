@@ -26,6 +26,9 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 
 /**
  * Interface TasksManagerByTasksRegistryInterface.
+ * Interface to define a registry able to persist the task manager managing a task.
+ * The registry is usable via an array access behavior, with tasks as key, to return and manipulate managers. Manager
+ * are identified by their id referenced in the platform, but manager must be referenced into the registry.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

@@ -37,6 +37,8 @@ use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
 /**
  * Class PHP7Runner.
+ * Implementation of RunnerInterface, Worker of RemotePHP7Runner of CodeBundle library to execute some PHP Task into an
+ * isolated and secured environment. Tasks and returns are transmitted via two dedicated AMQP exchange.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

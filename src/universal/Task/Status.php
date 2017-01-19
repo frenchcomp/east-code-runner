@@ -27,6 +27,7 @@ use Teknoo\Immutable\ImmutableTrait;
 
 /**
  * Class Status.
+ * Default implementation of StatusInterface, as Value Object (aka immutable).
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

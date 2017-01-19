@@ -26,6 +26,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 
 /**
  * Interface PHPCommanderInterface.
+ * Interface to define in a PHP worker the service able to manage the PHP Script and execute it.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -34,11 +35,15 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 interface PHPCommanderInterface
 {
     /**
+     * To reinitialize the configuration of PHP
+     *
      * @return PHPCommanderInterface
      */
     public function reset(): PHPCommanderInterface;
 
     /**
+     * To create the composer.json required by the task's code and initialize Composer and its autoloader.
+     *
      * @param CodeInterface   $code
      * @param RunnerInterface $runner
      *

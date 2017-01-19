@@ -24,6 +24,8 @@ namespace Teknoo\East\CodeRunner\Service;
 
 /**
  * Class DatesService.
+ * Service to manage the date to use during a request, to keep the same date, without second evolution and simplify
+ * test.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -58,6 +60,9 @@ class DatesService
     }
 
     /**
+     * To get the \DateTime instance representing the current Date. If the date is not already defined, the service
+     * create a new instance.
+     *
      * @return \DateTime
      */
     public function getDate(): \DateTime
@@ -70,6 +75,8 @@ class DatesService
     }
 
     /**
+     * To define a specific date to use as current date.
+     *
      * @param \DateTime $date
      *
      * @return DatesService

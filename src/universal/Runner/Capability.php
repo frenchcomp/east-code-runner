@@ -27,6 +27,8 @@ use Teknoo\Immutable\ImmutableTrait;
 
 /**
  * Class Capability.
+ * Default implementation of CapabilityInterface, value object to represent capabilities of a runner, needed by
+ * tasks to be executed.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

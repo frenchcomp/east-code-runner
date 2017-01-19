@@ -36,6 +36,7 @@ use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
 /**
  * Class PHPCommander.
+ * Default PHPCommanderInterface of ComposerConfiguratorInterface for the RemotePHP7Runner's worker;
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -104,7 +105,7 @@ class PHPCommander implements PHPCommanderInterface
     }
 
     /**
-     * @return PHPCommanderInterface
+     * {@inheritdoc}
      */
     public function reset(): PHPCommanderInterface
     {
@@ -118,6 +119,8 @@ class PHPCommander implements PHPCommanderInterface
     }
 
     /**
+     * To prepare the PHP Script from the script of the tasks, appened by the Composer's autoloader.
+     *
      * @param CodeInterface $code
      *
      * @return string
@@ -137,6 +140,9 @@ class PHPCommander implements PHPCommanderInterface
     }
 
     /**
+     * To write the PHP Script into a dedicated file, accessible via the shell wrapper into a isolated process of this
+     * worker.
+     *
      * @param CodeInterface $code
      */
     private function writePHPScript(CodeInterface $code)
@@ -144,6 +150,9 @@ class PHPCommander implements PHPCommanderInterface
         $this->fileSystem->write(self::TEMP_FILE, $this->generatePHPScript($code), true);
     }
 
+    /**
+     * To execute the PHP Script via the Shell wrapper.
+     */
     private function executePhpScript()
     {
         $phpCommand = clone $this->phpCommand;
@@ -158,6 +167,8 @@ class PHPCommander implements PHPCommanderInterface
     }
 
     /**
+     * To extract the PHP Script's output from the Shell wrapper.
+     *
      * @return ResultInterface
      */
     private function generateResult(): ResultInterface
@@ -172,10 +183,7 @@ class PHPCommander implements PHPCommanderInterface
     }
 
     /**
-     * @param CodeInterface   $code
-     * @param RunnerInterface $runner
-     *
-     * @return PHPCommanderInterface
+     * {@inheritdoc}
      */
     public function execute(CodeInterface $code, RunnerInterface $runner): PHPCommanderInterface
     {

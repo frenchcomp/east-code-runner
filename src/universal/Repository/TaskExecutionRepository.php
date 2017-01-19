@@ -27,6 +27,7 @@ use Teknoo\East\CodeRunner\Entity\TaskExecution;
 
 /**
  * Class TaskExecutionRepository.
+ * Registry to manage TaskExecution Entity
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -40,6 +41,9 @@ class TaskExecutionRepository extends EntityRepository
     private $tasksExecutionsList = [];
 
     /**
+     * To return a TaskExecution, from the runner's identifier. If there are no TaskExecution found, the method returns
+     * false.
+     *
      * @param string $identifier
      *
      * @return TaskExecution|false
@@ -66,6 +70,9 @@ class TaskExecutionRepository extends EntityRepository
     }
 
     /**
+     * To get a TaskExecution from the Runner's identifier. If the TaskExecution has been already fetched, the repository
+     * use it's cache.
+     *
      * @param string $identifier
      *
      * @return TaskExecution|false

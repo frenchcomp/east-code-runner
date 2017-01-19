@@ -35,6 +35,9 @@ use Teknoo\East\CodeRunner\Entity\TaskStandby;
 class TaskStandbyRepository extends EntityRepository
 {
     /**
+     * To return the next TaskStandby, from the runner's identifier, to execute.
+     * If there are no TaskExecution found, the method returns false. There are no cache to avoid synchronisation issues
+     *
      * @param string $identifier
      *
      * @return TaskStandby|false

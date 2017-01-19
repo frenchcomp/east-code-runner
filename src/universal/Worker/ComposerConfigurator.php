@@ -33,6 +33,7 @@ use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
 /**
  * Class ComposerConfigurator.
+ * Default implementation of ComposerConfiguratorInterface for the RemotePHP7Runner's worker;
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -91,7 +92,7 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     }
 
     /**
-     * @return ComposerConfiguratorInterface
+     * {@inheritdoc}
      */
     public function reset(): ComposerConfiguratorInterface
     {
@@ -105,8 +106,9 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     }
 
     /**
-     * @param CodeInterface $code
+     * To generate the composer.json content file from neededCapabilities's return.
      *
+     * @param CodeInterface $code
      * @return string
      */
     private function convertToRequirePackage(CodeInterface $code): string
@@ -123,6 +125,8 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     }
 
     /**
+     * To write into the composer.json file, all requirements needed by the script
+     *
      * @param CodeInterface $code
      */
     private function generateComposerFile(CodeInterface $code)
@@ -130,6 +134,9 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
         $this->fileSystem->write(self::COMPOSER_JSON_FILE, $this->convertToRequirePackage($code), true);
     }
 
+    /**
+     * To initialize Composer via the Shell wrapper.
+     */
     private function runComposer()
     {
         $composerCommand = clone $this->composerCommand;
@@ -141,10 +148,7 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     }
 
     /**
-     * @param CodeInterface   $code
-     * @param RunnerInterface $runner
-     *
-     * @return ComposerConfiguratorInterface
+     * {@inheritdoc}
      */
     public function configure(CodeInterface $code, RunnerInterface $runner): ComposerConfiguratorInterface
     {
