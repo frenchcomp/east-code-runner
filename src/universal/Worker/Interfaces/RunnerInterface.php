@@ -46,7 +46,7 @@ interface RunnerInterface
     public function composerIsReady(CodeInterface $code): RunnerInterface;
 
     /**
-     * To be notified when the PHP Script is executed
+     * To be notified when the PHP Script is executed.
      *
      * @param CodeInterface   $code
      * @param ResultInterface $result

@@ -76,7 +76,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     }
 
     /**
-     * To deqeue from the runner's list the next task to execute for a runner
+     * To deqeue from the runner's list the next task to execute for a runner.
      *
      * @param RunnerInterface $runner
      *
@@ -107,7 +107,7 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     }
 
     /**
-     *To create a new TaskStandby instance to persist the runner to a task
+     *To create a new TaskStandby instance to persist the runner to a task.
      *
      * @param TaskInterface   $task
      * @param RunnerInterface $runner

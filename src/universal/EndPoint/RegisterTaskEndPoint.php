@@ -66,6 +66,7 @@ class RegisterTaskEndPoint
 
     /**
      * @param TaskManagerInterface $tasksManager
+     *
      * @return RegisterTaskEndPoint
      */
     public function registerTaskManager(TaskManagerInterface $tasksManager): RegisterTaskEndPoint
@@ -76,7 +77,7 @@ class RegisterTaskEndPoint
     }
 
     /**
-     * To allow East processor to execute this endpoint like a method
+     * To allow East processor to execute this endpoint like a method.
      *
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client

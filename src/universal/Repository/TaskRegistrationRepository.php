@@ -27,7 +27,7 @@ use Teknoo\East\CodeRunner\Entity\TaskRegistration;
 
 /**
  * Class TaskRegistrationRepository.
- * Registry to manage TaskRegistration Entity
+ * Registry to manage TaskRegistration Entity.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

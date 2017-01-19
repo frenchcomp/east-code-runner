@@ -32,7 +32,7 @@ use Teknoo\States\State\StateTrait;
 
 /**
  * Class Selecting.
- * RunnerManager's state to dispatch a task to a good runner able to execute the task
+ * RunnerManager's state to dispatch a task to a good runner able to execute the task.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

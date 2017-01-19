@@ -30,7 +30,7 @@ use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
 /**
- * State Busy of RemotePHP7Runner to forbid new execution until the current task is not finished
+ * State Busy of RemotePHP7Runner to forbid new execution until the current task is not finished.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -58,7 +58,7 @@ class Busy implements StateInterface
 
     private function doExecute()
     {
-        /**
+        /*
          * To forbid a new execution
          */
         return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {

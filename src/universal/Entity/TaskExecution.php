@@ -162,7 +162,7 @@ class TaskExecution
     }
 
     /**
-     * To update the deletedAt field to soft delete the execution
+     * To update the deletedAt field to soft delete the execution.
      *
      * @param \DateTime|null $deletedAt
      *

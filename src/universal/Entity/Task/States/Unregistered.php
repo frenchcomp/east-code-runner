@@ -30,7 +30,7 @@ use Teknoo\States\State\StateTrait;
 
 /**
  * State Unregistered.
- * State enable only when the task has not been registered into the task manager
+ * State enable only when the task has not been registered into the task manager.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -48,7 +48,7 @@ class Unregistered implements StateInterface
 
     private function doSetCode()
     {
-        /**
+        /*
          * To register the code to execute
          * @param CodeInterface $code
          * @return Task
@@ -64,7 +64,7 @@ class Unregistered implements StateInterface
 
     private function doRegisterUrl()
     {
-        /**
+        /*
          * To register the url assigned to this tasl
          * @param string $taskUrl
          * @return Task
@@ -80,7 +80,7 @@ class Unregistered implements StateInterface
 
     private function doRegisterStatus()
     {
-        /**
+        /*
          * To be able to change the status of the task
          * @param StatusInterface $status
          * @return Task

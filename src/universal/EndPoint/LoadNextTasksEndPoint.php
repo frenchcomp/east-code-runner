@@ -57,7 +57,7 @@ class LoadNextTasksEndPoint
     }
 
     /**
-     * To allow East processor to execute this endpoint like a method
+     * To allow East processor to execute this endpoint like a method.
      *
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client
@@ -69,7 +69,7 @@ class LoadNextTasksEndPoint
         $this->runnerManager->loadNextTasks();
 
         $client->responseFromController(
-            new Response(200, [], \json_encode(['success'=>true]))
+            new Response(200, [], \json_encode(['success' => true]))
         );
 
         return $this;

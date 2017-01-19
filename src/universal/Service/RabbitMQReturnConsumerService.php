@@ -76,7 +76,8 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
 
     /**
      * Method to retrieve the original class from the JSON Serialized object (defined in its attribute class), and if
-     * the object implements StatusInterface of ResultInterface, unserialize them
+     * the object implements StatusInterface of ResultInterface, unserialize them.
+     *
      * @param array $values
      *
      * @return ResultInterface|StatusInterface
@@ -106,7 +107,7 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
     }
 
     /**
-     * To retrieve and extract, from the AMQP message, the object passed by the woerker
+     * To retrieve and extract, from the AMQP message, the object passed by the woerker.
      *
      * @param AMQPMessage $message
      *

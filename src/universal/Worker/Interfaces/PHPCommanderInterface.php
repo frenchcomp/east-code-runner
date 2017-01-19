@@ -35,7 +35,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 interface PHPCommanderInterface
 {
     /**
-     * To reinitialize the configuration of PHP
+     * To reinitialize the configuration of PHP.
      *
      * @return PHPCommanderInterface
      */

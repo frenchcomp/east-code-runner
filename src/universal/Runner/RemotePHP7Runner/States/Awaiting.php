@@ -54,7 +54,7 @@ class Awaiting implements StateInterface
 
     private function doExecute()
     {
-        /**
+        /*
          * To execute the task on the runner
          */
         return function (RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface {

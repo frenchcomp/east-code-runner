@@ -27,7 +27,7 @@ use Teknoo\East\CodeRunner\Entity\TaskExecution;
 
 /**
  * Class TaskExecutionRepository.
- * Registry to manage TaskExecution Entity
+ * Registry to manage TaskExecution Entity.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

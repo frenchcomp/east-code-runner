@@ -70,7 +70,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     private $codeInstance;
 
     /**
-     * Json representation of $codeInstance, automatically converted
+     * Json representation of $codeInstance, automatically converted.
      *
      * @var string
      */
@@ -87,7 +87,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     private $statusInstance;
 
     /**
-     * Json representation of $statusInstance, automatically converted
+     * Json representation of $statusInstance, automatically converted.
      *
      * @var string
      */
@@ -99,7 +99,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     private $resultInstance;
 
     /**
-     * Json representation of $result, automatically converted
+     * Json representation of $result, automatically converted.
      *
      * @var string
      */
@@ -432,7 +432,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
             && \is_subclass_of($code['class'], CodeInterface::class)) {
             $codeClass = $code['class'];
             /**
-             * @var CodeInterface $codeClass
+             * @var CodeInterface
              */
             $code = $codeClass::jsonDeserialize($code);
         }
@@ -442,7 +442,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
             && \is_subclass_of($status['class'], StatusInterface::class)) {
             $statusClass = $status['class'];
             /**
-             * @var StatusInterface $statusClass
+             * @var StatusInterface
              */
             $status = $statusClass::jsonDeserialize($status);
         }
@@ -452,7 +452,7 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
             && \is_subclass_of($result['class'], ResultInterface::class)) {
             $resultClass = $result['class'];
             /**
-             * @var ResultInterface $resultClass
+             * @var ResultInterface
              */
             $result = $resultClass::jsonDeserialize($result);
         }

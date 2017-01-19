@@ -40,9 +40,10 @@ use Teknoo\East\CodeRunner\Task\PHPCode;
 trait CheckRequirementsTrait
 {
     /**
-     * Method to check if all requirements needed by the task is available on the runner
+     * Method to check if all requirements needed by the task is available on the runner.
      *
      * @param PHPCode $code
+     *
      * @throws \RuntimeException
      */
     private function checkRequirements(PHPCode $code)
@@ -53,7 +54,7 @@ trait CheckRequirementsTrait
             $capabilityFound = false;
 
             /**
-             * @var CapabilityInterface $capability
+             * @var CapabilityInterface
              */
             foreach ($capabilities as $capability) {
                 if ($neededCapability == $capability) {
@@ -69,10 +70,10 @@ trait CheckRequirementsTrait
     }
 
     /**
-     * To indicate to the manager that the task has been rejected by the runner
+     * To indicate to the manager that the task has been rejected by the runner.
      *
      * @param RunnerManagerInterface $manager
-     * @param TaskInterface $task
+     * @param TaskInterface          $task
      */
     private function rejectTask(RunnerManagerInterface $manager, TaskInterface $task)
     {
@@ -82,10 +83,10 @@ trait CheckRequirementsTrait
     }
 
     /**
-     * To indicate to the manager that the task has been accepted by the runner
+     * To indicate to the manager that the task has been accepted by the runner.
      *
      * @param RunnerManagerInterface $manager
-     * @param TaskInterface $task
+     * @param TaskInterface          $task
      */
     private function acceptTask(RunnerManagerInterface $manager, TaskInterface $task)
     {

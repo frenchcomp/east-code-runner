@@ -29,7 +29,7 @@ use Teknoo\States\State\StateTrait;
 
 /**
  * State Executed.
- * State enable only when the task has been executed
+ * State enable only when the task has been executed.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -45,7 +45,7 @@ class Executed implements StateInterface
 
     private function doRegisterStatus()
     {
-        /**
+        /*
          * To be able to change the status of the task
          * @param StatusInterface $status
          * @return Task

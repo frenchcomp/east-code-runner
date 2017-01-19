@@ -135,7 +135,7 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     }
 
     /**
-     * To create a new TaskExecution instance to persist the runner executing a task
+     * To create a new TaskExecution instance to persist the runner executing a task.
      *
      * @param TaskInterface   $task
      * @param RunnerInterface $runner

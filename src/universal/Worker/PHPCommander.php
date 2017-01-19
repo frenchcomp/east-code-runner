@@ -36,7 +36,7 @@ use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
 /**
  * Class PHPCommander.
- * Default PHPCommanderInterface of ComposerConfiguratorInterface for the RemotePHP7Runner's worker;
+ * Default PHPCommanderInterface of ComposerConfiguratorInterface for the RemotePHP7Runner's worker;.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License

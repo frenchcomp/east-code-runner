@@ -128,7 +128,7 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
     }
 
     /**
-     * To register another capability to this runner
+     * To register another capability to this runner.
      *
      * @param Capability $capability
      *

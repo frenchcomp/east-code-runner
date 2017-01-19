@@ -33,7 +33,7 @@ use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
 /**
  * Class ComposerConfigurator.
- * Default implementation of ComposerConfiguratorInterface for the RemotePHP7Runner's worker;
+ * Default implementation of ComposerConfiguratorInterface for the RemotePHP7Runner's worker;.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
@@ -109,13 +109,14 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
      * To generate the composer.json content file from neededCapabilities's return.
      *
      * @param CodeInterface $code
+     *
      * @return string
      */
     private function convertToRequirePackage(CodeInterface $code): string
     {
         $require = [];
         /**
-         * @var CapabilityInterface $capability
+         * @var CapabilityInterface
          */
         foreach ($code->getNeededCapabilities() as $capability) {
             $require[$capability->getType()] = $capability->getValue();
@@ -125,7 +126,7 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     }
 
     /**
-     * To write into the composer.json file, all requirements needed by the script
+     * To write into the composer.json file, all requirements needed by the script.
      *
      * @param CodeInterface $code
      */

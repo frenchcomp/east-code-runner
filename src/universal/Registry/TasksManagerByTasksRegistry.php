@@ -106,7 +106,7 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     }
 
     /**
-     * To extract a task from a TaskRegistration entity
+     * To extract a task from a TaskRegistration entity.
      *
      * @param TaskInterface $task
      *
@@ -158,7 +158,7 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     }
 
     /**
-     * To create a new TaskRegistration instance to persist the manager owning a task
+     * To create a new TaskRegistration instance to persist the manager owning a task.
      *
      * @param TaskInterface        $task
      * @param TaskManagerInterface $manager

@@ -35,7 +35,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
 interface ComposerConfiguratorInterface
 {
     /**
-     * To reinitialize the configuration of Composer
+     * To reinitialize the configuration of Composer.
      *
      * @return ComposerConfiguratorInterface
      */
