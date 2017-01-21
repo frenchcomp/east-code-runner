@@ -23,14 +23,12 @@
 namespace Teknoo\Tests\East\CodeRunnerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Teknoo\East\CodeRunnerBundle\DependencyInjection\TeknooEastCodeRunnerExtension;
 
 /**
  * Class TeknooStatesExtensionTest.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -76,22 +74,22 @@ class TeknooEastCodeRunnerExtensionTest extends \PHPUnit_Framework_TestCase
                         'work_directory' => '/tmp/php7-runner',
                         'composer_command' => 'composer',
                         'composer_instruction' => 'install',
-                        'php_command' => 'php'
+                        'php_command' => 'php',
                     ],
                     'tasks_managers' => [
                         'default' => [
                             'identifier' => 'default.foobar',
                             'url_pattern' => 'http://foo/UUID',
                             'service_id' => 'manager.default',
-                            'is_default' => true
+                            'is_default' => true,
                         ],
                         'another' => [
                             'identifier' => 'another.foobar',
                             'url_pattern' => 'http://foo/UUID',
                             'service_id' => 'manager.another',
-                            'is_default' => false
-                        ]
-                    ]
+                            'is_default' => false,
+                        ],
+                    ],
                 ],
             ],
             $containerMock

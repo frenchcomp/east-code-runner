@@ -115,7 +115,7 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
     private function convertToRequirePackage(CodeInterface $code): string
     {
         $require = [];
-        /**
+        /*
          * @var CapabilityInterface
          */
         foreach ($code->getNeededCapabilities() as $capability) {

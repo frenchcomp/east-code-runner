@@ -28,9 +28,7 @@ use Teknoo\East\CodeRunner\Registry\TasksRegistry;
 use Teknoo\East\CodeRunner\Repository\TaskRepository;
 
 /**
- *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -61,7 +59,7 @@ class TasksRegistryTest extends AbstractTasksRegistryTest
             ->expects(self::any())
             ->method('findOneBy')
             ->willReturnCallback(function ($name) {
-                if (['id'=>'fooBar', 'deletedAt' => null] == $name) {
+                if (['id' => 'fooBar', 'deletedAt' => null] == $name) {
                     return $this->createMock(Task::class);
                 }
 

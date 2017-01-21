@@ -28,10 +28,9 @@ use Teknoo\East\CodeRunner\Worker\Interfaces\ComposerConfiguratorInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
 /**
- * Class AbstractComposerConfiguratorTest
+ * Class AbstractComposerConfiguratorTest.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
@@ -68,7 +67,7 @@ abstract class AbstractComposerConfiguratorTest extends \PHPUnit_Framework_TestC
         $code = $this->createMock(CodeInterface::class);
         $code->expects(self::any())->method('getNeededCapabilities')->willReturn([
             new Capability('foo', '2.3.4'),
-            new Capability('bar', '*')
+            new Capability('bar', '*'),
         ]);
 
         $runner = $this->createMock(RunnerInterface::class);

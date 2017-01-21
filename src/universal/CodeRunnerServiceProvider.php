@@ -256,7 +256,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
         );
 
         /**
-         * @var RunnerManagerInterface $runnerManager
+         * @var RunnerManagerInterface
          */
         $runnerManager = $container->get(RunnerManagerInterface::class);
         $runnerManager->registerMe($runner);

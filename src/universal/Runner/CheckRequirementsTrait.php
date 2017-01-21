@@ -53,7 +53,7 @@ trait CheckRequirementsTrait
         foreach ($code->getNeededCapabilities() as $neededCapability) {
             $capabilityFound = false;
 
-            /**
+            /*
              * @var CapabilityInterface
              */
             foreach ($capabilities as $capability) {

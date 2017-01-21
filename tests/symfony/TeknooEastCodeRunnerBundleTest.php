@@ -31,7 +31,6 @@ use Teknoo\East\CodeRunnerBundle\TeknooEastCodeRunnerBundle;
  * Class TeknooEastCodeRunnerBundleTest.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *

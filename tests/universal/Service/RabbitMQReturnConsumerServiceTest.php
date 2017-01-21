@@ -32,9 +32,7 @@ use Teknoo\East\CodeRunner\Task\Status;
 use Teknoo\East\CodeRunner\Task\TextResult;
 
 /**
- *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -134,7 +132,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     public function testExecuteBadMessageClass()
     {
         $message = new AMQPMessage();
-        $message->body = json_encode(['foo'=>'bar']);
+        $message->body = json_encode(['foo' => 'bar']);
 
         $this->getLogger()->expects(self::once())->method('critical');
 

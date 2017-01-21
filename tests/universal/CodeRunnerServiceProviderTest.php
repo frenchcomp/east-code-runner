@@ -47,10 +47,9 @@ use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\DatesService;
 
 /**
- * Class CodeRunnerServiceProviderTest
+ * Class CodeRunnerServiceProviderTest.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -67,8 +66,8 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ContainerInterface|\PHPUnit_Framework_MockObject_MockObject $containerMock
-     * @param string $repositoryName
+     * @param ContainerInterface|\PHPUnit_Framework_MockObject_MockObject                $containerMock
+     * @param string                                                                     $repositoryName
      * @param EntityRepository|ObjectRepository|\PHPUnit_Framework_MockObject_MockObject $repositoryMock
      */
     private function prepareRepository($containerMock, $repositoryName, $repositoryMock)
@@ -168,7 +167,6 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = $this->createMock(ContainerInterface::class);
         $this->buildProvider()->createTaskStandbyRepository($container);
     }
-
 
     public function testCreateDatesService()
     {

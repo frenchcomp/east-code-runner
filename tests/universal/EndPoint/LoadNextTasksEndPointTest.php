@@ -25,15 +25,12 @@ namespace Teknoo\Tests\East\CodeRunner\EndPoint;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\EndPoint\LoadNextTasksEndPoint;
-use Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager;
 use Teknoo\East\Foundation\Http\ClientInterface;
 
 /**
- *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -71,7 +68,9 @@ class LoadNextTasksEndPointTest extends \PHPUnit_Framework_TestCase
         $client = $this->createMock(ClientInterface::class);
         $client->expects(self::once())
             ->method('responseFromController')
-            ->with($this->callback(function (ResponseInterface $response) {return 200 == $response->getStatusCode();}))
+            ->with($this->callback(function (ResponseInterface $response) {
+                return 200 == $response->getStatusCode();
+            }))
             ->willReturnSelf();
 
         $endpoint = $this->buildEndPoint();

@@ -33,9 +33,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 
 /**
- *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
@@ -93,7 +91,9 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $client = $this->createMock(ClientInterface::class);
         $client->expects(self::once())
             ->method('responseFromController')
-            ->with($this->callback(function (ResponseInterface $response) {return 404 == $response->getStatusCode();}))
+            ->with($this->callback(function (ResponseInterface $response) {
+                return 404 == $response->getStatusCode();
+            }))
             ->willReturnSelf();
 
         $this->getTasksRegistryMock()
@@ -119,7 +119,9 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $client = $this->createMock(ClientInterface::class);
         $client->expects(self::once())
             ->method('responseFromController')
-            ->with($this->callback(function (ResponseInterface $response) {return 404 == $response->getStatusCode();}))
+            ->with($this->callback(function (ResponseInterface $response) {
+                return 404 == $response->getStatusCode();
+            }))
             ->willReturnSelf();
 
         $task = $this->createMock(TaskInterface::class);
@@ -147,7 +149,9 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $client = $this->createMock(ClientInterface::class);
         $client->expects(self::once())
             ->method('responseFromController')
-            ->with($this->callback(function (ResponseInterface $response) {return 200 == $response->getStatusCode();}))
+            ->with($this->callback(function (ResponseInterface $response) {
+                return 200 == $response->getStatusCode();
+            }))
             ->willReturnSelf();
 
         $task = $this->createMock(TaskInterface::class);

@@ -27,10 +27,9 @@ use Teknoo\East\CodeRunner\Worker\Interfaces\PHPCommanderInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\RunnerInterface;
 
 /**
- * Class AbstractPHPCommanderTest
+ * Class AbstractPHPCommanderTest.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
- *
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
