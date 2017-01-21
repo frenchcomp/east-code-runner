@@ -1,9 +1,9 @@
 {
     "name": "teknoo/east-code-runner",
-    "description": "East Symfony bundle to run PHP code from request in secure environment",
+    "description": "East bundle to run some code from request in secured and isolated environment for tests, demos or async operations",
     "license": "MIT",
-    "type": "symfony-bundle",
-    "keywords": ["east","remote execution"],
+    "type": "library",
+    "keywords": ["east","remote","execution","async","worker"],
     "homepage": "http://teknoo.software/code-runner",
     "authors": [
         {
