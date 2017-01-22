@@ -46,6 +46,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+            ->scalarNode('doctrine_connection')->defaultValue('default')->end()
                 ->arrayNode('tasks_managers')
                     ->prototype('array')
                         ->children()

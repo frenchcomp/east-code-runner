@@ -22,9 +22,11 @@
 
 namespace Teknoo\East\CodeRunnerBundle\DependencyInjection;
 
+use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -39,7 +41,7 @@ use Symfony\Component\DependencyInjection\Loader;
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-class TeknooEastCodeRunnerExtension extends Extension
+class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -51,7 +53,6 @@ class TeknooEastCodeRunnerExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        $loader->load('doctrine.config.yml');
 
         //To configure PHP7 Runner service
         if (!empty($config['php7_runner'])) {
@@ -115,5 +116,112 @@ class TeknooEastCodeRunnerExtension extends Extension
                 }
             }
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function configureDoctrine(ContainerBuilder $container)
+    {
+        $doctrineConnection = 'default';
+
+        // process the configuration of AcmeHelloExtension
+        $configs = $container->getExtensionConfig($this->getAlias());
+        // use the Configuration class to generate a config array with the settings "teknoo_east_code_runner"
+        $config = $this->processConfiguration(new Configuration(), $configs);
+
+        // check if the configuration define the dbal connection to use with this bundle
+        if (isset($config['doctrine_connection'])) {
+            $doctrineConnection = $config['doctrine_connection'];
+        }
+
+        $container->prependExtensionConfig('doctrine', [
+            'orm' => [
+                'entity_managers' => [
+                    'code_runner' => [
+                        'connection' => $doctrineConnection,
+                        'naming_strategy' => 'doctrine.orm.naming_strategy.underscore',
+                        'mappings' => [
+                            'TeknooEastCodeRunner' => [
+                                'type' => 'yml',
+                                'dir' => "%kernel.root_dir%/../vendor/teknoo/east-code-runner/src/universal/config/doctrine",
+                                'is_bundle' => false,
+                                'prefix' => 'Teknoo\East\CodeRunner\Entity'
+                            ]
+                        ],
+                        'auto_mapping' => false,
+                        'filters' => [
+                            'softdeleteable' => [
+                                'class' => SoftDeleteableFilter::class,
+                                'enabled' => false
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $container->prependExtensionConfig('stof_doctrine_extensions', [
+            'orm' => [
+                $doctrineConnection => [
+                    'timestampable' => true
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function configureOldSoundRabbitMQ(ContainerBuilder $container)
+    {
+        $container->prependExtensionConfig('old_sound_rabbit_mq', [
+            'producers' => [
+                'remote_php7_task' => [
+                    'connection' => 'code_runner',
+                    'exchange_options' => ['name' => 'remote_php7_task', 'type' => 'direct', 'auto_delete' => false],
+                    'service_alias' => 'teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.task',
+                ],
+                'remote_php7_return' => [
+                    'connection' => 'code_runner',
+                    'exchange_options' => ['name' => 'remote_php7_result', 'type' => 'direct', 'auto_delete' => false],
+                    'service_alias' => 'teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.return',
+                ],
+            ],
+            'consumers' => [
+                'worker_php7_task' => [
+                    'connection' => 'code_runner',
+                    'exchange_options' => [
+                        'name' => 'remote_php7_task',
+                        'type' => 'direct',
+                        'auto_delete' => false,
+                    ],
+                    'queue_options' => [
+                        'name' => 'remote_php7_task',
+                        'auto_delete' => false,
+                    ],
+                    'callback' => 'teknoo.east.bundle.coderunner.worker.php7_runner',
+                ],
+                'consumer_php7_return' => [
+                    'connection' => 'code_runner',
+                    'exchange_options' => [
+                        'name' => 'remote_php7_result',
+                        'type' => 'direct',
+                        'auto_delete' => false,
+                    ],
+                    'queue_options' => [
+                        'name' => 'remote_php7_result',
+                        'auto_delete' => false,
+                    ],
+                    'callback' => 'teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer'
+                ],
+            ]
+        ]);
+    }
+
+    public function prepend(ContainerBuilder $container)
+    {
+        $this->configureDoctrine($container);
+        $this->configureOldSoundRabbitMQ($container);
     }
 }
