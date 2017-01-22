@@ -62,7 +62,7 @@ Add into your app/config/config.yml
         doctrine_connection: 'default'
         runners:
             php7_runner:
-                service: 'teknoo.east.bundle.coderunner.runner.remote_php7'
+                type: 'php7'
                 amqp_connection: 'code_runner'
                 enable_server: true #To reference the RemotePHP7Runner into the Runner manager
                 enable_worker: true #To enable RemotePHP7Worker (only worker side)

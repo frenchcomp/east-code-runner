@@ -57,15 +57,21 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()//Prototype
                 ->end() //tasks_managers
-                ->arrayNode('php7_runner')
-                    ->children()
-                        ->booleanNode('enable_server')->defaultValue(false)->end()
-                        ->booleanNode('enable_worker')->defaultValue(false)->end()
-                        ->scalarNode('work_directory')->defaultValue('/tmp/php7-runner')->end()
-                        ->scalarNode('composer_command')->defaultValue('')->end()
-                        ->scalarNode('composer_instruction')->defaultValue('install')->end()
-                        ->scalarNode('php_command')->defaultValue('')->end()
-                    ->end()
+                ->arrayNode('runners')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('type')->defaultValue('php7')->end()
+                            ->booleanNode('enable_server')->defaultValue(false)->end()
+                            ->scalarNode('amqp_connection')->defaultValue('default')->end()
+                            ->scalarNode('task_exchange')->defaultValue('remote_php7_task')->end()
+                            ->scalarNode('result_exchange')->defaultValue('remote_php7_result')->end()
+                            ->booleanNode('enable_worker')->defaultValue(false)->end()
+                            ->scalarNode('work_directory')->defaultValue('/tmp/php7-runner')->end()
+                            ->scalarNode('composer_command')->defaultValue('')->end()
+                            ->scalarNode('composer_instruction')->defaultValue('install')->end()
+                            ->scalarNode('php_command')->defaultValue('')->end()
+                        ->end()
+                    ->end()//Prototype
                 ->end()
             ->end(); //root
 
