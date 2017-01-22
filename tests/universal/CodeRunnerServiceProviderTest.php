@@ -27,7 +27,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Interop\Container\ContainerInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
+use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\CodeRunnerServiceProvider;
+use Teknoo\East\CodeRunner\EndPoint\DeleteTaskEndPoint;
+use Teknoo\East\CodeRunner\EndPoint\GetTaskEndPoint;
+use Teknoo\East\CodeRunner\EndPoint\LoadNextTasksEndPoint;
+use Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Entity\TaskExecution;
 use Teknoo\East\CodeRunner\Entity\TaskRegistration;
@@ -39,12 +44,17 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
+use Teknoo\East\CodeRunner\Registry\TasksRegistry;
 use Teknoo\East\CodeRunner\Repository\TaskExecutionRepository;
 use Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository;
 use Teknoo\East\CodeRunner\Repository\TaskRepository;
 use Teknoo\East\CodeRunner\Repository\TaskStandbyRepository;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\DatesService;
+use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
+use Teknoo\East\CodeRunner\Worker\ComposerConfigurator;
+use Teknoo\East\CodeRunner\Worker\PHP7Runner;
+use Teknoo\East\CodeRunner\Worker\PHPCommander;
 
 /**
  * Class CodeRunnerServiceProviderTest.
@@ -390,6 +400,223 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testDeleteTaskEndPoint()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case TasksManagerByTasksRegistryInterface::class:
+                        return $this->createMock(TasksManagerByTasksRegistryInterface::class);
+                        break;
+                    case TasksRegistry::class:
+                        return $this->createMock(TasksRegistry::class);
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            DeleteTaskEndPoint::class,
+            $this->buildProvider()->createDeleteTaskEndPoint($container)
+        );
+    }
+
+    public function testGetTaskEndPoint()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case TasksRegistry::class:
+                        return $this->createMock(TasksRegistry::class);
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            GetTaskEndPoint::class,
+            $this->buildProvider()->createGetTaskEndPoint($container)
+        );
+    }
+
+    public function testRegisterTaskEndPoint()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case RunnerManagerInterface::class:
+                        return $this->createMock(RunnerManagerInterface::class);
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            RegisterTaskEndPoint::class,
+            $this->buildProvider()->createRegisterTaskEndPoint($container)
+        );
+    }
+
+    public function testLoadNextTasksEndPoint()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case RunnerManagerInterface::class:
+                        return $this->createMock(RunnerManagerInterface::class);
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            LoadNextTasksEndPoint::class,
+            $this->buildProvider()->createLoadNextTasksEndPoint($container)
+        );
+    }
+
+    public function testCreateRabbitMQReturnConsumerService()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case RemotePHP7Runner::class:
+                        return $this->createMock(RemotePHP7Runner::class);
+                        break;
+                    case LoggerInterface::class:
+                        return $this->createMock(LoggerInterface::class);
+                        break;
+                    case RunnerManagerInterface::class:
+                        return $this->createMock(RunnerManagerInterface::class);
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            RabbitMQReturnConsumerService::class,
+            $this->buildProvider()->createRabbitMQReturnConsumerService($container)
+        );
+    }
+
+    public function testPHP7Runner()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case 'teknoo.east.bundle.coderunner.worker.version':
+                        return 'fooBar';
+                        break;
+                    case 'teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.return':
+                        return $this->createMock(ProducerInterface::class);
+                        break;
+                    case LoggerInterface::class:
+                        return $this->createMock(LoggerInterface::class);
+                        break;
+                    case ComposerConfigurator::class:
+                        return $this->createMock(ComposerConfigurator::class);
+                        break;
+                    case PHPCommander::class:
+                        return $this->createMock(PHPCommander::class);
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            PHP7Runner::class,
+            $this->buildProvider()->createPHP7Runner($container)
+        );
+    }
+
+    public function testComposerConfigurator()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case 'teknoo.east.bundle.coderunner.worker.composer.configuration.command':
+                    case 'teknoo.east.bundle.coderunner.worker.work_directory':
+                    case 'teknoo.east.bundle.coderunner.worker.composer.configuration.instruction':
+                        return 'fooBar';
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            ComposerConfigurator::class,
+            $this->buildProvider()->createComposerConfigurator($container)
+        );
+    }
+
+    public function testPHPCommander()
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(true);
+
+        $container->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($name) {
+                switch ($name) {
+                    case 'teknoo.east.bundle.coderunner.worker.php_commander.command':
+                    case 'teknoo.east.bundle.coderunner.worker.work_directory':
+                    case 'teknoo.east.bundle.coderunner.worker.version':
+                        return 'fooBar';
+                        break;
+                }
+            });
+
+        self::assertInstanceOf(
+            PHPCommander::class,
+            $this->buildProvider()->createPHPCommander($container)
+        );
+    }
+
     public function testGetDefinitions()
     {
         $definitions = $this->buildProvider()->getServices();
@@ -404,5 +631,13 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
         self::assertTrue(isset($definitions[RunnerManagerInterface::class]));
         self::assertTrue(isset($definitions[TaskManagerInterface::class]));
         self::assertTrue(isset($definitions[RemotePHP7Runner::class]));
+        self::assertTrue(isset($definitions[DeleteTaskEndPoint::class]));
+        self::assertTrue(isset($definitions[GetTaskEndPoint::class]));
+        self::assertTrue(isset($definitions[RegisterTaskEndPoint::class]));
+        self::assertTrue(isset($definitions[LoadNextTasksEndPoint::class]));
+        self::assertTrue(isset($definitions[RabbitMQReturnConsumerService::class]));
+        self::assertTrue(isset($definitions[ComposerConfigurator::class]));
+        self::assertTrue(isset($definitions[PHP7Runner::class]));
+        self::assertTrue(isset($definitions[PHPCommander::class]));
     }
 }

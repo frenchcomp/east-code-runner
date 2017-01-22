@@ -22,11 +22,20 @@
 
 namespace Teknoo\East\CodeRunner;
 
+use AdamBrett\ShellWrapper\Command;
+use AdamBrett\ShellWrapper\Runners\Exec;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Gaufrette\Adapter\Local;
+use Gaufrette\Filesystem;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Log\LoggerInterface;
+use Teknoo\East\CodeRunner\EndPoint\DeleteTaskEndPoint;
+use Teknoo\East\CodeRunner\EndPoint\GetTaskEndPoint;
+use Teknoo\East\CodeRunner\EndPoint\LoadNextTasksEndPoint;
+use Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Entity\TaskExecution;
 use Teknoo\East\CodeRunner\Entity\TaskRegistration;
@@ -50,6 +59,10 @@ use Teknoo\East\CodeRunner\Repository\TaskStandbyRepository;
 use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\DatesService;
+use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
+use Teknoo\East\CodeRunner\Worker\ComposerConfigurator;
+use Teknoo\East\CodeRunner\Worker\PHP7Runner;
+use Teknoo\East\CodeRunner\Worker\PHPCommander;
 
 /**
  * Definition provider following PSR 11 Draft to build an universal bundle/package.
@@ -239,6 +252,55 @@ class CodeRunnerServiceProvider implements ServiceProvider
     /**
      * @param ContainerInterface $container
      *
+     * @return DeleteTaskEndPoint
+     */
+    public static function createDeleteTaskEndPoint(ContainerInterface $container): DeleteTaskEndPoint
+    {
+        return new DeleteTaskEndPoint(
+            $container->get(TasksManagerByTasksRegistryInterface::class),
+            $container->get(TasksRegistry::class)
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return GetTaskEndPoint
+     */
+    public static function createGetTaskEndPoint(ContainerInterface $container): GetTaskEndPoint
+    {
+        return new GetTaskEndPoint(
+            $container->get(TasksRegistry::class)
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return RegisterTaskEndPoint
+     */
+    public static function createRegisterTaskEndPoint(ContainerInterface $container): RegisterTaskEndPoint
+    {
+        return new RegisterTaskEndPoint(
+            $container->get(RunnerManagerInterface::class)
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return LoadNextTasksEndPoint
+     */
+    public static function createLoadNextTasksEndPoint(ContainerInterface $container): LoadNextTasksEndPoint
+    {
+        return new LoadNextTasksEndPoint(
+            $container->get(RunnerManagerInterface::class)
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
      * @return RemotePHP7Runner
      */
     public static function createRemotePHP7Runner(ContainerInterface $container): RemotePHP7Runner
@@ -248,10 +310,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.identifier'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.name'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.version'), [
-                new Capability('platform', 'php7'),
-                new Capability('feature', 'composer'),
-                new Capability('feature', 'curl'),
-                new Capability('feature', 'zip'),
+                new Capability('php', '>=7'),
             ]
         );
 
@@ -265,27 +324,104 @@ class CodeRunnerServiceProvider implements ServiceProvider
     }
 
     /**
+     * @param ContainerInterface $container
+     *
+     * @return RabbitMQReturnConsumerService
+     */
+    public static function createRabbitMQReturnConsumerService(ContainerInterface $container): RabbitMQReturnConsumerService
+    {
+        return new RabbitMQReturnConsumerService(
+            $container->get(RemotePHP7Runner::class),
+            $container->get(RunnerManagerInterface::class),
+            $container->get(LoggerInterface::class)
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return ComposerConfigurator
+     */
+    public static function createComposerConfigurator(ContainerInterface $container): ComposerConfigurator
+    {
+        return new ComposerConfigurator(
+            new Exec(),
+            new Command($container->get('teknoo.east.bundle.coderunner.worker.composer.configuration.command')),
+            new Filesystem(new Local($container->get('teknoo.east.bundle.coderunner.worker.work_directory'))),
+            $container->get('teknoo.east.bundle.coderunner.worker.composer.configuration.instruction'),
+            $container->get('teknoo.east.bundle.coderunner.worker.work_directory')
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return PHP7Runner
+     */
+    public static function createPHP7Runner(ContainerInterface $container): PHP7Runner
+    {
+        return new PHP7Runner(
+            $container->get('teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.return'),
+            $container->get(LoggerInterface::class),
+            $container->get('teknoo.east.bundle.coderunner.worker.version'),
+            $container->get(ComposerConfigurator::class),
+            $container->get(PHPCommander::class)
+        );
+    }
+
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return PHPCommander
+     */
+    public static function createPHPCommander(ContainerInterface $container): PHPCommander
+    {
+        return new PHPCommander(
+            new Exec(),
+            new Command($container->get('teknoo.east.bundle.coderunner.worker.php_commander.command')),
+            new Filesystem(new Local($container->get('teknoo.east.bundle.coderunner.worker.work_directory'))),
+            $container->get('teknoo.east.bundle.coderunner.worker.version'),
+            $container->get('teknoo.east.bundle.coderunner.worker.work_directory')
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getServices()
     {
         return [
+            //Repositories
             TaskRepository::class => [static::class, 'createTaskRepository'],
             TaskExecutionRepository::class => [static::class, 'createTaskExecutionRepository'],
             TaskRegistrationRepository::class => [static::class, 'createTaskRegistrationRepository'],
             TaskStandbyRepository::class => [static::class, 'createTaskStandbyRepository'],
 
+            //Service
             DatesService::class => [static::class, 'createDatesService'],
 
+            //Registries
             TasksByRunnerRegistryInterface::class => [static::class, 'createRegistryTasksByRunner'],
             TasksManagerByTasksRegistryInterface::class => [static::class, 'createRegistryTasksMangerByTask'],
             TasksStandbyRegistryInterface::class => [static::class, 'createRegistryTasksStandBy'],
             TasksRegistryInterface::class => [static::class, 'createRegistryTasks'],
 
+            //Manager
             RunnerManagerInterface::class => [static::class, 'createRunnerManager'],
             TaskManagerInterface::class => [static::class, 'createTaskManager'],
 
+            //Endpoints
+            DeleteTaskEndPoint::class => [static::class, 'createDeleteTaskEndPoint'],
+            GetTaskEndPoint::class => [static::class, 'createGetTaskEndPoint'],
+            RegisterTaskEndPoint::class => [static::class, 'createRegisterTaskEndPoint'],
+            LoadNextTasksEndPoint::class => [static::class, 'createLoadNextTasksEndPoint'],
+
+            //RemotePHP7Runner
             RemotePHP7Runner::class => [static::class, 'createRemotePHP7Runner'],
+            RabbitMQReturnConsumerService::class => [static::class, 'createRabbitMQReturnConsumerService'],
+            ComposerConfigurator::class => [static::class, 'createComposerConfigurator'],
+            PHP7Runner::class => [static::class, 'createPHP7Runner'],
+            PHPCommander::class => [static::class, 'createPHPCommander'],
         ];
     }
 }

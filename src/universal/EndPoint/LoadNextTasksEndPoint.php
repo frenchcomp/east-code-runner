@@ -24,7 +24,7 @@ namespace Teknoo\East\CodeRunner\EndPoint;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
-use Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager;
+use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
@@ -42,16 +42,16 @@ class LoadNextTasksEndPoint
     use EastControllerTrait;
 
     /**
-     * @var RunnerManager
+     * @var RunnerManagerInterface
      */
     private $runnerManager;
 
     /**
      * RegisterTaskEndPoint constructor.
      *
-     * @param RunnerManager $runnerManager
+     * @param RunnerManagerInterface $runnerManager
      */
-    public function __construct(RunnerManager $runnerManager)
+    public function __construct(RunnerManagerInterface $runnerManager)
     {
         $this->runnerManager = $runnerManager;
     }
