@@ -1,5 +1,15 @@
 #Teknoo Software - Code Runner - Change Log
 
+##[0.0.1-alpha10] - 2017-01-24
+
+###Updated
+- Code runner package is now able to update Doctrine configuration to avoid complex configuration of final platform
+ about this package.
+- Code runner package support now several instance of a same Runner (with different services id) with their  
+- Code runner package is now able to configure OldSound RabbitMQ bundle for each runner to avoid complex configuration
+ of final platform about this package.
+- Fix some bugs
+
 ##[0.0.1-alpha9] - 2017-01-17
 
 ###Updated
