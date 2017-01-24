@@ -110,29 +110,29 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                         'mappings' => [
                             'TeknooEastCodeRunner' => [
                                 'type' => 'yml',
-                                'dir' => "%kernel.root_dir%/../vendor/teknoo/east-code-runner/src/universal/config/doctrine",
+                                'dir' => '%kernel.root_dir%/../vendor/teknoo/east-code-runner/src/universal/config/doctrine',
                                 'is_bundle' => false,
-                                'prefix' => 'Teknoo\East\CodeRunner\Entity'
-                            ]
+                                'prefix' => 'Teknoo\East\CodeRunner\Entity',
+                            ],
                         ],
                         'auto_mapping' => false,
                         'filters' => [
                             'softdeleteable' => [
                                 'class' => SoftDeleteableFilter::class,
-                                'enabled' => false
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                'enabled' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         $container->prependExtensionConfig('stof_doctrine_extensions', [
             'orm' => [
                 $doctrineConnection => [
-                    'timestampable' => true
-                ]
-            ]
+                    'timestampable' => true,
+                ],
+            ],
         ]);
     }
 
@@ -197,7 +197,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                         'name' => $resultExchange,
                         'auto_delete' => false,
                     ],
-                    'callback' => $returnConsumerServiceId
+                    'callback' => $returnConsumerServiceId,
                 ];
 
                 //Runner service
@@ -267,7 +267,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                         'name' => $taskExchange,
                         'auto_delete' => false,
                     ],
-                    'callback' => $phpRunnerDefinitionId
+                    'callback' => $phpRunnerDefinitionId,
                 ];
 
                 //Composer command service
