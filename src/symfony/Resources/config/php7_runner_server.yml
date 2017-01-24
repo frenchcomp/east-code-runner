@@ -20,8 +20,6 @@ services:
       - []
     calls:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
-    tags:
-      - {name: 'teknoo.east.code_runner.runner.service'}
 
   teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.abstract:
     class: '%teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.class%'

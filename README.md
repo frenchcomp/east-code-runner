@@ -62,11 +62,14 @@ Add into your app/config/config.yml
         doctrine_connection: 'default'
         runners:
             php7_runner:
-                type: 'php7'
-                amqp_connection: 'code_runner'
                 enable_server: true #To reference the RemotePHP7Runner into the Runner manager
+                amqp_connection: 'code_runner'
+                task_exchange: 'task_exchange_name'
+                result_exchange: 'result_exchange_name'
                 enable_worker: true #To enable RemotePHP7Worker (only worker side)
                 composer_command: 'composer'
+                composer_instruction: 'install'
+                work_directory: '/tmp'
                 php_command: 'php'
         tasks_managers:
             default: #You can define several tasks managers

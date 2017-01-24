@@ -27,6 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -96,8 +97,8 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         // check if the configuration define the dbal connection to use with this bundle
-        if (isset($config['runners'])) {
-            $doctrineConnection = $config['runners'];
+        if (isset($config['doctrine_connection'])) {
+            $doctrineConnection = $config['doctrine_connection'];
         }
 
         $container->prependExtensionConfig('doctrine', [
@@ -167,7 +168,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
 
             $resultExchange = 'remote_php7_result_'.$runnerId;
             if (!empty($runnerConfiguration['result_exchange'])) {
-                $taskExchange = $runnerConfiguration['result_exchange'];
+                $resultExchange = $runnerConfiguration['result_exchange'];
             }
 
             //To autoconfigure server side (Task producer and Result consumer) in the Old Sound RabbitMq bundle
@@ -196,14 +197,14 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                         'name' => $resultExchange,
                         'auto_delete' => false,
                     ],
-                    'callback' => $runnerConfiguration
+                    'callback' => $returnConsumerServiceId
                 ];
 
                 //Runner service
                 $runnerDefinition = new DefinitionDecorator(
                     'teknoo.east.bundle.coderunner.runner.remote_php7.abstract'
                 );
-                $runnerDefinition->replaceArgument(0, '@'.$producerTaskAliasId);
+                $runnerDefinition->replaceArgument(0, new Reference($producerTaskAliasId));
                 $runnerDefinition->replaceArgument(1, $runnerId);
                 //Add tags to register them into registry
                 $runnerDefinition->addTag('teknoo.east.code_runner.runner.service');
@@ -213,7 +214,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                 $returnConsumerDefinition = new DefinitionDecorator(
                     'teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.abstract'
                 );
-                $returnConsumerDefinition->replaceArgument(0, '@'.$runnerServiceId);
+                $returnConsumerDefinition->replaceArgument(0, new Reference($runnerServiceId));
                 $container->setDefinition($returnConsumerServiceId, $returnConsumerDefinition);
             }
 
@@ -236,7 +237,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
 
                 $composerInstructionValue = 'install';
                 if (!empty($composerInstructionValue['composer_instruction'])) {
-                    $composerCommandValue = $composerInstructionValue['composer_instruction'];
+                    $composerInstructionValue = $composerInstructionValue['composer_instruction'];
                 }
 
                 $phpCommandValue = 'php';
@@ -294,16 +295,16 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                 $gaufretteFileSystemDefinition = new DefinitionDecorator(
                     'teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem.abstract'
                 );
-                $gaufretteFileSystemDefinition->replaceArgument(0, '@'.$gaufretteAdapterDefinitionId);
+                $gaufretteFileSystemDefinition->replaceArgument(0, new Reference($gaufretteAdapterDefinitionId));
                 $container->setDefinition($gaufretteFileSystemDefinitionId, $gaufretteFileSystemDefinition);
 
                 //Composer Configurator
                 $composerConfiguratorDefinition = new DefinitionDecorator(
                     'teknoo.east.bundle.coderunner.worker.composer.configuration.abstract'
                 );
-                $composerConfiguratorDefinition->replaceArgument(1, '@'.$composerCommandDefinitionId);
-                $composerConfiguratorDefinition->replaceArgument(2, '@'.$gaufretteFileSystemDefinitionId);
-                $composerConfiguratorDefinition->replaceArgument(3, $composerCommandValue);
+                $composerConfiguratorDefinition->replaceArgument(1, new Reference($composerCommandDefinitionId));
+                $composerConfiguratorDefinition->replaceArgument(2, new Reference($gaufretteFileSystemDefinitionId));
+                $composerConfiguratorDefinition->replaceArgument(3, $composerInstructionValue);
                 $composerConfiguratorDefinition->replaceArgument(4, $workDirectory);
                 $container->setDefinition($composerConfigurationDefinitionId, $composerConfiguratorDefinition);
 
@@ -311,18 +312,18 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                 $phpCommanderDefinition = new DefinitionDecorator(
                     'teknoo.east.bundle.coderunner.worker.php_commander.abstract'
                 );
-                $phpCommanderDefinition->replaceArgument(1, '@'.$phpCommandDefinitionId);
-                $phpCommanderDefinition->replaceArgument(2, '@'.$gaufretteFileSystemDefinitionId);
+                $phpCommanderDefinition->replaceArgument(1, new Reference($phpCommandDefinitionId));
+                $phpCommanderDefinition->replaceArgument(2, new Reference($gaufretteFileSystemDefinitionId));
                 $phpCommanderDefinition->replaceArgument(4, $workDirectory);
                 $container->setDefinition($phpCommanderDefinitionId, $phpCommanderDefinition);
 
                 //PHP Runner
                 $runnerDefinition = new DefinitionDecorator(
-                    'teknoo.east.bundle.coderunner.worker.php_commander.abstract'
+                    'teknoo.east.bundle.coderunner.worker.php7_runner.abstract'
                 );
-                $runnerDefinition->replaceArgument(0, '@'.$producerReturnAliasId);
-                $runnerDefinition->replaceArgument(3, '@'.$composerConfigurationDefinitionId);
-                $runnerDefinition->replaceArgument(4, '@'.$phpCommanderDefinitionId);
+                $runnerDefinition->replaceArgument(0, new Reference($producerReturnAliasId));
+                $runnerDefinition->replaceArgument(3, new Reference($composerConfigurationDefinitionId));
+                $runnerDefinition->replaceArgument(4, new Reference($phpCommanderDefinitionId));
                 $container->setDefinition($phpRunnerDefinitionId, $runnerDefinition);
             }
         }
