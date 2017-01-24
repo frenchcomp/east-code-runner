@@ -8,9 +8,10 @@ parameters:
   teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.class: 'Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService'
 
 services:
-  teknoo.east.bundle.coderunner.runner.remote_php7:
+  teknoo.east.bundle.coderunner.runner.remote_php7.abstract:
     class: '%teknoo.east.bundle.coderunner.runner.remote_php7.class%'
     private: false
+    abstract: true
     arguments:
       - '@teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.task'
       - '%teknoo.east.bundle.coderunner.runner.remote_php7.identifier%'
@@ -22,8 +23,10 @@ services:
     tags:
       - {name: 'teknoo.east.code_runner.runner.service'}
 
-  teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer:
+  teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.abstract:
     class: '%teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.class%'
+    private: false
+    abstract: true
     arguments:
       - '@teknoo.east.bundle.coderunner.runner.remote_php7'
       - '@teknoo.east.bundle.coderunner.manager.runners'

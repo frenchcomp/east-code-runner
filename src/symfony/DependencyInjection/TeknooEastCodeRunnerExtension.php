@@ -55,45 +55,10 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
         $loader->load('services.yml');
 
         //To configure PHP7 Runner service
-        if (!empty($config['php7_runner'])) {
-            $php7RunnerConfig = $config['php7_runner'];
-
+        if (!empty($config['runners'])) {
             //To load automatically the PHP 7 runner
-            if (!empty($php7RunnerConfig['enable_server'])) {
-                $loader->load('php7_runner_server.yml');
-            }
-
-            if (!empty($php7RunnerConfig['enable_worker'])) {
-                $loader->load('php7_runner_worker.yml');
-            }
-
-            if (!empty($php7RunnerConfig['work_directory'])) {
-                $container->setParameter(
-                    'teknoo.east.bundle.coderunner.worker.work_directory',
-                    $php7RunnerConfig['work_directory']
-                );
-            }
-
-            if (!empty($php7RunnerConfig['composer_command'])) {
-                $container->setParameter(
-                    'teknoo.east.bundle.coderunner.worker.composer.configuration.command',
-                    $php7RunnerConfig['composer_command']
-                );
-            }
-
-            if (!empty($php7RunnerConfig['composer_instruction'])) {
-                $container->setParameter(
-                    'teknoo.east.bundle.coderunner.worker.composer.configuration.instruction',
-                    $php7RunnerConfig['composer_instruction']
-                );
-            }
-
-            if (!empty($php7RunnerConfig['php_command'])) {
-                $container->setParameter(
-                    'teknoo.east.bundle.coderunner.worker.php_commander.command',
-                    $php7RunnerConfig['php_command']
-                );
-            }
+            $loader->load('php7_runner_server.yml');
+            $loader->load('php7_runner_worker.yml');
         }
 
         //To define tasks managers
@@ -131,8 +96,8 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         // check if the configuration define the dbal connection to use with this bundle
-        if (isset($config['doctrine_connection'])) {
-            $doctrineConnection = $config['doctrine_connection'];
+        if (isset($config['runners'])) {
+            $doctrineConnection = $config['runners'];
         }
 
         $container->prependExtensionConfig('doctrine', [
@@ -175,47 +140,196 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
      */
     private function configureOldSoundRabbitMQ(ContainerBuilder $container)
     {
+        // process the configuration of AcmeHelloExtension
+        $configs = $container->getExtensionConfig($this->getAlias());
+        // use the Configuration class to generate a config array with the settings "teknoo_east_code_runner"
+        $config = $this->processConfiguration(new Configuration(), $configs);
+
+        // check if the configuration define the dbal connection to use with this bundle
+        $runnersConfiguration = [];
+        if (isset($config['runners']) && \is_array($config['runners'])) {
+            $runnersConfiguration = $config['runners'];
+        }
+
+        $producers = [];
+        $consumers = [];
+        foreach ($runnersConfiguration as $runnerId => $runnerConfiguration) {
+            //Extract value from configuration from this runner or set with default value suffixed by the runner id
+            $amqpConnection = 'default';
+            if (!empty($runnerConfiguration['amqp_connection'])) {
+                $amqpConnection = $runnerConfiguration['amqp_connection'];
+            }
+
+            $taskExchange = 'remote_php7_task_'.$runnerId;
+            if (!empty($runnerConfiguration['task_exchange'])) {
+                $taskExchange = $runnerConfiguration['task_exchange'];
+            }
+
+            $resultExchange = 'remote_php7_result_'.$runnerId;
+            if (!empty($runnerConfiguration['result_exchange'])) {
+                $taskExchange = $runnerConfiguration['result_exchange'];
+            }
+
+            //To autoconfigure server side (Task producer and Result consumer) in the Old Sound RabbitMq bundle
+            //And create new service, extending Code runner side service to interact with them
+            if (!empty($runnerConfiguration['enable_server'])) {
+                $runnerServiceId = 'teknoo.coderunner.runner.remote_php7.'.$runnerId;
+                $producerTaskAliasId = 'teknoo.coderunner.vendor.old_sound_producer.remote_php7.task.'.$runnerId;
+                $returnConsumerServiceId = 'teknoo.coderunner.service.rabbit_mq_return_consumer.'.$runnerId;
+
+                //AMQP Producer
+                $producers['remote_php7_task_'.$runnerId] = [
+                    'connection' => $amqpConnection,
+                    'exchange_options' => ['name' => $taskExchange, 'type' => 'direct', 'auto_delete' => false],
+                    'service_alias' => $producerTaskAliasId,
+                ];
+
+                //AMQP CONSUMER
+                $consumers['consumer_php7_return_'.$runnerId] = [
+                    'connection' => $amqpConnection,
+                    'exchange_options' => [
+                        'name' => $resultExchange,
+                        'type' => 'direct',
+                        'auto_delete' => false,
+                    ],
+                    'queue_options' => [
+                        'name' => $resultExchange,
+                        'auto_delete' => false,
+                    ],
+                    'callback' => $runnerConfiguration
+                ];
+
+                //Runner service
+                $runnerDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.runner.remote_php7.abstract'
+                );
+                $runnerDefinition->replaceArgument(0, '@'.$producerTaskAliasId);
+                $runnerDefinition->replaceArgument(1, $runnerId);
+                //Add tags to register them into registry
+                $runnerDefinition->addTag('teknoo.east.code_runner.runner.service');
+                $container->setDefinition($runnerServiceId, $runnerDefinition);
+
+                //Return Consumer Service
+                $returnConsumerDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.abstract'
+                );
+                $returnConsumerDefinition->replaceArgument(0, '@'.$runnerServiceId);
+                $container->setDefinition($returnConsumerServiceId, $returnConsumerDefinition);
+            }
+
+            //To autoconfigure worker side (Task consumer and Result Producer) in the Old Sound RabbitMq bundle
+            //And create new service, extending Code runner side service to interact with them
+            if (!empty($runnerConfiguration['enable_worker'])) {
+                $producerReturnAliasId = 'teknoo.coderunner.vendor.old_sound_producer.remote_php7.return_'.$runnerId;
+                $composerCommandDefinitionId = 'teknoo.coderunner.worker.vendor.shell.composer.command.'.$runnerId;
+                $phpCommandDefinitionId = 'teknoo.coderunner.worker.vendor.shell.php_commander.command.'.$runnerId;
+                $gaufretteAdapterDefinitionId = 'teknoo.coderunner.worker.vendor.gaufrette.adapter.'.$runnerId;
+                $gaufretteFileSystemDefinitionId = 'teknoo.coderunner.worker.vendor.gaufrette.filesystem.'.$runnerId;
+                $composerConfigurationDefinitionId = 'teknoo.coderunner.worker.composer.configuration.'.$runnerId;
+                $phpCommanderDefinitionId = 'teknoo.coderunner.worker.php_commander.'.$runnerId;
+                $phpRunnerDefinitionId = 'teknoo.coderunner.worker.php7_runner.'.$runnerId;
+
+                $composerCommandValue = 'composer';
+                if (!empty($runnerConfiguration['composer_command'])) {
+                    $composerCommandValue = $runnerConfiguration['composer_command'];
+                }
+
+                $composerInstructionValue = 'install';
+                if (!empty($composerInstructionValue['composer_instruction'])) {
+                    $composerCommandValue = $composerInstructionValue['composer_instruction'];
+                }
+
+                $phpCommandValue = 'php';
+                if (!empty($runnerConfiguration['php_command'])) {
+                    $phpCommandValue = $runnerConfiguration['php_command'];
+                }
+
+                $workDirectory = '/tmp';
+                if (!empty($runnerConfiguration['work_directory'])) {
+                    $workDirectory = $runnerConfiguration['work_directory'];
+                }
+
+                $producers['remote_php7_return_'.$runnerId] = [
+                    'connection' => $amqpConnection,
+                    'exchange_options' => ['name' => $resultExchange, 'type' => 'direct', 'auto_delete' => false],
+                    'service_alias' => $producerReturnAliasId,
+                ];
+
+                $consumers['consumer_php7_task_'.$runnerId] = [
+                    'connection' => $amqpConnection,
+                    'exchange_options' => [
+                        'name' => $taskExchange,
+                        'type' => 'direct',
+                        'auto_delete' => false,
+                    ],
+                    'queue_options' => [
+                        'name' => $taskExchange,
+                        'auto_delete' => false,
+                    ],
+                    'callback' => $phpRunnerDefinitionId
+                ];
+
+                //Composer command service
+                $composerCommandDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.worker.vendor.shell.composer.command.abstract'
+                );
+                $composerCommandDefinition->replaceArgument(0, $composerCommandValue);
+                $container->setDefinition($composerCommandDefinitionId, $composerCommandDefinition);
+
+                //Composer command service
+                $phpCommandDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.worker.vendor.shell.php_commander.command.abstract'
+                );
+                $phpCommandDefinition->replaceArgument(0, $phpCommandValue);
+                $container->setDefinition($phpCommandDefinitionId, $phpCommandDefinition);
+
+                //Gaufrette Adapter
+                $gaufretteAdapterDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter.abstract'
+                );
+                $gaufretteAdapterDefinition->replaceArgument(0, $workDirectory);
+                $container->setDefinition($gaufretteAdapterDefinitionId, $gaufretteAdapterDefinition);
+
+                //Gaufrette FileSystem
+                $gaufretteFileSystemDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem.abstract'
+                );
+                $gaufretteFileSystemDefinition->replaceArgument(0, '@'.$gaufretteAdapterDefinitionId);
+                $container->setDefinition($gaufretteFileSystemDefinitionId, $gaufretteFileSystemDefinition);
+
+                //Composer Configurator
+                $composerConfiguratorDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.worker.composer.configuration.abstract'
+                );
+                $composerConfiguratorDefinition->replaceArgument(1, '@'.$composerCommandDefinitionId);
+                $composerConfiguratorDefinition->replaceArgument(2, '@'.$gaufretteFileSystemDefinitionId);
+                $composerConfiguratorDefinition->replaceArgument(3, $composerCommandValue);
+                $composerConfiguratorDefinition->replaceArgument(4, $workDirectory);
+                $container->setDefinition($composerConfigurationDefinitionId, $composerConfiguratorDefinition);
+
+                //PHP Commander
+                $phpCommanderDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.worker.php_commander.abstract'
+                );
+                $phpCommanderDefinition->replaceArgument(1, '@'.$phpCommandDefinitionId);
+                $phpCommanderDefinition->replaceArgument(2, '@'.$gaufretteFileSystemDefinitionId);
+                $phpCommanderDefinition->replaceArgument(4, $workDirectory);
+                $container->setDefinition($phpCommanderDefinitionId, $phpCommanderDefinition);
+
+                //PHP Runner
+                $runnerDefinition = new DefinitionDecorator(
+                    'teknoo.east.bundle.coderunner.worker.php_commander.abstract'
+                );
+                $runnerDefinition->replaceArgument(0, '@'.$producerReturnAliasId);
+                $runnerDefinition->replaceArgument(3, '@'.$composerConfigurationDefinitionId);
+                $runnerDefinition->replaceArgument(4, '@'.$phpCommanderDefinitionId);
+                $container->setDefinition($phpRunnerDefinitionId, $runnerDefinition);
+            }
+        }
+
         $container->prependExtensionConfig('old_sound_rabbit_mq', [
-            'producers' => [
-                'remote_php7_task' => [
-                    'connection' => 'code_runner',
-                    'exchange_options' => ['name' => 'remote_php7_task', 'type' => 'direct', 'auto_delete' => false],
-                    'service_alias' => 'teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.task',
-                ],
-                'remote_php7_return' => [
-                    'connection' => 'code_runner',
-                    'exchange_options' => ['name' => 'remote_php7_result', 'type' => 'direct', 'auto_delete' => false],
-                    'service_alias' => 'teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.return',
-                ],
-            ],
-            'consumers' => [
-                'worker_php7_task' => [
-                    'connection' => 'code_runner',
-                    'exchange_options' => [
-                        'name' => 'remote_php7_task',
-                        'type' => 'direct',
-                        'auto_delete' => false,
-                    ],
-                    'queue_options' => [
-                        'name' => 'remote_php7_task',
-                        'auto_delete' => false,
-                    ],
-                    'callback' => 'teknoo.east.bundle.coderunner.worker.php7_runner',
-                ],
-                'consumer_php7_return' => [
-                    'connection' => 'code_runner',
-                    'exchange_options' => [
-                        'name' => 'remote_php7_result',
-                        'type' => 'direct',
-                        'auto_delete' => false,
-                    ],
-                    'queue_options' => [
-                        'name' => 'remote_php7_result',
-                        'auto_delete' => false,
-                    ],
-                    'callback' => 'teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer'
-                ],
-            ]
+            'producers' => $producers,
+            'consumers' => $consumers,
         ]);
     }
 

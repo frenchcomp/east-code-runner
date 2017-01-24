@@ -8,21 +8,23 @@ parameters:
   teknoo.east.bundle.coderunner.worker.work_directory: ''
   teknoo.east.bundle.coderunner.worker.version: '0.0.1-alpha9'
   teknoo.east.bundle.coderunner.worker.composer.configuration.class: 'Teknoo\East\CodeRunner\Worker\ComposerConfigurator'
-  teknoo.east.bundle.coderunner.worker.composer.configuration.command: ''
+  teknoo.east.bundle.coderunner.worker.composer.configuration.command: 'composer'
   teknoo.east.bundle.coderunner.worker.composer.configuration.instruction: 'install'
   teknoo.east.bundle.coderunner.worker.php7_runner.class: 'Teknoo\East\CodeRunner\Worker\PHP7Runner'
   teknoo.east.bundle.coderunner.worker.php_commander.class: 'Teknoo\East\CodeRunner\Worker\PHPCommander'
   teknoo.east.bundle.coderunner.worker.php_commander.command: ''
 
 services:
-  teknoo.east.bundle.coderunner.worker.vendor.shell.composer.command:
+  teknoo.east.bundle.coderunner.worker.vendor.shell.composer.command.abstract:
     class: '%teknoo.east.bundle.coderunner.worker.vendor.shell.command.class%'
+    abstract: true
     arguments:
       - '%teknoo.east.bundle.coderunner.worker.composer.configuration.command%'
     private: true
 
-  teknoo.east.bundle.coderunner.worker.vendor.shell.php_commander.command:
+  teknoo.east.bundle.coderunner.worker.vendor.shell.php_commander.command.abstract:
     class: '%teknoo.east.bundle.coderunner.worker.vendor.shell.command.class%'
+    abstract: true
     arguments:
       - '%teknoo.east.bundle.coderunner.worker.php_commander.command%'
     private: true
@@ -31,41 +33,46 @@ services:
     class: '%teknoo.east.bundle.coderunner.worker.vendor.shell.runner.class%'
     private: true
 
-  teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter:
+  teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter.abstract:
     class: '%teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter.class%'
+    abstract: true
     arguments:
       - '%teknoo.east.bundle.coderunner.worker.work_directory%'
     private: true
 
-  teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem:
+  teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem.abstract:
     class: '%teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem.class%'
+    abstract: true
     private: true
     arguments:
-      - '@teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter'
+      - '@teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter.abstract'
 
-  teknoo.east.bundle.coderunner.worker.composer.configuration:
+  teknoo.east.bundle.coderunner.worker.composer.configuration.abstract:
     class: '%teknoo.east.bundle.coderunner.worker.composer.configuration.class%'
+    abstract: true
     arguments:
       - '@teknoo.east.bundle.coderunner.worker.vendor.shell.runner'
-      - '@teknoo.east.bundle.coderunner.worker.vendor.shell.composer.command'
-      - '@teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem'
+      - '@teknoo.east.bundle.coderunner.worker.vendor.shell.composer.command.abstract'
+      - '@teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem.abstract'
       - '%teknoo.east.bundle.coderunner.worker.composer.configuration.instruction%'
       - '%teknoo.east.bundle.coderunner.worker.work_directory%'
 
-  teknoo.east.bundle.coderunner.worker.php_commander:
+  teknoo.east.bundle.coderunner.worker.php_commander.abstract:
     class: '%teknoo.east.bundle.coderunner.worker.php_commander.class%'
+    abstract: true
     arguments:
       - '@teknoo.east.bundle.coderunner.worker.vendor.shell.runner'
-      - '@teknoo.east.bundle.coderunner.worker.vendor.shell.php_commander.command'
-      - '@teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem'
+      - '@teknoo.east.bundle.coderunner.worker.vendor.shell.php_commander.command.abstract'
+      - '@teknoo.east.bundle.coderunner.worker.vendor.gaufrette.filesystem.abstract'
       - '%teknoo.east.bundle.coderunner.worker.version%'
       - '%teknoo.east.bundle.coderunner.worker.work_directory%'
 
-  teknoo.east.bundle.coderunner.worker.php7_runner:
+  teknoo.east.bundle.coderunner.worker.php7_runner.abstract:
     class: '%teknoo.east.bundle.coderunner.worker.php7_runner.class%'
+    abstract: true
     arguments:
       - '@teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.return'
       - '@logger'
       - '%teknoo.east.bundle.coderunner.worker.version%'
-      - '@teknoo.east.bundle.coderunner.worker.composer.configuration'
-      - '@teknoo.east.bundle.coderunner.worker.php_commander'
+      - '@teknoo.east.bundle.coderunner.worker.composer.configuration.abstract'
+      - '@teknoo.east.bundle.coderunner.worker.php_commander.abstract'
