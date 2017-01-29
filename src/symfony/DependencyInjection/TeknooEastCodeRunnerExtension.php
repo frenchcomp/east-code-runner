@@ -91,7 +91,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
     {
         $doctrineConnection = 'default';
 
-        // process the configuration of AcmeHelloExtension
+        // process the configuration of TeknooEastCodeRunnerExtension
         $configs = $container->getExtensionConfig($this->getAlias());
         // use the Configuration class to generate a config array with the settings "teknoo_east_code_runner"
         $config = $this->processConfiguration(new Configuration(), $configs);
@@ -141,7 +141,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
      */
     private function configureOldSoundRabbitMQ(ContainerBuilder $container)
     {
-        // process the configuration of AcmeHelloExtension
+        // process the configuration of TeknooEastCodeRunnerExtension
         $configs = $container->getExtensionConfig($this->getAlias());
         // use the Configuration class to generate a config array with the settings "teknoo_east_code_runner"
         $config = $this->processConfiguration(new Configuration(), $configs);
@@ -236,8 +236,8 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                 }
 
                 $composerInstructionValue = 'install';
-                if (!empty($composerInstructionValue['composer_instruction'])) {
-                    $composerInstructionValue = $composerInstructionValue['composer_instruction'];
+                if (!empty($runnerConfiguration['composer_instruction'])) {
+                    $composerInstructionValue = $runnerConfiguration['composer_instruction'];
                 }
 
                 $phpCommandValue = 'php';

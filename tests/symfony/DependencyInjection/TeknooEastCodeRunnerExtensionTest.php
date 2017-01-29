@@ -97,4 +97,38 @@ class TeknooEastCodeRunnerExtensionTest extends \PHPUnit_Framework_TestCase
             $containerMock
         );
     }
+
+    public function testPrepend()
+    {
+        $containerMock = $this->createMock(ContainerBuilder::class);
+        $containerMock->expects(self::any())
+            ->method('getExtensionConfig')
+            ->willReturn([
+                [
+                    'doctrine_connection' => 'default',
+                    'runners' => [
+                        'php7_runner' => [
+                            'amqp_connection' => 'code_runner',
+                            'enable_server' => true,
+                            'enable_worker' => true,
+                            'composer_command' => 'composer',
+                            'composer_instruction' => 'install',
+                            'php_command' => 'php',
+                            'task_exchange' => 'remote_php7_task',
+                            'result_exchange' => 'remote_php7_result',
+                        ],
+                    ],
+                    'tasks_managers' => [
+                        'default' => [
+                            'service_id' => 'demo.task.manager',
+                            'identifier' => 'default_task_manager',
+                            'url_pattern' => 'http://localhost/code-runner/task/UUID',
+                            'is_default' => true,
+                        ],
+                    ],
+                ],
+            ]);
+
+        $this->buildExtension()->prepend($containerMock);
+    }
 }
