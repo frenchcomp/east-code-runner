@@ -1,5 +1,12 @@
 #Teknoo Software - Code Runner - Change Log
 
+##[0.0.1-alpha13] - 2017-01-29
+###Fixed
+- Complete test and fix TeknooEastCodeRunnerExtension to not ignore composer instruction configuration 
+
+###Added 
+- Documentation
+
 ##[0.0.1-alpha12] - 2017-01-24
 
 ###Updated
