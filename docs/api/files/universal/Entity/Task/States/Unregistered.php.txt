@@ -1,0 +1,95 @@
+<?php
+
+/**
+ * East CodeRunnerBundle.
+ *
+ * LICENSE
+ *
+ * This source file is subject to the MIT license and the version 3 of the GPL3
+ * license that are bundled with this package in the folder licences
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to richarddeloge@gmail.com so we can send you a copy immediately.
+ *
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ *
+ * @link        http://teknoo.software/east/coderunner Project website
+ *
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ */
+
+namespace Teknoo\East\CodeRunner\Entity\Task\States;
+
+use Teknoo\East\CodeRunner\Entity\Task\Task;
+use Teknoo\East\CodeRunner\Task\Interfaces\CodeInterface;
+use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
+use Teknoo\States\State\StateInterface;
+use Teknoo\States\State\StateTrait;
+
+/**
+ * State Unregistered.
+ * State enable only when the task has not been registered into the task manager.
+ *
+ * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
+ * @license     http://teknoo.software/license/mit         MIT License
+ * @author      Richard Déloge <richarddeloge@gmail.com>
+ *
+ * @mixin Task
+ *
+ * @property StatusInterface $statusInstance
+ * @property string $url
+ * @property CodeInterface $codeInstance
+ */
+class Unregistered implements StateInterface
+{
+    use StateTrait;
+
+    private function doSetCode()
+    {
+        /*
+         * To register the code to execute
+         * @param CodeInterface $code
+         * @return Task
+         */
+        return function (CodeInterface $code): Task {
+            $this->codeInstance = $code;
+
+            $this->updateStates();
+
+            return $this;
+        };
+    }
+
+    private function doRegisterUrl()
+    {
+        /*
+         * To register the url assigned to this tasl
+         * @param string $taskUrl
+         * @return Task
+         */
+        return function (string $taskUrl): Task {
+            $this->url = $taskUrl;
+
+            $this->updateStates();
+
+            return $this;
+        };
+    }
+
+    private function doRegisterStatus()
+    {
+        /*
+         * To be able to change the status of the task
+         * @param StatusInterface $status
+         * @return Task
+         */
+        return function (StatusInterface $status): Task {
+            $this->statusInstance = $status;
+
+            return $this;
+        };
+    }
+}
+

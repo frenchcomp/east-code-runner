@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+        <script type="text/javascript">
+        function loadExternalCodeSnippets() {
+            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+                var src = pre.getAttribute('data-src');
+                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+                var language = 'php';
+
+                var code = document.createElement('code');
+                code.className = 'language-' + language;
+
+                pre.textContent = '';
+
+                code.textContent = 'Loading…';
+
+                pre.appendChild(code);
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', src, true);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+
+                            Prism.highlightElement(code);
+                        }
+                        else if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                        }
+                        else {
+                            code.textContent = '✖ Error: File does not exist or is empty';
+                        }
+                    }
+                };
+
+                xhr.send(null);
+            });
+        }
+
+        $(document).ready(function(){
+            loadExternalCodeSnippets();
+        });
+        $('#source-view').on('shown', function () {
+            loadExternalCodeSnippets();
+        })
+    </script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Teknoo.html">\Teknoo</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">271</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1969263240"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1969263240" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1996887899"></a>
+                                <a href="../namespaces/Teknoo.html" style="margin-left: 30px; padding-left: 0">Teknoo</a>
+            </div>
+            <div id="namespace-1996887899" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1075428130"></a>
+                                <a href="../namespaces/Teknoo.East.html" style="margin-left: 30px; padding-left: 0">East</a>
+            </div>
+            <div id="namespace-1075428130" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-792398642"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.html" style="margin-left: 30px; padding-left: 0">CodeRunner</a>
+            </div>
+            <div id="namespace-792398642" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1845790984"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.EndPoint.html" style="margin-left: 30px; padding-left: 0">EndPoint</a>
+            </div>
+            <div id="namespace-1845790984" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.EndPoint.DeleteTaskEndPoint.html">DeleteTaskEndPoint</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.EndPoint.GetTaskEndPoint.html">GetTaskEndPoint</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.EndPoint.LoadNextTasksEndPoint.html">LoadNextTasksEndPoint</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.EndPoint.RegisterTaskEndPoint.html">RegisterTaskEndPoint</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1659680772"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Entity.html" style="margin-left: 30px; padding-left: 0">Entity</a>
+            </div>
+            <div id="namespace-1659680772" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-775756508"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Entity.Task.html" style="margin-left: 30px; padding-left: 0">Task</a>
+            </div>
+            <div id="namespace-775756508" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-821160880"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Entity.Task.States.html" style="margin-left: 30px; padding-left: 0">States</a>
+            </div>
+            <div id="namespace-821160880" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Entity.Task.States.Executed.html">Executed</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Entity.Task.States.Registered.html">Registered</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Entity.Task.States.Unregistered.html">Unregistered</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Entity.Task.Task.html">Task</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Entity.TaskExecution.html">TaskExecution</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Entity.TaskRegistration.html">TaskRegistration</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Entity.TaskStandby.html">TaskStandby</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2130668900"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Manager.html" style="margin-left: 30px; padding-left: 0">Manager</a>
+            </div>
+            <div id="namespace-2130668900" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1562262216"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Manager.Interfaces.html" style="margin-left: 30px; padding-left: 0">Interfaces</a>
+            </div>
+            <div id="namespace-1562262216" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Manager.Interfaces.RunnerManagerInterface.html">RunnerManagerInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Manager.Interfaces.TaskManagerInterface.html">TaskManagerInterface</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1300625328"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Manager.RunnerManager.html" style="margin-left: 30px; padding-left: 0">RunnerManager</a>
+            </div>
+            <div id="namespace-1300625328" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2138277591"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Manager.RunnerManager.States.html" style="margin-left: 30px; padding-left: 0">States</a>
+            </div>
+            <div id="namespace-2138277591" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Manager.RunnerManager.States.Running.html">Running</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Manager.RunnerManager.States.Selecting.html">Selecting</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Manager.RunnerManager.RunnerManager.html">RunnerManager</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Manager.TaskManager.html">TaskManager</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2146027015"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Registry.html" style="margin-left: 30px; padding-left: 0">Registry</a>
+            </div>
+            <div id="namespace-2146027015" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-383492001"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Registry.Interfaces.html" style="margin-left: 30px; padding-left: 0">Interfaces</a>
+            </div>
+            <div id="namespace-383492001" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Registry.Interfaces.TasksByRunnerRegistryInterface.html">TasksByRunnerRegistryInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Registry.Interfaces.TasksManagerByTasksRegistryInterface.html">TasksManagerByTasksRegistryInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Registry.Interfaces.TasksRegistryInterface.html">TasksRegistryInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Registry.Interfaces.TasksStandbyRegistryInterface.html">TasksStandbyRegistryInterface</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Registry.TasksByRunnerRegistry.html">TasksByRunnerRegistry</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Registry.TasksManagerByTasksRegistry.html">TasksManagerByTasksRegistry</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Registry.TasksRegistry.html">TasksRegistry</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Registry.TasksStandbyRegistry.html">TasksStandbyRegistry</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1326937450"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Repository.html" style="margin-left: 30px; padding-left: 0">Repository</a>
+            </div>
+            <div id="namespace-1326937450" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Repository.TaskExecutionRepository.html">TaskExecutionRepository</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Repository.TaskRegistrationRepository.html">TaskRegistrationRepository</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Repository.TaskRepository.html">TaskRepository</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Repository.TaskStandbyRepository.html">TaskStandbyRepository</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-632798719"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Runner.html" style="margin-left: 30px; padding-left: 0">Runner</a>
+            </div>
+            <div id="namespace-632798719" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1067782845"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Runner.Interfaces.html" style="margin-left: 30px; padding-left: 0">Interfaces</a>
+            </div>
+            <div id="namespace-1067782845" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Runner.Interfaces.CapabilityInterface.html">CapabilityInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Runner.Interfaces.RunnerInterface.html">RunnerInterface</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1698205770"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Runner.RemotePHP7Runner.html" style="margin-left: 30px; padding-left: 0">RemotePHP7Runner</a>
+            </div>
+            <div id="namespace-1698205770" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-610977328"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Runner.RemotePHP7Runner.States.html" style="margin-left: 30px; padding-left: 0">States</a>
+            </div>
+            <div id="namespace-610977328" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Runner.RemotePHP7Runner.States.Awaiting.html">Awaiting</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Runner.RemotePHP7Runner.States.Busy.html">Busy</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Runner.RemotePHP7Runner.RemotePHP7Runner.html">RemotePHP7Runner</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/Teknoo.East.CodeRunner.Runner.CheckRequirementsTrait.html">CheckRequirementsTrait</a></li>
+                                                                            <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Runner.Capability.html">Capability</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2101359137"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Service.html" style="margin-left: 30px; padding-left: 0">Service</a>
+            </div>
+            <div id="namespace-2101359137" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Service.DatesService.html">DatesService</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Service.RabbitMQReturnConsumerService.html">RabbitMQReturnConsumerService</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1300411012"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Task.html" style="margin-left: 30px; padding-left: 0">Task</a>
+            </div>
+            <div id="namespace-1300411012" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-12105775"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Task.Interfaces.html" style="margin-left: 30px; padding-left: 0">Interfaces</a>
+            </div>
+            <div id="namespace-12105775" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Task.Interfaces.CodeInterface.html">CodeInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Task.Interfaces.ResultInterface.html">ResultInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Task.Interfaces.StatusInterface.html">StatusInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Task.Interfaces.TaskInterface.html">TaskInterface</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Task.PHPCode.html">PHPCode</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Task.Status.html">Status</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Task.TextResult.html">TextResult</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-39209296"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Worker.html" style="margin-left: 30px; padding-left: 0">Worker</a>
+            </div>
+            <div id="namespace-39209296" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1988990847"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunner.Worker.Interfaces.html" style="margin-left: 30px; padding-left: 0">Interfaces</a>
+            </div>
+            <div id="namespace-1988990847" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Worker.Interfaces.ComposerConfiguratorInterface.html">ComposerConfiguratorInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Worker.Interfaces.PHPCommanderInterface.html">PHPCommanderInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Teknoo.East.CodeRunner.Worker.Interfaces.RunnerInterface.html">RunnerInterface</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Worker.ComposerConfigurator.html">ComposerConfigurator</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Worker.PHP7Runner.html">PHP7Runner</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.Worker.PHPCommander.html">PHPCommander</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunner.CodeRunnerServiceProvider.html">CodeRunnerServiceProvider</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2110982663"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunnerBundle.html" style="margin-left: 30px; padding-left: 0">CodeRunnerBundle</a>
+            </div>
+            <div id="namespace-2110982663" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-275391715"></a>
+                                <a href="../namespaces/Teknoo.East.CodeRunnerBundle.DependencyInjection.html" style="margin-left: 30px; padding-left: 0">DependencyInjection</a>
+            </div>
+            <div id="namespace-275391715" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunnerBundle.DependencyInjection.Configuration.html">Configuration</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunnerBundle.DependencyInjection.RunnerCompilerPass.html">RunnerCompilerPass</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunnerBundle.DependencyInjection.TaskManagerCompilerPass.html">TaskManagerCompilerPass</a></li>
+                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunnerBundle.DependencyInjection.TeknooEastCodeRunnerExtension.html">TeknooEastCodeRunnerExtension</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Teknoo.East.CodeRunnerBundle.TeknooEastCodeRunnerBundle.html">TeknooEastCodeRunnerBundle</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content file">
+                    <nav>
+                                                                    </nav>
+
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+                    <h1><small>symfony/DependencyInjection</small>RunnerCompilerPass.php</h1>
+                    <p><em>East CodeRunnerBundle.</em></p>
+                    <p>LICENSE</p>
+<p>This source file is subject to the MIT license and the version 3 of the GPL3
+license that are bundled with this package in the folder licences
+If you did not receive a copy of the license and are unable to
+obtain it through the world-wide-web, please send an email
+to richarddeloge@gmail.com so we can send you a copy immediately.</p>
+
+                    
+                    
+                                        <h2>Classes</h2>
+                    <table class="table table-hover">
+                                            <tr>
+                            <td><a href="../classes/Teknoo.East.CodeRunnerBundle.DependencyInjection.RunnerCompilerPass.html">RunnerCompilerPass</a></td>
+                            <td><em>Class RunnerCompilerPass.</em></td>
+                        </tr>
+                                        </table>
+                                    </div>
+
+                <aside class="span4 detailsbar">
+                    <dl>
+                                                    <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">\Default</div></dd>
+                        
+                                                                                    <dt>See also</dt>
+                                                                                        <dd><a href="http://teknoo.software/east/coderunner"><div class="namespace-wrapper">Project website</div></a></dd>
+                                                    
+                    </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                                    <tr>
+                                <th>
+                                    copyright
+                                </th>
+                                <td>
+                                                                            <p>Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)</p>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <th>
+                                    license
+                                </th>
+                                <td>
+                                                                            <p><a href="http://teknoo.software/license/mit">http://teknoo.software/license/mit</a>         MIT License</p>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <th>
+                                    author
+                                </th>
+                                <td>
+                                                                            <p>Richard Déloge <a href="mailto:richarddeloge@gmail.com">richarddeloge@gmail.com</a></p>
+                                                                    </td>
+                            </tr>
+                                            </table>
+
+                </aside>
+            </div>
+
+            
+            
+        </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label"></h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/symfony/DependencyInjection/RunnerCompilerPass.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Teknoo.html">\Teknoo</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 29th, 2017 at 14:57.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
