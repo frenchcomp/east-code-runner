@@ -12,6 +12,9 @@
 - Manage runners supporing multitask into RunnerManager : Prepare a runner to execute a new task at final status for
   mono task runner, or at first status pushed for multi task runner
 
+###Fixed
+- Use MSG_ACK and MSG_REJECT for PHP7Runner with RabbitMQ
+
 ##[0.0.1-alpha13] - 2017-01-29
 ###Fixed
 - Complete test and fix TeknooEastCodeRunnerExtension to not ignore composer instruction configuration 

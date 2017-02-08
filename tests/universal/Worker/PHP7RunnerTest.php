@@ -22,6 +22,7 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Worker;
 
+use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
@@ -199,7 +200,8 @@ class PHP7RunnerTest extends AbstractRunnerTest
             ->with($code, $runner)
             ->willReturnSelf();
 
-        self::assertTrue(
+        self::assertEquals(
+            ConsumerInterface::MSG_ACK,
             $runner->execute($message)
         );
     }
@@ -225,7 +227,8 @@ class PHP7RunnerTest extends AbstractRunnerTest
             ->expects(self::once())
             ->method('critical');
 
-        self::assertTrue(
+        self::assertEquals(
+            ConsumerInterface::MSG_REJECT,
             $runner->execute($message)
         );
     }
