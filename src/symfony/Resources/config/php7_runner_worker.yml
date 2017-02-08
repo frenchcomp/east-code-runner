@@ -6,7 +6,7 @@ parameters:
   teknoo.east.bundle.coderunner.worker.vendor.gaufrette.adapter.class: 'Gaufrette\Adapter\Local'
 
   teknoo.east.bundle.coderunner.worker.work_directory: ''
-  teknoo.east.bundle.coderunner.worker.version: '0.0.1-alpha9'
+  teknoo.east.bundle.coderunner.worker.version: '0.0.1-alpha14'
   teknoo.east.bundle.coderunner.worker.composer.configuration.class: 'Teknoo\East\CodeRunner\Worker\ComposerConfigurator'
   teknoo.east.bundle.coderunner.worker.composer.configuration.command: 'composer'
   teknoo.east.bundle.coderunner.worker.composer.configuration.instruction: 'install'
