@@ -26,6 +26,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
 use Teknoo\East\CodeRunner\Task\Status;
@@ -41,6 +42,11 @@ use Teknoo\East\CodeRunner\Task\TextResult;
 class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var TasksRegistryInterface
+     */
+    private $tasksRegistry;
+
+    /**
      * @var RemotePHP7Runner
      */
     private $remotePHP7Runner;
@@ -54,6 +60,18 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|TasksRegistryInterface
+     */
+    public function getTasksRegistry(): TasksRegistryInterface
+    {
+        if (!$this->tasksRegistry instanceof \PHPUnit_Framework_MockObject_MockObject) {
+            $this->tasksRegistry = $this->createMock(TasksRegistryInterface::class);
+        }
+
+        return $this->tasksRegistry;
+    }
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|RemotePHP7Runner
@@ -97,6 +115,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     public function buildService()
     {
         return new RabbitMQReturnConsumerService(
+            $this->getTasksRegistry(),
             $this->getRemotePHP7Runner(),
             $this->getRunnerManager(),
             $this->getLogger()
@@ -116,13 +135,47 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     {
         $result = new TextResult('foo', 'bar', '7.1', 123, 345);
         $message = new AMQPMessage();
-        $message->body = json_encode($result);
+        $task = new Task();
+        $message->body = json_encode(['https://foo.bar'=>$result]);
+
+        $this->getTasksRegistry()
+            ->expects(self::once())
+            ->method('get')
+            ->with('https://foo.bar')
+            ->willReturn($task);
 
         $this->getRunnerManager()
             ->expects(self::once())
             ->method('pushResult')
-            ->with($this->getRemotePHP7Runner(), $result)
+            ->with($this->getRemotePHP7Runner(), $task, $result)
             ->willThrowException(new \Exception());
+
+        $this->getLogger()->expects(self::once())->method('critical');
+
+        self::assertTrue($this->buildService()->execute($message));
+    }
+
+    public function testExecuteTaskMissingInMessage()
+    {
+        $message = new AMQPMessage();
+        $message->body = json_encode([]);
+
+        $this->getLogger()->expects(self::once())->method('critical');
+
+        self::assertTrue($this->buildService()->execute($message));
+    }
+
+    public function testExecuteTaskMissingInRegistry()
+    {
+        $result = new TextResult('foo', 'bar', '7.1', 123, 345);
+        $message = new AMQPMessage();
+        $message->body = json_encode(['https://foo.bar'=>$result]);
+
+        $this->getTasksRegistry()
+            ->expects(self::once())
+            ->method('get')
+            ->with('https://foo.bar')
+            ->willThrowException(new \DomainException());
 
         $this->getLogger()->expects(self::once())->method('critical');
 
@@ -132,7 +185,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     public function testExecuteBadMessageClass()
     {
         $message = new AMQPMessage();
-        $message->body = json_encode(['foo' => 'bar']);
+        $message->body = json_encode(['https://foo.bar'=>['foo' => 'bar']]);
 
         $this->getLogger()->expects(self::once())->method('critical');
 
@@ -142,7 +195,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     public function testExecuteBadMessageNotManager()
     {
         $message = new AMQPMessage();
-        $message->body = json_encode(new Task());
+        $message->body = json_encode(['https://foo.bar'=>new Task()]);
 
         $this->getLogger()->expects(self::once())->method('critical');
 
@@ -153,12 +206,19 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     {
         $result = new TextResult('foo', 'bar', '7.1', 123, 345);
         $message = new AMQPMessage();
-        $message->body = json_encode($result);
+        $task = new Task();
+        $message->body = json_encode(['https://foo.bar'=>$result]);
+
+        $this->getTasksRegistry()
+            ->expects(self::once())
+            ->method('get')
+            ->with('https://foo.bar')
+            ->willReturn($task);
 
         $this->getRunnerManager()
             ->expects(self::once())
             ->method('pushResult')
-            ->with($this->getRemotePHP7Runner(), $result)
+            ->with($this->getRemotePHP7Runner(), $task, $result)
             ->willReturnSelf();
 
         $this->getLogger()->expects(self::never())->method('critical');
@@ -170,12 +230,19 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     {
         $status = new Status('foo');
         $message = new AMQPMessage();
-        $message->body = json_encode($status);
+        $task = new Task();
+        $message->body = json_encode(['https://foo.bar'=>$status]);
+
+        $this->getTasksRegistry()
+            ->expects(self::once())
+            ->method('get')
+            ->with('https://foo.bar')
+            ->willReturn($task);
 
         $this->getRunnerManager()
             ->expects(self::once())
             ->method('pushStatus')
-            ->with($this->getRemotePHP7Runner(), $status)
+            ->with($this->getRemotePHP7Runner(), $task, $status)
             ->willReturnSelf();
 
         $this->getLogger()->expects(self::never())->method('critical');

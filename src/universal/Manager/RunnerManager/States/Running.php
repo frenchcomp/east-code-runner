@@ -101,7 +101,7 @@ class Running implements StateInterface
          * @param TaskInterface $task
          */
         return function (RunnerInterface $runner, TaskInterface $task) {
-            $runner->reset();
+            $runner->prepareNextTask();
             unset($this->tasksByRunner[$runner]);
             $this->loadNextTaskFor($runner);
         };
@@ -112,12 +112,7 @@ class Running implements StateInterface
         /*
          * {@inheritdoc}
          */
-        return function (RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface {
-            if (!isset($this->tasksByRunner[$runner])) {
-                throw new \DomainException('Error, the task was not found for this runner');
-            }
-
-            $task = $this->tasksByRunner[$runner];
+        return function (RunnerInterface $runner, TaskInterface $task, ResultInterface $result): RunnerManagerInterface {
             if (!isset($this->tasksManagerByTasks[$task])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
@@ -134,12 +129,7 @@ class Running implements StateInterface
         /*
          * {@inheritdoc}
          */
-        return function (RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface {
-            if (!isset($this->tasksByRunner[$runner])) {
-                throw new \DomainException('Error, the task was not found for this runner');
-            }
-
-            $task = $this->tasksByRunner[$runner];
+        return function (RunnerInterface $runner, TaskInterface $task, StatusInterface $status): RunnerManagerInterface {
             if (!isset($this->tasksManagerByTasks[$task])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
@@ -147,7 +137,19 @@ class Running implements StateInterface
             $taskManager = $this->tasksManagerByTasks[$task];
             $taskManager->taskStatusIsUpdated($task, $status);
 
-            if ($status->isFinal()) {
+            if ($runner->supportsMultiplesTasks() && isset($this->tasksByRunner[$runner])) {
+                //If the runner support multiple tasks execution, check if the task called is the currently
+                // initializing task for this runner
+
+                $currentTaskExecuted = $this->tasksByRunner[$runner];
+
+                if ($currentTaskExecuted instanceof TaskInterface
+                    && $task->getUrl() == $currentTaskExecuted->getUrl()) {
+                    //It's the task currently initializing by the runner, inform it to switch to next task
+                    $this->clearRunner($runner, $task);
+                }
+
+            } elseif (!$runner->supportsMultiplesTasks() && $status->isFinal()) {
                 $this->clearRunner($runner, $task);
             }
 
@@ -170,6 +172,7 @@ class Running implements StateInterface
                 //To prevent some issue if manager had not already registerd itself
                 $this->tasksManagerByTasks[$task] = $taskManager;
             }
+
             $this->loadNextTaskFor($runner);
 
             return $this;

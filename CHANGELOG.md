@@ -1,5 +1,17 @@
 #Teknoo Software - Code Runner - Change Log
 
+##[0.0.1-alpha14] - 2017-02-08
+###Updated
+- Runner are now prepared to execute a new task and not "reseted"
+- RunnerManager can now push a status or a result for a task, from a runner, even if the task is not the current task
+  executed/initializing by the runner.
+
+###Added
+- Runner supporting multi tasks (can execute several tasks in same time).
+- Add multi tasks support for RemotePHP7Runner
+- Manage runners supporing multitask into RunnerManager : Prepare a runner to execute a new task at final status for
+  mono task runner, or at first status pushed for multi task runner
+
 ##[0.0.1-alpha13] - 2017-01-29
 ###Fixed
 - Complete test and fix TeknooEastCodeRunnerExtension to not ignore composer instruction configuration 

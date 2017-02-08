@@ -74,11 +74,19 @@ abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testResetReturn()
+    public function testSupportsMultiplesTasks()
+    {
+        self::assertInternalType(
+            'bool',
+            $this->buildRunner()->supportsMultiplesTasks()
+        );
+    }
+
+    public function testPrepareNextTaskReturn()
     {
         self::assertInstanceOf(
             RunnerInterface::class,
-            $this->buildRunner()->reset()
+            $this->buildRunner()->prepareNextTask()
         );
     }
 

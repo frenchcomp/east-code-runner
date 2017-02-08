@@ -511,6 +511,9 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnCallback(function ($name) {
                 switch ($name) {
+                    case TasksRegistryInterface::class;
+                        return $this->createMock(TasksRegistryInterface::class);
+                        break;
                     case RemotePHP7Runner::class:
                         return $this->createMock(RemotePHP7Runner::class);
                         break;

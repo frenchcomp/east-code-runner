@@ -26,6 +26,7 @@ use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
+use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
@@ -42,6 +43,11 @@ use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
  */
 class RabbitMQReturnConsumerService implements ConsumerInterface
 {
+    /**
+     * @var TasksRegistryInterface
+     */
+    private $tasksRegistry;
+
     /**
      * @var RemotePHP7Runner
      */
@@ -60,15 +66,18 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
     /**
      * RabbitMQResultConsumerService constructor.
      *
+     * @param TasksRegistryInterface $tasksRegistry
      * @param RemotePHP7Runner       $remotePHP7Runner
      * @param RunnerManagerInterface $runnerManager
      * @param LoggerInterface        $logger
      */
     public function __construct(
+        TasksRegistryInterface $tasksRegistry,
         RemotePHP7Runner $remotePHP7Runner,
         RunnerManagerInterface $runnerManager,
         LoggerInterface $logger
     ) {
+        $this->tasksRegistry = $tasksRegistry;
         $this->remotePHP7Runner = $remotePHP7Runner;
         $this->runnerManager = $runnerManager;
         $this->logger = $logger;
@@ -111,14 +120,18 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
      *
      * @param AMQPMessage $message
      *
-     * @return ResultInterface|StatusInterface
+     * @return string,ResultInterface|StatusInterface
      *
      * @throws \DomainException          if the class is not managed here
      * @throws \InvalidArgumentException when the value not embedded the class
      */
     private function extractObject(AMQPMessage $message)
     {
-        return $this->jsonDeserialize(json_decode($message->body, true));
+        foreach (\json_decode($message->body, true) as $taskUrl => $body) {
+            return [$taskUrl, $this->jsonDeserialize($body)];
+        }
+
+        throw new \RuntimeException('Error, the body object is missing');
     }
 
     /**
@@ -132,14 +145,16 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
     public function execute(AMQPMessage $msg)
     {
         try {
-            $object = $this->extractObject($msg);
+            list($taskUrl, $object) = $this->extractObject($msg);
+
+            $task =$this->tasksRegistry->get($taskUrl);
 
             if ($object instanceof ResultInterface) {
-                $this->runnerManager->pushResult($this->remotePHP7Runner, $object);
+                $this->runnerManager->pushResult($this->remotePHP7Runner, $task, $object);
             }
 
             if ($object instanceof StatusInterface) {
-                $this->runnerManager->pushStatus($this->remotePHP7Runner, $object);
+                $this->runnerManager->pushStatus($this->remotePHP7Runner, $task, $object);
             }
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());

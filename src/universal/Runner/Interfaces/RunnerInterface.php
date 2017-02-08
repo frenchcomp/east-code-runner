@@ -63,12 +63,12 @@ interface RunnerInterface
     public function getCapabilities(): array;
 
     /**
-     * To inform a system that can return to its initial state and forgot
-     * the last execution in progress and advance to the next.
+     * To inform a system that can return to its initial state to prepare the next task execution.
+     * If the runner can not support multiple task it must forgot the last execution in progress and advance to the next.
      *
      * @return RunnerInterface
      */
-    public function reset(): RunnerInterface;
+    public function prepareNextTask(): RunnerInterface;
 
     /**
      * To restore in the runner its current task in execution (for asynchronous runners).
@@ -103,4 +103,12 @@ interface RunnerInterface
      * @throws \LogicException if the task's code is invalid
      */
     public function execute(RunnerManagerInterface $manager, TaskInterface $task): RunnerInterface;
+
+    /**
+     * To know if the runner can execute several tasks at same time. (Runner's method prepareNextTask() is called after
+     * first status update and not at final status).
+     *
+     * @return bool
+     */
+    public function supportsMultiplesTasks(): bool;
 }

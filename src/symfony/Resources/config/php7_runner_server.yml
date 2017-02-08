@@ -26,6 +26,7 @@ services:
     private: false
     abstract: true
     arguments:
+      - '@teknoo.east.bundle.coderunner.registry.tasks'
       - '@teknoo.east.bundle.coderunner.runner.remote_php7'
       - '@teknoo.east.bundle.coderunner.manager.runners'
       - '@logger'

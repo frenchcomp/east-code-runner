@@ -84,6 +84,19 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->buildManager()->pushResult(
             new \stdClass(),
+            $this->createMock(TaskInterface::class),
+            $this->createMock(ResultInterface::class)
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testPushResultBadTask()
+    {
+        $this->buildManager()->pushResult(
+            $this->createMock(RunnerInterface::class),
+            new \stdClass(),
             $this->createMock(ResultInterface::class)
         );
     }
@@ -95,6 +108,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->buildManager()->pushResult(
             $this->createMock(RunnerInterface::class),
+            $this->createMock(TaskInterface::class),
             new \stdClass()
         );
     }
@@ -121,6 +135,9 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
             ->with($manager, $task)
             ->willReturnSelf();
 
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -140,25 +157,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
             RunnerManagerInterface::class,
             $manager->pushResult(
                 $runner,
-                $result
-            )
-        );
-    }
-
-    /**
-     * @expectedException \DomainException
-     */
-    public function testPushResultExceptionTaskUnknown()
-    {
-        $manager = $this->buildManager();
-        $runner = $this->createMock(RunnerInterface::class);
-        $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
-        $result = $this->createMock(ResultInterface::class);
-
-        self::assertInstanceOf(
-            RunnerManagerInterface::class,
-            $manager->pushResult(
-                $runner,
+                $task,
                 $result
             )
         );
@@ -171,6 +170,19 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->buildManager()->pushStatus(
             new \stdClass(),
+            $this->createMock(TaskInterface::class),
+            $this->createMock(StatusInterface::class)
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testPushStatusBadTask()
+    {
+        $this->buildManager()->pushStatus(
+            $this->createMock(RunnerInterface::class),
+            new \stdClass(),
             $this->createMock(StatusInterface::class)
         );
     }
@@ -182,6 +194,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->buildManager()->pushStatus(
             $this->createMock(RunnerInterface::class),
+            $this->createMock(TaskInterface::class),
             new \stdClass()
         );
     }
@@ -208,6 +221,9 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
             ->with($manager, $task)
             ->willReturnSelf();
 
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -227,25 +243,7 @@ abstract class AbstractRunnerManagerTest extends \PHPUnit_Framework_TestCase
             RunnerManagerInterface::class,
             $manager->pushStatus(
                 $runner,
-                $status
-            )
-        );
-    }
-
-    /**
-     * @expectedException \DomainException
-     */
-    public function testPushStatusExceptionTaskUnknown()
-    {
-        $manager = $this->buildManager();
-        $runner = $this->createMock(RunnerInterface::class);
-        $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
-        $status = $this->createMock(StatusInterface::class);
-
-        self::assertInstanceOf(
-            RunnerManagerInterface::class,
-            $manager->pushStatus(
-                $runner,
+                $task,
                 $status
             )
         );

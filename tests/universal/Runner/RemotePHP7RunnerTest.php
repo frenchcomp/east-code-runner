@@ -107,7 +107,7 @@ class RemotePHP7RunnerTest extends AbstractRunnerTest
 
         self::assertTrue($runner->inState(Busy::class));
 
-        $runner->reset();
+        $runner->prepareNextTask();
         self::assertTrue($runner->inState(Awaiting::class));
     }
 
@@ -212,7 +212,7 @@ class RemotePHP7RunnerTest extends AbstractRunnerTest
 
         self::assertTrue($runner->inState(Busy::class));
 
-        $runner->reset();
+        $runner->prepareNextTask();
         self::assertTrue($runner->inState(Awaiting::class));
     }
 

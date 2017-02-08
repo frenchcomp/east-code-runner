@@ -51,8 +51,8 @@ use Teknoo\States\Proxy\ProxyTrait;
  *
  * @method RunnerManager doRegisterMe(RunnerInterface $runner)
  * @method RunnerManager doForgetMe(RunnerInterface $runner)
- * @method RunnerManager doPushResult(RunnerInterface $runner, ResultInterface $result)
- * @method RunnerManager doPushStatus(RunnerInterface $runner, StatusInterface $status)
+ * @method RunnerManager doPushResult(RunnerInterface $runner, TaskInterface $task, ResultInterface $result)
+ * @method RunnerManager doPushStatus(RunnerInterface $runner, TaskInterface $task, StatusInterface $status)
  * @method RunnerManager doTaskAccepted(RunnerInterface $runner, TaskInterface $task)
  * @method RunnerManager doTaskRejected(RunnerInterface $runner, TaskInterface $task)
  * @method RunnerInterface selectRunnerToExecuteTask(TaskInterface  $task)
@@ -145,17 +145,23 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function pushResult(RunnerInterface $runner, ResultInterface $result): RunnerManagerInterface
-    {
-        return $this->doPushResult($runner, $result);
+    public function pushResult(
+        RunnerInterface $runner,
+        TaskInterface $task,
+        ResultInterface $result
+    ): RunnerManagerInterface {
+        return $this->doPushResult($runner, $task, $result);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pushStatus(RunnerInterface $runner, StatusInterface $status): RunnerManagerInterface
-    {
-        return $this->doPushStatus($runner, $status);
+    public function pushStatus(
+        RunnerInterface $runner,
+        TaskInterface $task,
+        StatusInterface $status
+    ): RunnerManagerInterface {
+        return $this->doPushStatus($runner, $task, $status);
     }
 
     /**

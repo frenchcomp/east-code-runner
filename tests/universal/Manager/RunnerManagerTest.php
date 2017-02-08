@@ -312,7 +312,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         );
     }
 
-    public function testPushStatusReturn()
+    public function testPushStatusReturnWithRunnerMonoTask()
     {
         $this->getTasksByRunnerMock()
             ->expects(self::never())
@@ -321,7 +321,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         parent::testPushStatusReturn();
     }
 
-    public function testPushStatusReturnFinal()
+    public function testPushStatusReturnFinalWithRunnerMonoTask()
     {
         $manager = $this->buildManager();
 
@@ -331,6 +331,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
+        $runner->expects(self::any())->method('supportsMultiplesTasks')->willReturn(false);
         $status = $this->createMock(StatusInterface::class);
         $status->expects(self::any())->method('isFinal')->willReturn(true);
         $task = $this->createMock(TaskInterface::class);
@@ -348,6 +349,9 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             ->method('execute')
             ->with($manager, $task)
             ->willReturnSelf();
+
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
 
         self::assertInstanceOf(
             RunnerManagerInterface::class,
@@ -368,6 +372,241 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             RunnerManagerInterface::class,
             $manager->pushStatus(
                 $runner,
+                $task,
+                $status
+            )
+        );
+    }
+
+    public function testPushStatusReturnNotFinalWithRunnerMultiTask()
+    {
+        $manager = $this->buildManager();
+
+        $this->getTasksByRunnerMock()
+            ->expects(self::once())
+            ->method('offsetUnset');
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
+        $runner->expects(self::any())->method('supportsMultiplesTasks')->willReturn(true);
+        $status = $this->createMock(StatusInterface::class);
+        $status->expects(self::any())->method('isFinal')->willReturn(false);
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('url');
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $runner->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe(
+                $runner
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $task
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->pushStatus(
+                $runner,
+                $task,
+                $status
+            )
+        );
+    }
+
+    public function testPushStatusReturnFinalWithRunnerMultiTask()
+    {
+        $manager = $this->buildManager();
+
+        $this->getTasksByRunnerMock()
+            ->expects(self::once())
+            ->method('offsetUnset');
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
+        $runner->expects(self::any())->method('supportsMultiplesTasks')->willReturn(true);
+        $status = $this->createMock(StatusInterface::class);
+        $status->expects(self::any())->method('isFinal')->willReturn(true);
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('url');
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $runner->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe(
+                $runner
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $task
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->pushStatus(
+                $runner,
+                $task,
+                $status
+            )
+        );
+    }
+
+    public function testPushStatusReturnAnotherNotFinalWithRunnerMultiTask()
+    {
+        $manager = $this->buildManager();
+
+        $this->getTasksByRunnerMock()
+            ->expects(self::never())
+            ->method('offsetUnset');
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
+        $runner->expects(self::any())->method('supportsMultiplesTasks')->willReturn(true);
+        $status = $this->createMock(StatusInterface::class);
+        $status->expects(self::any())->method('isFinal')->willReturn(false);
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('url');
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $runner->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
+        $newTask = $this->createMock(TaskInterface::class);
+        $newTask->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
+
+        $anotherTask = $this->createMock(TaskInterface::class);
+        $anotherTask->expects(self::any())->method('getUrl')->willReturn('http://foo2.bar');
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe(
+                $runner
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $newTask
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->pushStatus(
+                $runner,
+                $anotherTask,
+                $status
+            )
+        );
+    }
+
+    public function testPushStatusReturnAnotherFinalWithRunnerMultiTask()
+    {
+        $manager = $this->buildManager();
+
+        $this->getTasksByRunnerMock()
+            ->expects(self::never())
+            ->method('offsetUnset');
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
+        $runner->expects(self::any())->method('supportsMultiplesTasks')->willReturn(true);
+        $status = $this->createMock(StatusInterface::class);
+        $status->expects(self::any())->method('isFinal')->willReturn(true);
+        $task = $this->createMock(TaskInterface::class);
+        $task->expects(self::any())->method('getUrl')->willReturn('url');
+
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $runner->expects(self::once())
+            ->method('execute')
+            ->with($manager, $task)
+            ->willReturnSelf();
+
+        $newTask = $this->createMock(TaskInterface::class);
+        $newTask->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
+
+        $anotherTask = $this->createMock(TaskInterface::class);
+        $anotherTask->expects(self::any())->method('getUrl')->willReturn('http://foo2.bar');
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe(
+                $runner
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $newTask
+            )
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->pushStatus(
+                $runner,
+                $anotherTask,
                 $status
             )
         );
