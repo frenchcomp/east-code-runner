@@ -59,7 +59,7 @@ interface RunnerManagerInterface
      * To retrieve a result from an execution, pushed by a runner.
      *
      * @param RunnerInterface $runner
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
      * @param ResultInterface $result
      *
      * @return RunnerManagerInterface
@@ -76,7 +76,7 @@ interface RunnerManagerInterface
      * To allow a runner to update a status of a task.
      *
      * @param RunnerInterface $runner
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
      * @param StatusInterface $status
      *
      * @return RunnerManagerInterface

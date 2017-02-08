@@ -147,7 +147,7 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
         try {
             list($taskUrl, $object) = $this->extractObject($msg);
 
-            $task =$this->tasksRegistry->get($taskUrl);
+            $task = $this->tasksRegistry->get($taskUrl);
 
             if ($object instanceof ResultInterface) {
                 $this->runnerManager->pushResult($this->remotePHP7Runner, $task, $object);

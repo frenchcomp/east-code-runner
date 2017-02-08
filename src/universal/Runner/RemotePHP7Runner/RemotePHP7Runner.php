@@ -214,7 +214,6 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
     /**
      * {@inheritdoc}
      */
-
     public function supportsMultiplesTasks(): bool
     {
         return true;

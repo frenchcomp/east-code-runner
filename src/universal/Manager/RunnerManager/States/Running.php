@@ -148,7 +148,6 @@ class Running implements StateInterface
                     //It's the task currently initializing by the runner, inform it to switch to next task
                     $this->clearRunner($runner, $task);
                 }
-
             } elseif (!$runner->supportsMultiplesTasks() && $status->isFinal()) {
                 $this->clearRunner($runner, $task);
             }
