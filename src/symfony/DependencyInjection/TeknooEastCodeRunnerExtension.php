@@ -214,7 +214,7 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                 $returnConsumerDefinition = new DefinitionDecorator(
                     'teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.abstract'
                 );
-                $returnConsumerDefinition->replaceArgument(0, new Reference($runnerServiceId));
+                $returnConsumerDefinition->replaceArgument(1, new Reference($runnerServiceId));
                 $container->setDefinition($returnConsumerServiceId, $returnConsumerDefinition);
             }
 
