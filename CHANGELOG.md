@@ -1,6 +1,6 @@
 #Teknoo Software - Code Runner - Change Log
 
-##[0.0.1-alpha15] - 2017-02-11
+##[0.0.1-alpha16] - 2017-02-11
 ###Fixed
 - Bug in worker doest not return a valid json for result and status.
 - Documentation
