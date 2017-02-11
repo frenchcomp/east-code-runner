@@ -27,6 +27,7 @@ use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
+use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\CodeRunner\Worker\Interfaces\ComposerConfiguratorInterface;
 use Teknoo\East\CodeRunner\Worker\Interfaces\PHPCommanderInterface;
@@ -187,7 +188,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
     {
         $message = new AMQPMessage();
         $code = new PHPCode('echo "Hello World";', []);
-        $message->body = json_encode((new Task())->registerUrl('fooBar')->setCode($code));
+        $message->body = json_encode((new Task())->setId('fooBar')->setCode($code));
 
         $this->getReturnProducerMock()
             ->expects(self::once())
@@ -210,7 +211,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
     {
         $message = new AMQPMessage();
         $code = new PHPCode('echo "Hello World";', []);
-        $message->body = json_encode((new Task())->registerUrl('fooBar')->setCode($code));
+        $message->body = json_encode((new Task())->setId('fooBar')->setCode($code));
 
         $this->getReturnProducerMock()
             ->expects(self::exactly(3))

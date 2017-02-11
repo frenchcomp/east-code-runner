@@ -70,6 +70,29 @@ class TaskTest extends AbstractTaskTest
         );
     }
 
+    public function testSetId()
+    {
+        $entity = $this->buildTask();
+        self::assertInstanceOf(
+            Task::class,
+            $entity->setId("123")
+        );
+
+        self::assertEquals(
+            "123",
+            $entity->getId()
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testSetIdBadValue()
+    {
+        $entity = $this->buildTask();
+        $entity->setId(new \stdClass());
+    }
+
     public function testGetCreatedAt()
     {
         $date = new \DateTime('2016-07-28');

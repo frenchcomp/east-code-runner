@@ -74,7 +74,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     /**
      * @var string
      */
-    private $currentTaskUrl;
+    private $currentTaskUid;
 
     /**
      * PHP7Runner constructor.
@@ -120,9 +120,9 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
             $this->reset();
 
             $task = $this->extractTask($msg);
-            $this->currentTaskUrl = $task->getUrl();
+            $this->currentTaskUid = $task->getId();
 
-            $this->returnProducer->publish(json_encode([$this->currentTaskUrl => new Status('Prepare')]));
+            $this->returnProducer->publish(json_encode([$this->currentTaskUid => new Status('Prepare')]));
 
             $this->composerConfigurator->configure($task->getCode(), $this);
         } catch (\Throwable $e) {
@@ -140,8 +140,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
                 0
             );
 
-            $this->returnProducer->publish(json_encode([$this->currentTaskUrl => $result]));
-            $this->returnProducer->publish(json_encode([$this->currentTaskUrl => new Status('Failure')]));
+            $this->returnProducer->publish(json_encode([$this->currentTaskUid => $result]));
+            $this->returnProducer->publish(json_encode([$this->currentTaskUid => new Status('Failure')]));
 
             return ConsumerInterface::MSG_REJECT;
         }
@@ -156,7 +156,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
      */
     public function composerIsReady(CodeInterface $code): RunnerInterface
     {
-        $this->returnProducer->publish(json_encode([$this->currentTaskUrl => new Status('Executing')]));
+        $this->returnProducer->publish(json_encode([$this->currentTaskUid => new Status('Executing')]));
         $this->phpCommander->execute($code, $this);
 
         return $this;
@@ -169,7 +169,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     {
         $this->composerConfigurator->reset();
         $this->phpCommander->reset();
-        $this->currentTaskUrl = null;
+        $this->currentTaskUid = null;
     }
 
     /**
@@ -180,8 +180,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
      */
     public function codeExecuted(CodeInterface $code, ResultInterface $result): RunnerInterface
     {
-        $this->returnProducer->publish(json_encode([$this->currentTaskUrl => $result]));
-        $this->returnProducer->publish(json_encode([$this->currentTaskUrl => new Status('Finished', true)]));
+        $this->returnProducer->publish(json_encode([$this->currentTaskUid => $result]));
+        $this->returnProducer->publish(json_encode([$this->currentTaskUid => new Status('Finished', true)]));
 
         $this->reset();
 
@@ -196,8 +196,8 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
      */
     public function errorInCode(CodeInterface $code, ResultInterface $result): RunnerInterface
     {
-        $this->returnProducer->publish(json_encode([$this->currentTaskUrl => $result]));
-        $this->returnProducer->publish(json_encode([$this->currentTaskUrl => new Status('Failure', true)]));
+        $this->returnProducer->publish(json_encode([$this->currentTaskUid => $result]));
+        $this->returnProducer->publish(json_encode([$this->currentTaskUid => new Status('Failure', true)]));
 
         $this->reset();
 

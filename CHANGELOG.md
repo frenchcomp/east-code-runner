@@ -4,6 +4,10 @@
 ###Fixed
 - Bug in worker doest not return a valid json for result and status.
 - Documentation
+- Use task uuid instead of task url for PHP7Runner worker return.
+
+###Added
+- Add a method to define an id
 
 ##[0.0.1-alpha15] - 2017-02-10
 ###Fixed
