@@ -331,6 +331,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
     public static function createRabbitMQReturnConsumerService(ContainerInterface $container): RabbitMQReturnConsumerService
     {
         return new RabbitMQReturnConsumerService(
+            $container->get(TasksRegistryInterface::class),
             $container->get(RemotePHP7Runner::class),
             $container->get(RunnerManagerInterface::class),
             $container->get(LoggerInterface::class)

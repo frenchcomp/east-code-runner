@@ -176,9 +176,9 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
     /**
      * {@inheritdoc}
      */
-    public function reset(): RunnerInterface
+    public function prepareNextTask(): RunnerInterface
     {
-        return $this->doReset();
+        return $this->doPrepareNextTask();
     }
 
     /**
@@ -209,6 +209,14 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
             (new Assertion(Awaiting::class))->with('currentTask', new IsNotInstanceOf(TaskInterface::class)),
             (new Assertion(Busy::class))->with('currentTask', new IsInstanceOf(TaskInterface::class)),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsMultiplesTasks(): bool
+    {
+        return true;
     }
 }
 

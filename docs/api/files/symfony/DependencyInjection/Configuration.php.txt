@@ -65,7 +65,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('task_exchange')->defaultValue('remote_php7_task')->end()
                             ->scalarNode('result_exchange')->defaultValue('remote_php7_result')->end()
                             ->booleanNode('enable_worker')->defaultValue(false)->end()
-                            ->scalarNode('work_directory')->defaultValue('/tmp/php7-runner')->end()
+                            ->scalarNode('work_directory')->defaultValue('/tmp/')->end()
                             ->scalarNode('composer_command')->defaultValue('composer')->end()
                             ->scalarNode('composer_instruction')->defaultValue('install')->end()
                             ->scalarNode('php_command')->defaultValue('php')->end()

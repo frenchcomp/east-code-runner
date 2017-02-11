@@ -42,7 +42,7 @@ class Busy implements StateInterface
 {
     use StateTrait;
 
-    private function doReset()
+    private function doPrepareNextTask()
     {
         /*
          * {@inheritdoc}
