@@ -153,8 +153,10 @@ class Task implements ProxyInterface, TaskInterface, AutomatedInterface
     }
 
     /**
-     * To override task's uuid
+     * To override task's uuid.
+     *
      * @param string $id
+     *
      * @return Task
      */
     public function setId(string $id): Task

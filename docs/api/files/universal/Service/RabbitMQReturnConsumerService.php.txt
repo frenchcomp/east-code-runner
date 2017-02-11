@@ -34,7 +34,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 /**
  * Class RabbitMQReturnConsumerService.
  * AMQP Consumer service, to listen the queue used by the RemotePHP7Runner's worker to return to this platform status
- * and tasks' results. Resulst and status use the same chanel, the service dispatches them to good Runner manager's
+ * and tasks' results. Results and status use the same chanel, the service dispatches them to good Runner manager's
  * methods. Objects are serialized in JSON format and are automatically deserialized by the service.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -127,8 +127,8 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
      */
     private function extractObject(AMQPMessage $message)
     {
-        foreach (\json_decode($message->body, true) as $taskUrl => $body) {
-            return [$taskUrl, $this->jsonDeserialize($body)];
+        foreach (\json_decode($message->body, true) as $taskUid => $body) {
+            return [$taskUid, $this->jsonDeserialize($body)];
         }
 
         throw new \RuntimeException('Error, the body object is missing');
@@ -145,9 +145,9 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
     public function execute(AMQPMessage $msg)
     {
         try {
-            list($taskUrl, $object) = $this->extractObject($msg);
+            list($taskUid, $object) = $this->extractObject($msg);
 
-            $task = $this->tasksRegistry->get($taskUrl);
+            $task = $this->tasksRegistry->get($taskUid);
 
             if ($object instanceof ResultInterface) {
                 $this->runnerManager->pushResult($this->remotePHP7Runner, $task, $object);

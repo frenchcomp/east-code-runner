@@ -163,7 +163,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     }
 
     /**
-     * To reinitialize the state of this worker
+     * To reinitialize the state of this worker.
      */
     private function reset()
     {
