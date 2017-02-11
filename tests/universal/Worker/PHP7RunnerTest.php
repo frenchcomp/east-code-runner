@@ -187,7 +187,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
     {
         $message = new AMQPMessage();
         $code = new PHPCode('echo "Hello World";', []);
-        $message->body = json_encode((new Task())->setCode($code));
+        $message->body = json_encode((new Task())->registerUrl('fooBar')->setCode($code));
 
         $this->getReturnProducerMock()
             ->expects(self::once())
@@ -210,7 +210,7 @@ class PHP7RunnerTest extends AbstractRunnerTest
     {
         $message = new AMQPMessage();
         $code = new PHPCode('echo "Hello World";', []);
-        $message->body = json_encode((new Task())->setCode($code));
+        $message->body = json_encode((new Task())->registerUrl('fooBar')->setCode($code));
 
         $this->getReturnProducerMock()
             ->expects(self::exactly(3))
