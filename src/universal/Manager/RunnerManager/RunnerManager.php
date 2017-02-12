@@ -22,6 +22,7 @@
 
 namespace Teknoo\East\CodeRunner\Manager\RunnerManager;
 
+use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Manager\RunnerManager\States\Running;
@@ -83,6 +84,11 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
     private $tasksStandbyRegistry;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var bool
      */
     private $taskAcceptedByARunner = false;
@@ -99,15 +105,18 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
      * @param TasksByRunnerRegistryInterface       $tasksByRunner
      * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasks
      * @param TasksStandbyRegistryInterface        $tasksStandbyRegistry
+     * @param LoggerInterface $logger
      */
     public function __construct(
         TasksByRunnerRegistryInterface $tasksByRunner,
         TasksManagerByTasksRegistryInterface $tasksManagerByTasks,
-        TasksStandbyRegistryInterface $tasksStandbyRegistry
+        TasksStandbyRegistryInterface $tasksStandbyRegistry,
+        LoggerInterface $logger
     ) {
         $this->tasksByRunner = $tasksByRunner;
         $this->tasksManagerByTasks = $tasksManagerByTasks;
         $this->tasksStandbyRegistry = $tasksStandbyRegistry;
+        $this->logger = $logger;
 
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();

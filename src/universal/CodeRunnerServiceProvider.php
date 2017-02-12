@@ -227,7 +227,8 @@ class CodeRunnerServiceProvider implements ServiceProvider
         return new RunnerManager(
             $container->get(TasksByRunnerRegistryInterface::class),
             $container->get(TasksManagerByTasksRegistryInterface::class),
-            $container->get(TasksStandbyRegistryInterface::class)
+            $container->get(TasksStandbyRegistryInterface::class),
+            $container->get(LoggerInterface::class)
         );
     }
 
@@ -311,7 +312,8 @@ class CodeRunnerServiceProvider implements ServiceProvider
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.name'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.version'), [
                 new Capability('php', '>=7'),
-            ]
+            ],
+            $container->get(LoggerInterface::class)
         );
 
         /**

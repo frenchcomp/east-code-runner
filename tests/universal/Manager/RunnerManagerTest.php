@@ -22,6 +22,7 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Manager;
 
+use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager;
@@ -59,6 +60,11 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
      * @var TasksStandbyRegistryInterface
      */
     private $tasksStandbyRegistry;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @return TasksByRunnerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -178,6 +184,18 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
     }
 
     /**
+     * @return LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getLoggerMock(): LoggerInterface
+    {
+        if (!$this->logger instanceof LoggerInterface) {
+            $this->logger = $this->createMock(LoggerInterface::class);
+        }
+
+        return $this->logger;
+    }
+
+    /**
      * @return RunnerManagerInterface|RunnerManager
      */
     public function buildManager(): RunnerManagerInterface
@@ -185,7 +203,8 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         return new RunnerManager(
             $this->getTasksByRunnerMock(),
             $this->getTasksManagerByTasksMock(),
-            $this->getTasksStandbyRegistryMock()
+            $this->getTasksStandbyRegistryMock(),
+            $this->getLoggerMock()
         );
     }
 
@@ -253,6 +272,55 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $runner->expects(self::once())->method('execute');
         $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
 
+        $runner->expects(self::any())
+            ->method('canYouExecute')
+            ->willReturnCallback(function (RunnerManagerInterface $manager, TaskInterface $task) use ($runner) {
+                $manager->taskAccepted($runner, $task);
+
+                return $runner;
+            });
+
+        $this->getTasksByRunnerMock()[$runner] = $task;
+
+        $this->getTasksStandbyRegistryMock()
+            ->expects(self::once())
+            ->method('enqueue')
+            ->willReturnSelf();
+
+        $manager = $this->buildManager();
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->registerMe($runner)
+        );
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->executeForMeThisTask(
+                $this->createMock(TaskManagerInterface::class),
+                $task
+            )
+        );
+
+        unset($this->getTasksByRunnerMock()[$runner]);
+
+        self::assertInstanceOf(
+            RunnerManagerInterface::class,
+            $manager->loadNextTaskFor($runner)
+        );
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testManagerLoadNextTaskForAfterEnqueueOnException()
+    {
+        $task = $this->createMock(TaskInterface::class);
+
+        $runner = $this->createMock(RunnerInterface::class);
+        $runner->expects(self::once())->method('rememberYourCurrentTask')->with($task)->willReturnSelf();
+        $runner->expects(self::once())->method('execute')->willThrowException(new \Exception());
+        $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
+
         $this->getTasksByRunnerMock()[$runner] = $task;
 
         $runner->expects(self::any())
@@ -264,9 +332,13 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             });
 
         $this->getTasksStandbyRegistryMock()
-            ->expects(self::once())
+            ->expects(self::exactly(2))
             ->method('enqueue')
             ->willReturnSelf();
+
+        $this->getLoggerMock()
+            ->expects(self::once())
+            ->method('critical');
 
         $manager = $this->buildManager();
         self::assertInstanceOf(

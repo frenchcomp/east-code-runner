@@ -18,6 +18,7 @@ services:
       - '%teknoo.east.bundle.coderunner.runner.remote_php7.name%'
       - '%teknoo.east.bundle.coderunner.runner.remote_php7.version%'
       - []
+      - '@logger'
     calls:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
 

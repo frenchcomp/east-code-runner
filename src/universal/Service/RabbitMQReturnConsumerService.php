@@ -22,6 +22,7 @@
 
 namespace Teknoo\East\CodeRunner\Service;
 
+use Doctrine\DBAL\DBALException;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
@@ -156,10 +157,16 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
             if ($object instanceof StatusInterface) {
                 $this->runnerManager->pushStatus($this->remotePHP7Runner, $task, $object);
             }
+        } catch (DBALException $e) {
+            $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
+
+            return ConsumerInterface::MSG_REJECT_REQUEUE;
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
+
+            return ConsumerInterface::MSG_REJECT;
         }
 
-        return true;
+        return ConsumerInterface::MSG_ACK;
     }
 }

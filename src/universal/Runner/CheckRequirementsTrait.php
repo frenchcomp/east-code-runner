@@ -22,8 +22,8 @@
 
 namespace Teknoo\East\CodeRunner\Runner;
 
+use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
-use Teknoo\East\CodeRunner\Runner\Interfaces\CapabilityInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunner\Task\PHPCode;
@@ -39,6 +39,11 @@ use Teknoo\East\CodeRunner\Task\PHPCode;
  */
 trait CheckRequirementsTrait
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     /**
      * Method to check if all requirements needed by the task is available on the runner.
      *
@@ -112,6 +117,10 @@ trait CheckRequirementsTrait
             $this->checkRequirements($code);
         } catch (\Throwable $t) {
             $this->rejectTask($manager, $task);
+
+            if ($this->logger instanceof LoggerInterface) {
+                $this->logger->critical($t->getMessage() . PHP_EOL . $t->getTraceAsString());
+            }
 
             return $this;
         }

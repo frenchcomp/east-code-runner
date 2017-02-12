@@ -64,7 +64,15 @@ class RemotePHP7RunnerTest extends AbstractRunnerTest
 
     public function buildRunner(): RunnerInterface
     {
-        $runner = new RemotePHP7Runner($this->getProducer(), 'RemotePHP7Runner1', 'RemotePHP7Runner', 'PHP7.0', [new Capability('package', 'eval')]);
+        $runner = new RemotePHP7Runner(
+            $this->getProducer(),
+            'RemotePHP7Runner1',
+            'RemotePHP7Runner',
+            'PHP7.0',
+            [new Capability('package', 'eval')],
+            $this->getLogger()
+        );
+
         $runner->addCapability(new Capability('package', 'php7'));
 
         return $runner;
@@ -163,6 +171,10 @@ class RemotePHP7RunnerTest extends AbstractRunnerTest
         $this->getProducer()
             ->expects(self::never())
             ->method('publish');
+
+        $this->getLogger()
+            ->expects(self::once())
+            ->method('critical');
 
         self::assertInstanceOf(
             RunnerInterface::class,

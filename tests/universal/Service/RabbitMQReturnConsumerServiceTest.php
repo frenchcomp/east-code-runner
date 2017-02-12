@@ -22,6 +22,8 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Service;
 
+use Doctrine\DBAL\DBALException;
+use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
@@ -128,7 +130,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_REJECT, $this->buildService()->execute($message));
     }
 
     public function testExecuteBadBehaviorOfManager()
@@ -152,7 +154,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_REJECT, $this->buildService()->execute($message));
     }
 
     public function testExecuteTaskMissingInMessage()
@@ -162,7 +164,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_REJECT, $this->buildService()->execute($message));
     }
 
     public function testExecuteTaskMissingInRegistry()
@@ -179,7 +181,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_REJECT, $this->buildService()->execute($message));
     }
 
     public function testExecuteBadMessageClass()
@@ -189,7 +191,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_REJECT, $this->buildService()->execute($message));
     }
 
     public function testExecuteBadMessageNotManager()
@@ -199,7 +201,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_REJECT, $this->buildService()->execute($message));
     }
 
     public function testExecuteResult()
@@ -223,7 +225,7 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::never())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_ACK, $this->buildService()->execute($message));
     }
 
     public function testExecuteStatus()
@@ -247,6 +249,30 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::never())->method('critical');
 
-        self::assertTrue($this->buildService()->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_ACK, $this->buildService()->execute($message));
+    }
+
+    public function testExecuteStatusErrorDBal()
+    {
+        $status = new Status('foo');
+        $message = new AMQPMessage();
+        $task = new Task();
+        $message->body = json_encode(['https://foo.bar'=>$status]);
+
+        $this->getTasksRegistry()
+            ->expects(self::once())
+            ->method('get')
+            ->with('https://foo.bar')
+            ->willReturn($task);
+
+        $this->getRunnerManager()
+            ->expects(self::once())
+            ->method('pushStatus')
+            ->with($this->getRemotePHP7Runner(), $task, $status)
+            ->willThrowException(new DBALException());
+
+        $this->getLogger()->expects(self::once())->method('critical');
+
+        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $this->buildService()->execute($message));
     }
 }

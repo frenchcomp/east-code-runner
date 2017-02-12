@@ -23,6 +23,7 @@
 namespace Teknoo\East\CodeRunner\Runner\RemotePHP7Runner;
 
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
+use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Runner\CheckRequirementsTrait;
@@ -97,19 +98,22 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
      * @param string            $name
      * @param string            $version
      * @param array             $capabilities
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ProducerInterface $taskProducer,
         string $identifier,
         string $name,
         string $version,
-        array $capabilities
+        array $capabilities,
+        LoggerInterface $logger
     ) {
         $this->taskProducer = $taskProducer;
         $this->identifier = $identifier;
         $this->name = $name;
         $this->version = $version;
         $this->capabilities = $capabilities;
+        $this->logger = $logger;
 
         //Call the method of the trait to initialize local attributes of the proxy
         $this->initializeProxy();

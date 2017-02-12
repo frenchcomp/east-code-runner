@@ -112,6 +112,7 @@ services:
       - '@teknoo.east.bundle.coderunner.registry.tasks_by_runner'
       - '@teknoo.east.bundle.coderunner.registry.tasks_manager_by_task'
       - '@teknoo.east.bundle.coderunner.registry.tasks_standby'
+      - '@logger'
 
   teknoo.east.bundle.coderunner.manager.tasks.abstract:
     class: '%teknoo.east.bundle.coderunner.manager.tasks.class%'

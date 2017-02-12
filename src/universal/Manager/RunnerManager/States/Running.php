@@ -22,6 +22,7 @@
 
 namespace Teknoo\East\CodeRunner\Manager\RunnerManager\States;
 
+use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Manager\RunnerManager\RunnerManager;
@@ -48,6 +49,7 @@ use Teknoo\States\State\StateTrait;
  * @property TasksByRunnerRegistryInterface|TaskInterface[] $tasksByRunner
  * @property TasksManagerByTasksRegistryInterface|TaskManagerInterface[] $tasksManagerByTasks
  * @property TasksStandbyRegistry $tasksStandbyRegistry
+ * @property LoggerInterface $logger
  * @mixin RunnerManager
  */
 class Running implements StateInterface
@@ -195,6 +197,10 @@ class Running implements StateInterface
                         $runner->execute($this, $taskStandBy);
                         $this->tasksByRunner[$runner] = $taskStandBy;
                     } catch (\Throwable $e) {
+                        if ($this->logger instanceof LoggerInterface) {
+                            $this->logger->critical($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+                        }
+
                         $this->tasksStandbyRegistry->enqueue($runner, $taskStandBy);
                         throw $e;
                     }

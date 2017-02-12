@@ -1,5 +1,12 @@
 #Teknoo Software - Code Runner - Change Log
 
+##[0.0.1-alpha17] - 2017-02-12
+###Fixed
+- Bad management of DBALException on RabbitMQReturnConsumerService
+
+###Added
+- More logger operation on error
+
 ##[0.0.1-alpha16] - 2017-02-11
 ###Fixed
 - Bug in worker doest not return a valid json for result and status.

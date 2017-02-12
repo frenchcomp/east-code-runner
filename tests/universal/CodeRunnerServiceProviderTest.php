@@ -320,6 +320,9 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
                     case TasksStandbyRegistryInterface::class:
                         return $this->createMock(TasksStandbyRegistryInterface::class);
                         break;
+                    case LoggerInterface::class:
+                        return $this->createMock(LoggerInterface::class);
+                        break;
                 }
             });
 
@@ -391,6 +394,9 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
                         break;
                     case RunnerManagerInterface::class:
                         return $this->createMock(RunnerManagerInterface::class);
+                    case LoggerInterface::class:
+                        return $this->createMock(LoggerInterface::class);
+                        break;
                 }
             });
 

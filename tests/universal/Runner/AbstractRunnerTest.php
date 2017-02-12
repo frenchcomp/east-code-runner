@@ -22,6 +22,7 @@
 
 namespace Teknoo\Tests\East\CodeRunner\Runner;
 
+use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
@@ -35,6 +36,24 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
  */
 abstract class AbstractRunnerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @return LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getLogger(): LoggerInterface
+    {
+        if (!$this->logger instanceof LoggerInterface) {
+            $this->logger = $this->createMock(LoggerInterface::class);
+        }
+
+        return $this->logger;
+    }
+
+
     /**
      * To get an instance of the class to test.
      *
