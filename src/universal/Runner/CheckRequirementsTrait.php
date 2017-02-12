@@ -119,7 +119,7 @@ trait CheckRequirementsTrait
             $this->rejectTask($manager, $task);
 
             if ($this->logger instanceof LoggerInterface) {
-                $this->logger->critical($t->getMessage() . PHP_EOL . $t->getTraceAsString());
+                $this->logger->critical($t->getMessage().PHP_EOL.$t->getTraceAsString());
             }
 
             return $this;

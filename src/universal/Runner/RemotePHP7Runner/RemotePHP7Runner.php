@@ -98,7 +98,7 @@ class RemotePHP7Runner implements ProxyInterface, AutomatedInterface, RunnerInte
      * @param string            $name
      * @param string            $version
      * @param array             $capabilities
-     * @param LoggerInterface $logger
+     * @param LoggerInterface   $logger
      */
     public function __construct(
         ProducerInterface $taskProducer,

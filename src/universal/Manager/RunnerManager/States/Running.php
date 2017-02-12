@@ -198,7 +198,7 @@ class Running implements StateInterface
                         $this->tasksByRunner[$runner] = $taskStandBy;
                     } catch (\Throwable $e) {
                         if ($this->logger instanceof LoggerInterface) {
-                            $this->logger->critical($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+                            $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
                         }
 
                         $this->tasksStandbyRegistry->enqueue($runner, $taskStandBy);

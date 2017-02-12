@@ -105,7 +105,7 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
      * @param TasksByRunnerRegistryInterface       $tasksByRunner
      * @param TasksManagerByTasksRegistryInterface $tasksManagerByTasks
      * @param TasksStandbyRegistryInterface        $tasksStandbyRegistry
-     * @param LoggerInterface $logger
+     * @param LoggerInterface                      $logger
      */
     public function __construct(
         TasksByRunnerRegistryInterface $tasksByRunner,
