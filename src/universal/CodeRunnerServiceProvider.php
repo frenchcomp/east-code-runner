@@ -310,9 +310,8 @@ class CodeRunnerServiceProvider implements ServiceProvider
             $container->get('teknoo.east.bundle.coderunner.vendor.old_sound_producer.remote_php7.task'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.identifier'),
             $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.name'),
-            $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.version'), [
-                new Capability('php', '>=7'),
-            ],
+            $container->get('teknoo.east.bundle.coderunner.runner.remote_php7.version'),
+            [new Capability('php', '>=7')],
             $container->get(LoggerInterface::class)
         );
 
@@ -330,8 +329,9 @@ class CodeRunnerServiceProvider implements ServiceProvider
      *
      * @return RabbitMQReturnConsumerService
      */
-    public static function createRabbitMQReturnConsumerService(ContainerInterface $container): RabbitMQReturnConsumerService
-    {
+    public static function createRabbitMQReturnConsumerService(
+        ContainerInterface $container
+    ): RabbitMQReturnConsumerService {
         return new RabbitMQReturnConsumerService(
             $container->get(TasksRegistryInterface::class),
             $container->get(RemotePHP7Runner::class),

@@ -68,16 +68,16 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      * TasksManagerByTasksRegistry constructor.
      *
      * @param DatesService               $datesService
-     * @param TaskRegistrationRepository $taskRegistrationRepository
+     * @param TaskRegistrationRepository $repository
      * @param EntityManagerInterface     $entityManager
      */
     public function __construct(
         DatesService $datesService,
-        TaskRegistrationRepository $taskRegistrationRepository,
+        TaskRegistrationRepository $repository,
         EntityManagerInterface $entityManager
     ) {
         $this->datesService = $datesService;
-        $this->taskRegistrationRepository = $taskRegistrationRepository;
+        $this->taskRegistrationRepository = $repository;
         $this->entityManager = $entityManager;
     }
 
@@ -99,8 +99,8 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
             throw new \InvalidArgumentException();
         }
 
-        $id = $offset->getId();
-        $taskRegistration = $this->taskRegistrationRepository->findByTaskId($id);
+        $taskId = $offset->getId();
+        $taskRegistration = $this->taskRegistrationRepository->findByTaskId($taskId);
 
         return $taskRegistration instanceof TaskRegistration && !$taskRegistration->getDeletedAt() instanceof \DateTime;
     }
@@ -114,8 +114,8 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
      */
     private function getTaskRegistration(TaskInterface $task)
     {
-        $id = $task->getId();
-        $taskRegistration = $this->taskRegistrationRepository->findByTaskId($id);
+        $taskId = $task->getId();
+        $taskRegistration = $this->taskRegistrationRepository->findByTaskId($taskId);
 
         if (!$taskRegistration instanceof TaskRegistration || $taskRegistration->getDeletedAt() instanceof \DateTime) {
             return null;

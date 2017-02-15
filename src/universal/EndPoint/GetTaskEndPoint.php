@@ -73,7 +73,9 @@ class GetTaskEndPoint
         try {
             $task = $this->tasksRegistry->get($taskId);
         } catch (\DomainException $e) {
-            $client->responseFromController(new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found'])));
+            $client->responseFromController(
+                new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found']))
+            );
 
             return $this;
         }

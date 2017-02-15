@@ -96,7 +96,9 @@ class RegisterTaskEndPoint
         try {
             $task->getUrl();
         } catch (\Throwable $e) {
-            $client->responseFromController(new Response(501, [], json_encode(['success' => false, 'message' => 'Task is not registered'])));
+            $client->responseFromController(
+                new Response(501, [], json_encode(['success' => false, 'message' => 'Task is not registered']))
+            );
 
             return $this;
         }

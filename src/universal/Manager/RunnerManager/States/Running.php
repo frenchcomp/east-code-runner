@@ -114,7 +114,11 @@ class Running implements StateInterface
         /*
          * {@inheritdoc}
          */
-        return function (RunnerInterface $runner, TaskInterface $task, ResultInterface $result): RunnerManagerInterface {
+        return function (
+            RunnerInterface $runner,
+            TaskInterface $task,
+            ResultInterface $result
+        ): RunnerManagerInterface {
             if (!isset($this->tasksManagerByTasks[$task])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
@@ -131,7 +135,11 @@ class Running implements StateInterface
         /*
          * {@inheritdoc}
          */
-        return function (RunnerInterface $runner, TaskInterface $task, StatusInterface $status): RunnerManagerInterface {
+        return function (
+            RunnerInterface $runner,
+            TaskInterface $task,
+            StatusInterface $status
+        ): RunnerManagerInterface {
             if (!isset($this->tasksManagerByTasks[$task])) {
                 throw new \DomainException('Error, the task was not found for this runner');
             }
@@ -167,7 +175,11 @@ class Running implements StateInterface
          * @param TaskManagerInterface $taskManager
          * @return RunnerManager
          */
-        return function (RunnerInterface $runner, TaskInterface $task, TaskManagerInterface $taskManager): RunnerManager {
+        return function (
+            RunnerInterface $runner,
+            TaskInterface $task,
+            TaskManagerInterface $taskManager
+        ): RunnerManager {
             $this->tasksStandbyRegistry->enqueue($runner, $task);
             if (!isset($this->tasksManagerByTasks[$task])) {
                 //To prevent some issue if manager had not already registerd itself

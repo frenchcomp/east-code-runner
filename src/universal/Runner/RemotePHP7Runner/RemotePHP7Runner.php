@@ -43,8 +43,8 @@ use Teknoo\States\Proxy\ProxyTrait;
  * Class RemotePHP7Runner.
  * Implementation of RunnerInterface to provide a remote runner to execute task on a secured and isolate environment.
  *
- * A runner instance can work in two mode : Awaiting (To accept and execute a tasks) and Busy to forbid another executing
- * until the current task is being executed. These modes are managed
+ * A runner instance can work in two mode : Awaiting (To accept and execute a tasks) and Busy to forbid another
+ * executing until the current task is being executed. These modes are managed
  * using States pattern with the Teknoo States library.
  * The runner work with a Worker (see \Teknoo\East\CodeRunner\Worker\PHP7Runner) to execute the task in a secured
  * environment.

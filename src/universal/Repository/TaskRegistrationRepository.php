@@ -44,19 +44,19 @@ class TaskRegistrationRepository extends EntityRepository
      * To return a TaskRegistration, from the task's identifier. If there are no TaskExecution found, the method returns
      * false.
      *
-     * @param string $id
+     * @param string $taskId
      *
      * @return TaskRegistration|false
      */
-    private function fetchTaskRegistration(string $id)
+    private function fetchTaskRegistration(string $taskId)
     {
         $queryBuilder = $this->createQueryBuilder('tr');
         $queryBuilder->innerJoin('tr.task', 't');
         $queryBuilder->addSelect('t');
-        $queryBuilder->andWhere('t.id = :idTask');
+        $queryBuilder->andWhere('t.id = :taskId');
         $queryBuilder->andWhere('tr.deletedAt is null');
         $queryBuilder->andWhere('t.deletedAt is null');
-        $queryBuilder->setParameter('idTask', $id);
+        $queryBuilder->setParameter('taskId', $taskId);
         $queryBuilder->setMaxResults(1);
 
         $query = $queryBuilder->getQuery();
@@ -70,26 +70,26 @@ class TaskRegistrationRepository extends EntityRepository
     }
 
     /**
-     * To get a TaskExecution from the Runner's identifier. If the TaskExecution has been already fetched, the repository
-     * use it's cache.
+     * To get a TaskExecution from the Runner's identifier. If the TaskExecution has been already fetched,
+     * the repository use it's cache.
      *
-     * @param string $id
+     * @param string $taskId
      *
      * @return TaskRegistration|false
      */
-    public function findByTaskId(string $id)
+    public function findByTaskId(string $taskId)
     {
-        if (!isset($this->tasksRegistrationsList[$id])) {
-            $result = $this->fetchTaskRegistration($id);
+        if (!isset($this->tasksRegistrationsList[$taskId])) {
+            $result = $this->fetchTaskRegistration($taskId);
 
             if ($result instanceof TaskRegistration) {
-                $this->tasksRegistrationsList[$id] = $result;
+                $this->tasksRegistrationsList[$taskId] = $result;
             }
 
             return $result;
         }
 
-        return $this->tasksRegistrationsList[$id];
+        return $this->tasksRegistrationsList[$taskId];
     }
 
     /**
@@ -121,14 +121,14 @@ class TaskRegistrationRepository extends EntityRepository
     /**
      * To invalidate a specific cache.
      *
-     * @param string $id
+     * @param string $taskId
      *
      * @return TaskRegistrationRepository
      */
-    public function clearRegistration(string $id): TaskRegistrationRepository
+    public function clearRegistration(string $taskId): TaskRegistrationRepository
     {
-        if (isset($this->tasksRegistrationsList[$id])) {
-            unset($this->tasksRegistrationsList[$id]);
+        if (isset($this->tasksRegistrationsList[$taskId])) {
+            unset($this->tasksRegistrationsList[$taskId]);
         }
 
         return $this;

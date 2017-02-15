@@ -110,7 +110,8 @@ class TeknooEastCodeRunnerExtension extends Extension implements PrependExtensio
                         'mappings' => [
                             'TeknooEastCodeRunner' => [
                                 'type' => 'yml',
-                                'dir' => '%kernel.root_dir%/../vendor/teknoo/east-code-runner/src/universal/config/doctrine',
+                                'dir' =>
+                                    '%kernel.root_dir%/../vendor/teknoo/east-code-runner/src/universal/config/doctrine',
                                 'is_bundle' => false,
                                 'prefix' => 'Teknoo\East\CodeRunner\Entity',
                             ],

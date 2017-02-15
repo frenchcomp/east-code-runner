@@ -75,20 +75,20 @@ class ComposerConfigurator implements ComposerConfiguratorInterface
      * @param Command    $composerCommand
      * @param string     $composerInstruction
      * @param Filesystem $fileSystem
-     * @param string     $composerDirectoryParam
+     * @param string     $composerDirectory
      */
     public function __construct(
         Runner $commandRunner,
         Command $composerCommand,
         Filesystem $fileSystem,
         string $composerInstruction,
-        string $composerDirectoryParam
+        string $composerDirectory
     ) {
         $this->commandRunner = $commandRunner;
         $this->composerCommand = $composerCommand;
         $this->composerInstruction = $composerInstruction;
         $this->fileSystem = $fileSystem;
-        $this->composerDirectoryParam = $composerDirectoryParam;
+        $this->composerDirectoryParam = $composerDirectory;
     }
 
     /**

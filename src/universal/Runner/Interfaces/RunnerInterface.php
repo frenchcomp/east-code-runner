@@ -64,7 +64,8 @@ interface RunnerInterface
 
     /**
      * To inform a system that can return to its initial state to prepare the next task execution.
-     * If the runner can not support multiple task it must forgot the last execution in progress and advance to the next.
+     * If the runner can not support multiple task it must forgot the last execution in progress and advance
+     * to the next.
      *
      * @return RunnerInterface
      */
@@ -80,7 +81,8 @@ interface RunnerInterface
     public function rememberYourCurrentTask(TaskInterface $task): RunnerInterface;
 
     /**
-     * To check if a task is executable by the runner, the runner must recall to the manager the method accept or reject.
+     * To check if a task is executable by the runner, the runner must recall to the manager the method accept
+     * or reject.
      *
      * @param RunnerManagerInterface $manager
      * @param TaskInterface          $task

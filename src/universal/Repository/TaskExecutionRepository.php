@@ -70,8 +70,8 @@ class TaskExecutionRepository extends EntityRepository
     }
 
     /**
-     * To get a TaskExecution from the Runner's identifier. If the TaskExecution has been already fetched, the repository
-     * use it's cache.
+     * To get a TaskExecution from the Runner's identifier. If the TaskExecution has been already fetched,
+     * the repository use it's cache.
      *
      * @param string $identifier
      *
