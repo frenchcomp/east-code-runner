@@ -1,6 +1,16 @@
 #Teknoo Software - Code Runner - Change Log
 
-###[0.0.1-alpha18] - 2017-02-15
+##[0.0.1-alpha19] - 2017-02-22
+###Added
+Implement East Foundation Promise
+
+###Updated
+- Refactoring Endpoint to use them
+- Refactoring registry to use them and remove AccessBehavior
+- Update components using registries to use Promise
+- Update tests
+
+##[0.0.1-alpha18] - 2017-02-15
 ###Fix
 - Code style fix
 - License file follow Github specs
