@@ -24,7 +24,6 @@ namespace Teknoo\East\CodeRunner\Registry\Interfaces;
 
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
-use Teknoo\East\Foundation\Promise\Promise;
 use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
@@ -50,7 +49,7 @@ interface TasksStandbyRegistryInterface
     /**
      * Dequeues a standby task for a runner. If there are no standby queue, the method must return null.
      *
-     * @param RunnerInterface $runner
+     * @param RunnerInterface  $runner
      * @param PromiseInterface $promise
      *
      * @return TasksStandbyRegistryInterface

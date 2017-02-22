@@ -65,7 +65,7 @@ interface TaskManagerInterface
     /**
      * To persist a task to execute and sent it to a register.
      *
-     * @param TaskInterface $task
+     * @param TaskInterface    $task
      * @param PromiseInterface $promise
      *
      * @return TaskManagerInterface

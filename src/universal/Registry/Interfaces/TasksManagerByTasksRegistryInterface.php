@@ -38,35 +38,39 @@ use Teknoo\East\Foundation\Promise\PromiseInterface;
 interface TasksManagerByTasksRegistryInterface
 {
     /**
-     * To get the manager instance owning the task is passed to promise
+     * To get the manager instance owning the task is passed to promise.
      *
-     * @param TaskInterface $task
+     * @param TaskInterface    $task
      * @param PromiseInterface $promise
+     *
      * @return TasksManagerByTasksRegistryInterface
      */
     public function get(TaskInterface $task, PromiseInterface $promise): TasksManagerByTasksRegistryInterface;
 
     /**
-     * To register a manager owning a task
+     * To register a manager owning a task.
      *
-     * @param TaskInterface $task
+     * @param TaskInterface        $task
      * @param TaskManagerInterface $manager
+     *
      * @return TasksManagerByTasksRegistryInterface
      */
     public function register(TaskInterface $task, TaskManagerInterface $manager): TasksManagerByTasksRegistryInterface;
 
     /**
-     * To forged the manager owning a task
+     * To forged the manager owning a task.
      *
      * @param TaskInterface $task
+     *
      * @return TasksManagerByTasksRegistryInterface
      */
     public function remove(TaskInterface $task): TasksManagerByTasksRegistryInterface;
 
     /**
-     * Register an instance of manager to be able to return it via the method get()
+     * Register an instance of manager to be able to return it via the method get().
      *
      * @param TaskManagerInterface $taskManager
+     *
      * @return TasksManagerByTasksRegistryInterface
      */
     public function addTaskManager(TaskManagerInterface $taskManager): TasksManagerByTasksRegistryInterface;

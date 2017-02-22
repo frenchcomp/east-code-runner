@@ -35,8 +35,9 @@ use Teknoo\East\Foundation\Promise\PromiseInterface;
 interface TasksRegistryInterface
 {
     /**
-     * @param string $taskUid
+     * @param string           $taskUid
      * @param PromiseInterface $promise
+     *
      * @return TasksRegistryInterface
      */
     public function get(string $taskUid, PromiseInterface $promise): TasksRegistryInterface;

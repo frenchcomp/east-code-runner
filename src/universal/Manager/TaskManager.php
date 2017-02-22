@@ -221,7 +221,7 @@ class TaskManager implements TaskManagerInterface
     }
 
     /**
-     * @param TaskInterface $task
+     * @param TaskInterface    $task
      * @param PromiseInterface $promise;
      *
      * @return TaskManager

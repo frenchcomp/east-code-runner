@@ -37,18 +37,21 @@ use Teknoo\East\Foundation\Promise\PromiseInterface;
 interface TasksByRunnerRegistryInterface
 {
     /**
-     * To get the task currently executed by a runner, the task is passed to promise
+     * To get the task currently executed by a runner, the task is passed to promise.
      *
-     * @param RunnerInterface $runner
+     * @param RunnerInterface  $runner
      * @param PromiseInterface $promise
+     *
      * @return TasksByRunnerRegistryInterface
      */
     public function get(RunnerInterface $runner, PromiseInterface $promise): TasksByRunnerRegistryInterface;
 
     /**
-     * To register a task currently executed by a runner
+     * To register a task currently executed by a runner.
+     *
      * @param RunnerInterface $runner
-     * @param TaskInterface $task
+     * @param TaskInterface   $task
+     *
      * @return TasksByRunnerRegistryInterface
      */
     public function register(RunnerInterface $runner, TaskInterface $task): TasksByRunnerRegistryInterface;
@@ -57,6 +60,7 @@ interface TasksByRunnerRegistryInterface
      * To remove a reference about task currently executed by a runner.
      *
      * @param RunnerInterface $runner
+     *
      * @return TasksByRunnerRegistryInterface
      */
     public function remove(RunnerInterface $runner): TasksByRunnerRegistryInterface;
