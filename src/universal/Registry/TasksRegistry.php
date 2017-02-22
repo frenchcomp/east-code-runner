@@ -25,7 +25,7 @@ namespace Teknoo\East\CodeRunner\Registry;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Repository\TaskRepository;
-use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class TasksRegistry.
@@ -56,14 +56,16 @@ class TasksRegistry implements TasksRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $taskUid): TaskInterface
+    public function get(string $taskUid, PromiseInterface $promise): TasksRegistryInterface
     {
         $task = $this->taskRepository->findOneBy(['id' => $taskUid, 'deletedAt' => null]);
 
         if (!$task instanceof Task) {
-            throw new \DomainException('Error, the task was not found');
+            $promise->fail(new \DomainException('Error, the task was not found'));
         }
 
-        return $task;
+        $promise->success($task);
+
+        return $this;
     }
 }

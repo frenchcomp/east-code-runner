@@ -26,6 +26,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterf
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Interface TaskManagerInterface.
@@ -65,10 +66,11 @@ interface TaskManagerInterface
      * To persist a task to execute and sent it to a register.
      *
      * @param TaskInterface $task
+     * @param PromiseInterface $promise
      *
      * @return TaskManagerInterface
      */
-    public function executeMe(TaskInterface $task): TaskManagerInterface;
+    public function executeMe(TaskInterface $task, PromiseInterface $promise): TaskManagerInterface;
 
     /**
      * Called by the runner manager to inform the task manager an update about a task.

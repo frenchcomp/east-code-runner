@@ -29,6 +29,7 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -94,7 +95,13 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $this->getTasksManagerMock()
             ->expects(self::any())
             ->method('executeMe')
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function (TaskInterface $task, PromiseInterface $promise) {
+                    $promise->fail(new \Exception());
+
+                    return $this->getTasksManagerMock();
+                }
+            );
 
         $endpoint = $this->buildEndPoint();
 
@@ -122,8 +129,10 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
             ->expects(self::any())
             ->method('executeMe')
             ->willReturnCallback(
-                function (TaskInterface $task) {
+                function (TaskInterface $task, PromiseInterface $promise) {
                     $task->registerUrl('http://foo.bar');
+
+                    $promise->success($task);
 
                     return $this->getTasksManagerMock();
                 }

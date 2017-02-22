@@ -30,6 +30,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterf
 use Teknoo\East\CodeRunner\Repository\TaskRegistrationRepository;
 use Teknoo\East\CodeRunner\Service\DatesService;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class TasksManagerByTasksRegistry.
@@ -82,27 +83,14 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     }
 
     /**
-     * @param TaskManagerInterface $taskManager
+     * {@inheritdoc}
      */
-    public function addTaskManager(TaskManagerInterface $taskManager)
+    public function addTaskManager(TaskManagerInterface $taskManager): TasksManagerByTasksRegistryInterface
     {
         $this->tasksManagersList[$taskManager->getIdentifier()] = $taskManager;
         $taskManager->addRegistry($this);
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function offsetExists($offset)
-    {
-        if (!$offset instanceof TaskInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $taskId = $offset->getId();
-        $taskRegistration = $this->taskRegistrationRepository->findByTaskId($taskId);
-
-        return $taskRegistration instanceof TaskRegistration && !$taskRegistration->getDeletedAt() instanceof \DateTime;
+        return $this;
     }
 
     /**
@@ -127,25 +115,27 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     /**
      * {@inheritdoc}
      */
-    public function offsetGet($offset)
+    public function get(TaskInterface $task, PromiseInterface $promise): TasksManagerByTasksRegistryInterface
     {
-        if (!$offset instanceof TaskInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $taskRegistration = $this->getTaskRegistration($offset);
+        $taskRegistration = $this->getTaskRegistration($task);
 
         if (!$taskRegistration instanceof TaskRegistration) {
-            return null;
+            $promise->fail(new \DomainException('The task has not been registered'));
+
+            return $this;
         }
 
         $taskManagerIdentifier = $taskRegistration->getTaskManagerIdentifier();
 
         if (!isset($this->tasksManagersList[$taskManagerIdentifier])) {
-            throw new \DomainException();
+            $promise->fail(new \DomainException('The manager has not been referenced'));
+
+            return $this;
         }
 
-        return $this->tasksManagersList[$taskManagerIdentifier];
+        $promise->success($this->tasksManagersList[$taskManagerIdentifier]);
+
+        return $this;
     }
 
     /**
@@ -179,42 +169,38 @@ class TasksManagerByTasksRegistry implements TasksManagerByTasksRegistryInterfac
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function register(TaskInterface $task, TaskManagerInterface $manager): TasksManagerByTasksRegistryInterface
     {
-        if (!$offset instanceof TaskInterface || !$value instanceof TaskManagerInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $taskRegistration = $this->getTaskRegistration($offset);
+        $taskRegistration = $this->getTaskRegistration($task);
 
         if ($taskRegistration instanceof TaskRegistration) {
-            $taskRegistration->setTaskManagerIdentifier($value->getIdentifier());
+            $taskRegistration->setTaskManagerIdentifier($manager->getIdentifier());
         } else {
-            $taskRegistration = $this->create($offset, $value);
+            $taskRegistration = $this->create($task, $manager);
         }
 
         $this->save($taskRegistration);
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function remove(TaskInterface $task): TasksManagerByTasksRegistryInterface
     {
-        if (!$offset instanceof TaskInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $taskRegistration = $this->getTaskRegistration($offset);
+        $taskRegistration = $this->getTaskRegistration($task);
 
         if ($taskRegistration instanceof TaskRegistration) {
-            $this->taskRegistrationRepository->clearRegistration($offset->getId());
+            $this->taskRegistrationRepository->clearRegistration($task->getId());
             $taskRegistration->setDeletedAt($this->datesService->getDate());
 
             $this->save($taskRegistration);
         }
 
-        $this->taskRegistrationRepository->clearRegistration($offset->getId());
+        $this->taskRegistrationRepository->clearRegistration($task->getId());
+
+        return $this;
     }
 
     /**

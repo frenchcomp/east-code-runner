@@ -21,18 +21,45 @@
  */
 
 namespace Teknoo\East\CodeRunner\Registry\Interfaces;
+use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
+use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Interface TasksByRunnerRegistryInterface.
  * Interface to define a registry able to persist the task currently executed by a runner.
- * The registry is usable via an array access behavior, with runners as key, to return and manipulate tasks.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-interface TasksByRunnerRegistryInterface extends \ArrayAccess
+interface TasksByRunnerRegistryInterface
 {
+    /**
+     * To get the task currently executed by a runner, the task is passed to promise
+     *
+     * @param RunnerInterface $runner
+     * @param PromiseInterface $promise
+     * @return TasksByRunnerRegistryInterface
+     */
+    public function get(RunnerInterface $runner, PromiseInterface $promise): TasksByRunnerRegistryInterface;
+
+    /**
+     * To register a task currently executed by a runner
+     * @param RunnerInterface $runner
+     * @param TaskInterface $task
+     * @return TasksByRunnerRegistryInterface
+     */
+    public function register(RunnerInterface $runner, TaskInterface $task): TasksByRunnerRegistryInterface;
+
+    /**
+     * To remove a reference about task currently executed by a runner.
+     *
+     * @param RunnerInterface $runner
+     * @return TasksByRunnerRegistryInterface
+     */
+    public function remove(RunnerInterface $runner): TasksByRunnerRegistryInterface;
+
     /**
      * To clear all runners memorized tasks in the persistent dbms.
      *

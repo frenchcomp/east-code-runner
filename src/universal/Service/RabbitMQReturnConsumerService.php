@@ -31,6 +31,8 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
+use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\Promise;
 
 /**
  * Class RabbitMQReturnConsumerService.
@@ -148,15 +150,24 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
         try {
             list($taskUid, $object) = $this->extractObject($msg);
 
-            $task = $this->tasksRegistry->get($taskUid);
+            $this->tasksRegistry->get(
+                $taskUid,
+                new Promise(
+                    function (TaskInterface $task) use ($object) {
+                        if ($object instanceof ResultInterface) {
+                            $this->runnerManager->pushResult($this->remotePHP7Runner, $task, $object);
+                        }
 
-            if ($object instanceof ResultInterface) {
-                $this->runnerManager->pushResult($this->remotePHP7Runner, $task, $object);
-            }
+                        if ($object instanceof StatusInterface) {
+                            $this->runnerManager->pushStatus($this->remotePHP7Runner, $task, $object);
+                        }
+                    },
+                    function (\Throwable $e) {
+                        throw $e;
+                    }
+                )
+            );
 
-            if ($object instanceof StatusInterface) {
-                $this->runnerManager->pushStatus($this->remotePHP7Runner, $task, $object);
-            }
         } catch (DBALException $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
 

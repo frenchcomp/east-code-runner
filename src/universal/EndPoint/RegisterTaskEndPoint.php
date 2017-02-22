@@ -30,6 +30,7 @@ use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
+use Teknoo\East\Foundation\Promise\Promise;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
@@ -91,20 +92,20 @@ class RegisterTaskEndPoint
         $task->setCode(new PHPCode($code, [new Capability('php', '>=7')]));
 
         $this->tasksManager->registerRunnerManager($this->runnerManager);
-        $this->tasksManager->executeMe($task);
-
-        try {
-            $task->getUrl();
-        } catch (\Throwable $e) {
-            $client->responseFromController(
-                new Response(501, [], json_encode(['success' => false, 'message' => 'Task is not registered']))
-            );
-
-            return $this;
-        }
-
-        $client->responseFromController(
-            new Response(200, [], \json_encode($task))
+        $this->tasksManager->executeMe(
+            $task,
+            new Promise(
+                function (Task $task) use ($client) {
+                    $client->responseFromController(
+                        new Response(200, [], \json_encode($task))
+                    );
+                },
+                function () use ($client) {
+                    $client->responseFromController(
+                        new Response(501, [], json_encode(['success' => false, 'message' => 'Task is not registered']))
+                    );
+                }
+            )
         );
 
         return $this;

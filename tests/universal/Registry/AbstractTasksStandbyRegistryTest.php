@@ -25,6 +25,7 @@ namespace Teknoo\Tests\East\CodeRunner\Registry;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class AbstractTasksStandbyRegistryTest.
@@ -64,7 +65,15 @@ abstract class AbstractTasksStandbyRegistryTest extends \PHPUnit_Framework_TestC
      */
     public function testDequeueInvalidRunner()
     {
-        $this->buildRegistry()->dequeue(new \stdClass());
+        $this->buildRegistry()->dequeue(new \stdClass(), $this->createMock(PromiseInterface::class));
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testDequeueInvalidPromise()
+    {
+        $this->buildRegistry()->dequeue($this->createMock(RunnerInterface::class), new \stdClass());
     }
 
     public function testQueueDequeueBehavior()
@@ -83,8 +92,22 @@ abstract class AbstractTasksStandbyRegistryTest extends \PHPUnit_Framework_TestC
 
         $registry = $this->buildRegistry();
 
-        self::assertNull($registry->dequeue($runner1));
-        self::assertNull($registry->dequeue($runner2));
+        $promise1 = $this->createMock(PromiseInterface::class);
+        $promise1->expects(self::once())->method('fail')->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue(
+                $runner1,
+                $promise1
+            )
+        );
+
+        $promise2 = $this->createMock(PromiseInterface::class);
+        $promise2->expects(self::once())->method('fail')->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner2, $promise2)
+        );
 
         self::assertInstanceOf(
             TasksStandbyRegistryInterface::class,
@@ -101,12 +124,40 @@ abstract class AbstractTasksStandbyRegistryTest extends \PHPUnit_Framework_TestC
             $registry->enqueue($runner1, $task3)
         );
 
-        self::assertEquals($task1, $registry->dequeue($runner1));
-        self::assertEquals($task3, $registry->dequeue($runner1));
-        self::assertEquals($task2, $registry->dequeue($runner2));
+        $promise3 = $this->createMock(PromiseInterface::class);
+        $promise3->expects(self::once())->method('success')->with($task1)->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner1, $promise3)
+        );
 
-        self::assertNull($registry->dequeue($runner1));
-        self::assertNull($registry->dequeue($runner2));
+        $promise4 = $this->createMock(PromiseInterface::class);
+        $promise4->expects(self::once())->method('success')->with($task1)->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner1, $promise4)
+        );
+
+        $promise5 = $this->createMock(PromiseInterface::class);
+        $promise5->expects(self::once())->method('success')->with($task1)->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner2, $promise5)
+        );
+
+        $promise6 = $this->createMock(PromiseInterface::class);
+        $promise6->expects(self::once())->method('fail')->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner1, $promise6)
+        );
+
+        $promise7 = $this->createMock(PromiseInterface::class);
+        $promise7->expects(self::once())->method('fail')->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner2, $promise7)
+        );
     }
 
     public function testClearAll()
@@ -120,15 +171,28 @@ abstract class AbstractTasksStandbyRegistryTest extends \PHPUnit_Framework_TestC
 
         $task = $this->createMock(TaskInterface::class);
 
-        self::assertNull($registry->dequeue($runner));
+        $promise1 = $this->createMock(PromiseInterface::class);
+        $promise1->expects(self::once())->method('fail')->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner, $promise1)
+        );
 
-        $registry->enqueue($runner, $task);
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->enqueue($runner, $task)
+        );
 
         self::assertInstanceOf(
             TasksStandbyRegistryInterface::class,
             $registry->clearAll()
         );
 
-        self::assertNull($registry->dequeue($runner));
+        $promise2 = $this->createMock(PromiseInterface::class);
+        $promise2->expects(self::once())->method('fail')->willReturnSelf();
+        self::assertInstanceOf(
+            TasksStandbyRegistryInterface::class,
+            $registry->dequeue($runner, $promise2)
+        );
     }
 }

@@ -33,6 +33,7 @@ use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
 use Teknoo\East\CodeRunner\Task\Status;
 use Teknoo\East\CodeRunner\Task\TextResult;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -143,8 +144,12 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistry()
             ->expects(self::once())
             ->method('get')
-            ->with('https://foo.bar')
-            ->willReturn($task);
+            ->willReturnCallback(function ($taskUrl, PromiseInterface $promise) use ($task) {
+                self::assertEquals('https://foo.bar', $taskUrl);
+                $promise->success($task);
+
+                return $this->getTasksRegistry();
+            });
 
         $this->getRunnerManager()
             ->expects(self::once())
@@ -176,8 +181,12 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistry()
             ->expects(self::once())
             ->method('get')
-            ->with('https://foo.bar')
-            ->willThrowException(new \DomainException());
+            ->willReturnCallback(function ($taskUrl, PromiseInterface $promise) {
+                self::assertEquals('https://foo.bar', $taskUrl);
+                $promise->fail(new \DomainException());
+
+                return $this->getTasksRegistry();
+            });
 
         $this->getLogger()->expects(self::once())->method('critical');
 
@@ -214,8 +223,12 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistry()
             ->expects(self::once())
             ->method('get')
-            ->with('https://foo.bar')
-            ->willReturn($task);
+            ->willReturnCallback(function ($taskUrl, PromiseInterface $promise) use ($task) {
+                self::assertEquals('https://foo.bar', $taskUrl);
+                $promise->success($task);
+
+                return $this->getTasksRegistry();
+            });
 
         $this->getRunnerManager()
             ->expects(self::once())
@@ -238,8 +251,12 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistry()
             ->expects(self::once())
             ->method('get')
-            ->with('https://foo.bar')
-            ->willReturn($task);
+            ->willReturnCallback(function ($taskUrl, PromiseInterface $promise) use ($task) {
+                self::assertEquals('https://foo.bar', $taskUrl);
+                $promise->success($task);
+
+                return $this->getTasksRegistry();
+            });
 
         $this->getRunnerManager()
             ->expects(self::once())
@@ -262,8 +279,12 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistry()
             ->expects(self::once())
             ->method('get')
-            ->with('https://foo.bar')
-            ->willReturn($task);
+            ->willReturnCallback(function ($taskUrl, PromiseInterface $promise) use ($task) {
+                self::assertEquals('https://foo.bar', $taskUrl);
+                $promise->success($task);
+
+                return $this->getTasksRegistry();
+            });
 
         $this->getRunnerManager()
             ->expects(self::once())

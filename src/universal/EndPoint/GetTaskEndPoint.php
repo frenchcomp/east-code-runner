@@ -25,7 +25,9 @@ namespace Teknoo\East\CodeRunner\EndPoint;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
+use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
+use Teknoo\East\Foundation\Promise\Promise;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
@@ -70,18 +72,20 @@ class GetTaskEndPoint
         string $taskId
     ) {
         //Retrieve the task from the task registry
-        try {
-            $task = $this->tasksRegistry->get($taskId);
-        } catch (\DomainException $e) {
-            $client->responseFromController(
-                new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found']))
-            );
-
-            return $this;
-        }
-
-        $client->responseFromController(
-            new Response(200, [], \json_encode($task))
+        $this->tasksRegistry->get(
+            $taskId,
+            new Promise(
+                function (TaskInterface $result) use ($client) {
+                    $client->responseFromController(
+                        new Response(200, [], \json_encode($result))
+                    );
+                },
+                function () use ($client) {
+                    $client->responseFromController(
+                        new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found']))
+                    );
+                }
+            )
         );
 
         return $this;

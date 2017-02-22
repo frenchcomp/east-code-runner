@@ -30,6 +30,7 @@ use Teknoo\East\CodeRunner\Repository\TaskStandbyRepository;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Service\DatesService;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class TasksStandbyRegistry.
@@ -137,9 +138,17 @@ class TasksStandbyRegistry implements TasksStandbyRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function dequeue(RunnerInterface $runner)
+    public function dequeue(RunnerInterface $runner, PromiseInterface $promise): TasksStandbyRegistryInterface
     {
-        return $this->getNextTask($runner);
+        $task = $this->getNextTask($runner);
+
+        if ($task instanceof TaskInterface) {
+            $promise->success($task);
+        } else {
+            $promise->fail(new \OutOfBoundsException('The queue for this runner is empty'));
+        }
+
+        return $this;
     }
 
     /**

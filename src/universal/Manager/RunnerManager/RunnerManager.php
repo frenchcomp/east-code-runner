@@ -69,12 +69,12 @@ class RunnerManager implements ProxyInterface, RunnerManagerInterface
     private $runners = [];
 
     /**
-     * @var TasksByRunnerRegistryInterface|TaskInterface[]
+     * @var TasksByRunnerRegistryInterface
      */
     private $tasksByRunner;
 
     /**
-     * @var TasksManagerByTasksRegistryInterface|TaskManagerInterface[]
+     * @var TasksManagerByTasksRegistryInterface
      */
     private $tasksManagerByTasks;
 

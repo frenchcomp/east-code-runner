@@ -33,6 +33,7 @@ use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\Promise;
 use Teknoo\States\State\StateInterface;
 use Teknoo\States\State\StateTrait;
 
@@ -46,8 +47,8 @@ use Teknoo\States\State\StateTrait;
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
  * @property RunnerInterface[] $runners
- * @property TasksByRunnerRegistryInterface|TaskInterface[] $tasksByRunner
- * @property TasksManagerByTasksRegistryInterface|TaskManagerInterface[] $tasksManagerByTasks
+ * @property TasksByRunnerRegistryInterface $tasksByRunner
+ * @property TasksManagerByTasksRegistryInterface $tasksManagerByTasks
  * @property TasksStandbyRegistry $tasksStandbyRegistry
  * @property LoggerInterface $logger
  * @mixin RunnerManager
@@ -66,12 +67,12 @@ class Running implements StateInterface
             $runners[$runner->getIdentifier()] = $runner;
             $this->runners = $runners;
 
-            if (isset($this->tasksByRunner[$runner])) {
-                $taskOnThisRunner = $this->tasksByRunner[$runner];
-                if ($taskOnThisRunner instanceof TaskInterface) {
-                    $runner->rememberYourCurrentTask($taskOnThisRunner);
-                }
-            }
+            $this->tasksByRunner->get(
+                $runner,
+                new Promise(function(TaskInterface $task) use ($runner){
+                    $runner->rememberYourCurrentTask($task);
+                })
+            );
 
             return $this;
         };
@@ -104,7 +105,7 @@ class Running implements StateInterface
          */
         return function (RunnerInterface $runner, TaskInterface $task) {
             $runner->prepareNextTask();
-            unset($this->tasksByRunner[$runner]);
+            $this->tasksByRunner->remove($runner);
             $this->loadNextTaskFor($runner);
         };
     }
@@ -119,12 +120,17 @@ class Running implements StateInterface
             TaskInterface $task,
             ResultInterface $result
         ): RunnerManagerInterface {
-            if (!isset($this->tasksManagerByTasks[$task])) {
-                throw new \DomainException('Error, the task was not found for this runner');
-            }
-
-            $taskManager = $this->tasksManagerByTasks[$task];
-            $taskManager->taskResultIsUpdated($task, $result);
+            $this->tasksManagerByTasks->get(
+                $task,
+                new Promise(
+                    function (TaskManagerInterface $taskManager) use ($task, $result) {
+                        $taskManager->taskResultIsUpdated($task, $result);
+                    },
+                    function ($exception) {
+                        throw $exception;
+                    }
+                )
+            );
 
             return $this;
         };
@@ -140,27 +146,29 @@ class Running implements StateInterface
             TaskInterface $task,
             StatusInterface $status
         ): RunnerManagerInterface {
-            if (!isset($this->tasksManagerByTasks[$task])) {
-                throw new \DomainException('Error, the task was not found for this runner');
-            }
-
-            $taskManager = $this->tasksManagerByTasks[$task];
-            $taskManager->taskStatusIsUpdated($task, $status);
-
-            if ($runner->supportsMultiplesTasks() && isset($this->tasksByRunner[$runner])) {
-                //If the runner support multiple tasks execution, check if the task called is the currently
-                // initializing task for this runner
-
-                $currentTaskExecuted = $this->tasksByRunner[$runner];
-
-                if ($currentTaskExecuted instanceof TaskInterface
-                    && $task->getUrl() == $currentTaskExecuted->getUrl()) {
-                    //It's the task currently initializing by the runner, inform it to switch to next task
-                    $this->clearRunner($runner, $task);
-                }
-            } elseif (!$runner->supportsMultiplesTasks() && $status->isFinal()) {
-                $this->clearRunner($runner, $task);
-            }
+            $this->tasksManagerByTasks->get(
+                $task,
+                new Promise(
+                    function (TaskManagerInterface $taskManager) use ($runner, $task, $status) {
+                        if ($runner->supportsMultiplesTasks()) {
+                            $this->tasksByRunner->get(
+                                $runner,
+                                new Promise(function(TaskInterface $currentTaskExecuted) use ($runner, $task) {
+                                    if ($task->getUrl() == $currentTaskExecuted->getUrl()) {
+                                        //It's the task currently initializing by the runner, inform it to switch to next task
+                                        $this->clearRunner($runner, $task);
+                                    }
+                                })
+                            );
+                        } elseif (!$runner->supportsMultiplesTasks() && $status->isFinal()) {
+                            $this->clearRunner($runner, $task);
+                        }
+                    },
+                    function (\Throwable $exception) {
+                        throw $exception;
+                    }
+                )
+            );
 
             return $this;
         };
@@ -181,10 +189,13 @@ class Running implements StateInterface
             TaskManagerInterface $taskManager
         ): RunnerManager {
             $this->tasksStandbyRegistry->enqueue($runner, $task);
-            if (!isset($this->tasksManagerByTasks[$task])) {
-                //To prevent some issue if manager had not already registerd itself
-                $this->tasksManagerByTasks[$task] = $taskManager;
-            }
+            $this->tasksManagerByTasks->get(
+                $task,
+                new Promise(null, function() use ($task, $taskManager) {
+                    //To prevent some issue if manager had not already registerd itself
+                    $this->tasksManagerByTasks->register($task, $taskManager);
+                })
+            );
 
             $this->loadNextTaskFor($runner);
 
@@ -200,24 +211,27 @@ class Running implements StateInterface
          * @return RunnerManager
          */
         return function (RunnerInterface $runner): RunnerManager {
-            if (!isset($this->tasksByRunner[$runner])
-                || !$this->tasksByRunner[$runner] instanceof TaskInterface) {
-                $taskStandBy = $this->tasksStandbyRegistry->dequeue($runner);
+            $this->tasksByRunner->get(
+                $runner,
+                new Promise(null, function () use ($runner) {
+                    $this->tasksStandbyRegistry->dequeue(
+                        $runner,
+                        new Promise(function ($taskStandBy) use ($runner) {
+                            try {
+                                $runner->execute($this, $taskStandBy);
+                                $this->tasksByRunner->register($runner, $taskStandBy);
+                            } catch (\Throwable $e) {
+                                if ($this->logger instanceof LoggerInterface) {
+                                    $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
+                                }
 
-                if ($taskStandBy instanceof TaskInterface) {
-                    try {
-                        $runner->execute($this, $taskStandBy);
-                        $this->tasksByRunner[$runner] = $taskStandBy;
-                    } catch (\Throwable $e) {
-                        if ($this->logger instanceof LoggerInterface) {
-                            $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
-                        }
-
-                        $this->tasksStandbyRegistry->enqueue($runner, $taskStandBy);
-                        throw $e;
-                    }
-                }
-            }
+                                $this->tasksStandbyRegistry->enqueue($runner, $taskStandBy);
+                                throw $e;
+                            }
+                        })
+                    );
+                })
+            );
 
             return $this;
         };

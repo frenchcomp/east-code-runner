@@ -25,6 +25,7 @@ namespace Teknoo\Tests\East\CodeRunner\Registry;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksByRunnerRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class AbstractTasksByRunnerRegistryTest.
@@ -38,35 +39,42 @@ abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_Test
     abstract public function buildRegistry(): TasksByRunnerRegistryInterface;
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetExistsInvalidArgument()
+    public function testGetInvalidId()
     {
-        return isset($this->buildRegistry()[new \stdClass()]);
+        return $this->buildRegistry()->get(new \stdClass(), $this->createMock(PromiseInterface::class));
+    }
+    /**
+     * @expectedException \Throwable
+     */
+    public function testGetInvalidPromise()
+    {
+        return $this->buildRegistry()->get($this->createMock(RunnerInterface::class), new \stdClass());
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetGetInvalidArgument()
+    public function testRegisterInvalidRunner()
     {
-        return $this->buildRegistry()[new \stdClass()];
+        $this->buildRegistry()->register(new \stdClass(), $this->createMock(TaskInterface::class));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetSetInvalidArgument()
+    public function testRegisterInvalidRunnerTask()
     {
-        $this->buildRegistry()[new \stdClass()] = $this->createMock(TaskInterface::class);
+        $this->buildRegistry()->register($this->createMock(RunnerInterface::class), new \stdClass());
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetUnsetInvalidArgument()
+    public function testRemoveInvalidRunner()
     {
-        unset($this->buildRegistry()[new \stdClass()]);
+        $this->buildRegistry()->remove(new \stdClass());
     }
 
     public function testArrayAccessBehavior()
@@ -87,39 +95,95 @@ abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_Test
 
         $registry = $this->buildRegistry();
 
-        self::assertFalse(isset($registry[$runner1]));
-        self::assertFalse(isset($registry[$runner2]));
-        self::assertFalse(isset($registry[$runner3]));
+        $promise1 = $this->createMock(PromiseInterface::class);
+        $promise1->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner1, $promise1));
 
-        self::assertNull($registry[$runner1]);
-        self::assertNull($registry[$runner2]);
-        self::assertNull($registry[$runner3]);
+        $promise2 = $this->createMock(PromiseInterface::class);
+        $promise2->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner2, $promise2));
 
-        $registry[$runner1] = $task1;
-        $registry[$runner2] = $task2;
-        $registry[$runner3] = $task3;
+        $promise3 = $this->createMock(PromiseInterface::class);
+        $promise3->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner3, $promise3));
 
-        self::assertTrue(isset($registry[$runner1]));
-        self::assertTrue(isset($registry[$runner2]));
-        self::assertTrue(isset($registry[$runner3]));
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->register($runner1, $task1));
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->register($runner2, $task2));
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->register($runner3, $task3));
 
-        self::assertEquals($task1, $registry[$runner1]);
-        self::assertEquals($task2, $registry[$runner2]);
-        self::assertEquals($task3, $registry[$runner3]);
+        $promise4 = $this->createMock(PromiseInterface::class);
+        $promise4->expects(self::once())->method('success')->willReturnCallback(
+            function ($task) use ($task1, $promise4) {
+                self::assertInstanceOf(TaskInterface::class, $task);
+                self::assertEquals($task->getUrl(), $task1->getUrl());
 
-        $registry[$runner2] = $task3;
-        self::assertEquals($task3, $registry[$runner2]);
+                return $promise4;
+            }
+        );
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner1, $promise4));
 
-        unset($registry[$runner2]);
-        $registry[$runner3] = $task1;
+        $promise5 = $this->createMock(PromiseInterface::class);
+        $promise5->expects(self::once())->method('success')->willReturnCallback(
+            function ($task) use ($task2, $promise5) {
+                self::assertInstanceOf(TaskInterface::class, $task);
+                self::assertEquals($task->getUrl(), $task2->getUrl());
 
-        self::assertTrue(isset($registry[$runner1]));
-        self::assertFalse(isset($registry[$runner2]));
-        self::assertTrue(isset($registry[$runner3]));
+                return $promise5;
+            }
+        );
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner2, $promise5));
 
-        self::assertEquals($task1, $registry[$runner1]);
-        self::assertNull($registry[$runner2]);
-        self::assertEquals($task1, $registry[$runner3]);
+        $promise6 = $this->createMock(PromiseInterface::class);
+        $promise6->expects(self::once())->method('success')->willReturnCallback(
+            function ($task) use ($task3, $promise6) {
+                self::assertInstanceOf(TaskInterface::class, $task);
+                self::assertEquals($task->getUrl(), $task3->getUrl());
+
+                return $promise6;
+            }
+        );
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner3, $promise6));
+
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->register($runner2, $task3));
+        $promise7 = $this->createMock(PromiseInterface::class);
+        $promise7->expects(self::once())->method('success')->willReturnCallback(
+            function ($task) use ($task3, $promise7) {
+                self::assertInstanceOf(TaskInterface::class, $task);
+                self::assertEquals($task->getUrl(), $task3->getUrl());
+
+                return $promise7;
+            }
+        );
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner2, $promise7));
+
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->remove($runner2));
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->register($runner3, $task1));
+
+        $promise8 = $this->createMock(PromiseInterface::class);
+        $promise8->expects(self::once())->method('success')->willReturnCallback(
+            function ($task) use ($task1, $promise8) {
+                self::assertInstanceOf(TaskInterface::class, $task);
+                self::assertEquals($task->getUrl(), $task1->getUrl());
+
+                return $promise8;
+            }
+        );
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner1, $promise8));
+
+        $promise9 = $this->createMock(PromiseInterface::class);
+        $promise9->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner2, $promise9));
+
+        $promise10 = $this->createMock(PromiseInterface::class);
+        $promise10->expects(self::once())->method('success')->willReturnCallback(
+            function ($task) use ($task1, $promise10) {
+                self::assertInstanceOf(TaskInterface::class, $task);
+                self::assertEquals($task->getUrl(), $task1->getUrl());
+
+                return $promise10;
+            }
+        );
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner3, $promise10));
     }
 
     public function testClearAll()
@@ -133,17 +197,23 @@ abstract class AbstractTasksByRunnerRegistryTest extends \PHPUnit_Framework_Test
 
         $task = $this->createMock(TaskInterface::class);
 
-        self::assertFalse(isset($registry[$runner]));
+        $promise1 = $this->createMock(PromiseInterface::class);
+        $promise1->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner, $promise1));
 
-        $registry[$runner] = $task;
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->register($runner, $task));
 
-        self::assertTrue(isset($registry[$runner]));
+        $promise2 = $this->createMock(PromiseInterface::class);
+        $promise2->expects(self::once())->method('success')->willReturnSelf();
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner, $promise2));
 
         self::assertInstanceOf(
             TasksByRunnerRegistryInterface::class,
             $registry->clearAll()
         );
 
-        self::assertFalse(isset($registry[$runner]));
+        $promise3 = $this->createMock(PromiseInterface::class);
+        $promise3->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksByRunnerRegistryInterface::class, $registry->get($runner, $promise3));
     }
 }

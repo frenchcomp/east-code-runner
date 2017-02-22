@@ -28,6 +28,7 @@ use Teknoo\East\CodeRunner\EndPoint\GetTaskEndPoint;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -76,8 +77,12 @@ class GetTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistryMock()
             ->expects(self::any())
             ->method('get')
-            ->with(123)
-            ->willThrowException(new \DomainException());
+            ->willReturnCallback(function ($value, PromiseInterface $promise) {
+                self::assertEquals(123, $value);
+                $promise->fail(new \DomainException());
+
+                return $this->getTasksRegistryMock();
+            });
 
         $endpoint = $this->buildEndPoint();
 
@@ -106,8 +111,12 @@ class GetTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistryMock()
             ->expects(self::any())
             ->method('get')
-            ->with(123)
-            ->willReturn($task);
+            ->willReturnCallback(function ($value, PromiseInterface $promise) use ($task) {
+                self::assertEquals(123, $value);
+                $promise->success($task);
+
+                return $this->getTasksRegistryMock();
+            });
 
         $endpoint = $this->buildEndPoint();
 

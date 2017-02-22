@@ -25,6 +25,7 @@ namespace Teknoo\Tests\East\CodeRunner\Registry;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class AbstractTasksManagerByTasksRegistryTest.
@@ -38,35 +39,42 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
     abstract public function buildRegistry(): TasksManagerByTasksRegistryInterface;
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetExistsInvalidArgument()
+    public function testGetInvalidTask()
     {
-        return isset($this->buildRegistry()[new \stdClass()]);
+        return $this->buildRegistry()->get(new \stdClass(), $this->createMock(PromiseInterface::class));
+    }
+    /**
+     * @expectedException \Throwable
+     */
+    public function testGetInvalidPromise()
+    {
+        return $this->buildRegistry()->get($this->createMock(TaskInterface::class), new \stdClass());
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetGetInvalidArgument()
+    public function testRegisterInvalidTask()
     {
-        return $this->buildRegistry()[new \stdClass()];
+        $this->buildRegistry()->register(new \stdClass(), $this->createMock(TaskManagerInterface::class));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetSetInvalidArgument()
+    public function testRegisterInvalidTaskManager()
     {
-        $this->buildRegistry()[new \stdClass()] = $this->createMock(TaskManagerInterface::class);
+        $this->buildRegistry()->register($this->createMock(TaskInterface::class), new \stdClass());
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Throwable
      */
-    public function testOffsetUnsetInvalidArgument()
+    public function testRemoveInvalidArgument()
     {
-        unset($this->buildRegistry()[new \stdClass()]);
+        $this->buildRegistry()->remove(new \stdClass());
     }
 
     public function testArrayAccessBehavior()
@@ -90,44 +98,99 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
         $registry->addTaskManager($manager2);
         $registry->addTaskManager($manager3);
 
-        self::assertFalse(isset($registry[$task1]));
-        self::assertFalse(isset($registry[$task2]));
-        self::assertFalse(isset($registry[$task3]));
+        $promise1 = $this->createMock(PromiseInterface::class);
+        $promise1->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task1, $promise1));
 
-        self::assertNull($registry[$task1]);
-        self::assertNull($registry[$task2]);
-        self::assertNull($registry[$task3]);
+        $promise2 = $this->createMock(PromiseInterface::class);
+        $promise2->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task2, $promise2));
 
-        $registry[$task1] = $manager1;
-        $registry[$task2] = $manager2;
-        $registry[$task3] = $manager3;
+        $promise3 = $this->createMock(PromiseInterface::class);
+        $promise3->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task3, $promise3));
 
-        self::assertTrue(isset($registry[$task1]));
-        self::assertTrue(isset($registry[$task2]));
-        self::assertTrue(isset($registry[$task3]));
 
-        self::assertEquals($manager1, $registry[$task1]);
-        self::assertEquals($manager2, $registry[$task2]);
-        self::assertEquals($manager3, $registry[$task3]);
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->register($task1, $manager1));
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->register($task2, $manager2));
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->register($task3, $manager3));
 
-        $registry[$task2] = $manager3;
-        self::assertEquals($manager3, $registry[$task2]);
+        $promise4 = $this->createMock(PromiseInterface::class);
+        $promise4->expects(self::once())->method('success')->willReturnCallback(
+            function ($manager) use ($manager1, $promise4) {
+                self::assertInstanceOf(TaskManagerInterface::class, $manager);
+                self::assertEquals($manager->getIdentifier(), $manager1->getIdentifier());
 
-        unset($registry[$task2]);
-        $registry[$task3] = $manager1;
+                return $promise4;
+            }
+        );
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task1, $promise4));
 
-        self::assertTrue(isset($registry[$task1]));
-        self::assertFalse(isset($registry[$task2]));
-        self::assertTrue(isset($registry[$task3]));
+        $promise5 = $this->createMock(PromiseInterface::class);
+        $promise5->expects(self::once())->method('success')->willReturnCallback(
+            function ($manager) use ($manager2, $promise5) {
+                self::assertInstanceOf(TaskManagerInterface::class, $manager);
+                self::assertEquals($manager->getIdentifier(), $manager2->getIdentifier());
 
-        self::assertEquals($manager1, $registry[$task1]);
-        self::assertNull($registry[$task2]);
-        self::assertEquals($manager1, $registry[$task3]);
+                return $promise5;
+            }
+        );
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task2, $promise5));
+
+        $promise6 = $this->createMock(PromiseInterface::class);
+        $promise6->expects(self::once())->method('success')->willReturnCallback(
+            function ($manager) use ($manager3, $promise6) {
+                self::assertInstanceOf(TaskManagerInterface::class, $manager);
+                self::assertEquals($manager->getIdentifier(), $manager3->getIdentifier());
+
+                return $promise6;
+            }
+        );
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task3, $promise6));
+
+
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->register($task2, $manager3));
+        $promise7 = $this->createMock(PromiseInterface::class);
+        $promise7->expects(self::once())->method('success')->willReturnCallback(
+            function ($manager) use ($manager3, $promise7) {
+                self::assertInstanceOf(TaskManagerInterface::class, $manager);
+                self::assertEquals($manager->getIdentifier(), $manager3->getIdentifier());
+
+                return $promise7;
+            }
+        );
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task2, $promise7));
+
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->remove($task2));
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->register($task3, $manager1));
+
+        $promise8 = $this->createMock(PromiseInterface::class);
+        $promise8->expects(self::once())->method('success')->willReturnCallback(
+            function ($manager) use ($manager1, $promise8) {
+                self::assertInstanceOf(TaskManagerInterface::class, $manager);
+                self::assertEquals($manager->getIdentifier(), $manager1->getIdentifier());
+
+                return $promise8;
+            }
+        );
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task1, $promise8));
+
+        $promise9 = $this->createMock(PromiseInterface::class);
+        $promise9->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task2, $promise9));
+
+        $promise10 = $this->createMock(PromiseInterface::class);
+        $promise10->expects(self::once())->method('success')->willReturnCallback(
+            function ($manager) use ($manager1, $promise10) {
+                self::assertInstanceOf(TaskManagerInterface::class, $manager);
+                self::assertEquals($manager->getIdentifier(), $manager1->getIdentifier());
+
+                return $promise10;
+            }
+        );
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task3, $promise10));
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testArrayAccessBehaviorUnknownManager()
     {
         $manager1 = $this->createMock(TaskManagerInterface::class);
@@ -138,15 +201,16 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
 
         $registry = $this->buildRegistry();
 
-        self::assertFalse(isset($registry[$task1]));
+        $promise1 = $this->createMock(PromiseInterface::class);
+        $promise1->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task1, $promise1));
 
-        self::assertNull($registry[$task1]);
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->register($task1, $manager1));
 
-        $registry[$task1] = $manager1;
+        $promise2 = $this->createMock(PromiseInterface::class);
+        $promise2->expects(self::once())->method('fail')->willReturnSelf();
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task1, $promise2));
 
-        self::assertTrue(isset($registry[$task1]));
-
-        $registry[$task1];
     }
 
     public function testClearAll()
@@ -161,17 +225,23 @@ abstract class AbstractTasksManagerByTasksRegistryTest extends \PHPUnit_Framewor
         $manager = $this->createMock(TaskManagerInterface::class);
         $registry->addTaskManager($manager);
 
-        self::assertFalse(isset($registry[$task]));
+        $promise1 = $this->createMock(PromiseInterface::class);
+        $promise1->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task, $promise1));
 
-        $registry[$task] = $manager;
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->register($task, $manager));
 
-        self::assertTrue(isset($registry[$task]));
+        $promise2 = $this->createMock(PromiseInterface::class);
+        $promise2->expects(self::once())->method('success')->willReturnSelf();
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task, $promise2));
 
         self::assertInstanceOf(
             TasksManagerByTasksRegistryInterface::class,
             $registry->clearAll()
         );
 
-        self::assertFalse(isset($registry[$task]));
+        $promise3 = $this->createMock(PromiseInterface::class);
+        $promise3->expects(self::once())->method('fail');
+        self::assertInstanceOf(TasksManagerByTasksRegistryInterface::class, $registry->get($task, $promise3));
     }
 }

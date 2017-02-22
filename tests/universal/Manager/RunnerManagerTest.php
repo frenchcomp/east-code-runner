@@ -32,6 +32,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksStandbyRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Test RunnerManagerTest.
@@ -75,32 +76,36 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             $this->tasksByRunner = $this->createMock(TasksByRunnerRegistryInterface::class);
 
             $repository = [];
+
             $this->tasksByRunner
                 ->expects(self::any())
-                ->method('offsetExists')
-                ->willReturnCallback(function (RunnerInterface $name) use (&$repository) {
-                    return isset($repository[$name->getIdentifier()]);
+                ->method('get')
+                ->willReturnCallback(function (RunnerInterface $name, PromiseInterface $promise) use (&$repository) {
+                    if (isset($repository[$name->getIdentifier()])) {
+                        $promise->success($repository[$name->getIdentifier()]);
+                    } else {
+                        $promise->fail(new \DomainException());
+                    }
+
+                    return $this->tasksByRunner;
                 });
 
             $this->tasksByRunner
                 ->expects(self::any())
-                ->method('offsetGet')
-                ->willReturnCallback(function (RunnerInterface $name) use (&$repository) {
-                    return $repository[$name->getIdentifier()];
-                });
-
-            $this->tasksByRunner
-                ->expects(self::any())
-                ->method('offsetSet')
+                ->method('register')
                 ->willReturnCallback(function (RunnerInterface $name, $value) use (&$repository) {
                     $repository[$name->getIdentifier()] = $value;
+
+                    return $this->tasksByRunner;
                 });
 
             $this->tasksByRunner
                 ->expects(self::any())
-                ->method('offsetUnset')
+                ->method('remove')
                 ->willReturnCallback(function (RunnerInterface $name) use (&$repository) {
                     unset($repository[$name->getIdentifier()]);
+
+                    return $this->tasksByRunner;
                 });
         }
 
@@ -116,32 +121,36 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             $this->tasksManagerByTasks = $this->createMock(TasksManagerByTasksRegistryInterface::class);
 
             $repository = [];
+
             $this->tasksManagerByTasks
                 ->expects(self::any())
-                ->method('offsetExists')
-                ->willReturnCallback(function (TaskInterface $name) use (&$repository) {
-                    return isset($repository[$name->getId()]);
+                ->method('get')
+                ->willReturnCallback(function (TaskInterface $name, PromiseInterface $promise) use (&$repository) {
+                    if (isset($repository[$name->getId()])) {
+                        $promise->success($repository[$name->getId()]);
+                    } else {
+                        $promise->fail(new \DomainException());
+                    }
+
+                    return $this->tasksManagerByTasks;
                 });
 
             $this->tasksManagerByTasks
                 ->expects(self::any())
-                ->method('offsetGet')
-                ->willReturnCallback(function (TaskInterface $name) use (&$repository) {
-                    return $repository[$name->getId()];
-                });
-
-            $this->tasksManagerByTasks
-                ->expects(self::any())
-                ->method('offsetSet')
+                ->method('register')
                 ->willReturnCallback(function (TaskInterface $name, $value) use (&$repository) {
                     $repository[$name->getId()] = $value;
+
+                    return $this->tasksManagerByTasks;
                 });
 
             $this->tasksManagerByTasks
                 ->expects(self::any())
-                ->method('offsetUnset')
+                ->method('remove')
                 ->willReturnCallback(function (TaskInterface $name) use (&$repository) {
                     unset($repository[$name->getId()]);
+
+                    return $this->tasksManagerByTasks;
                 });
         }
 
@@ -171,12 +180,14 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             $this->tasksStandbyRegistry
                 ->expects(self::any())
                 ->method('dequeue')
-                ->willReturnCallback(function (RunnerInterface $runner) use (&$queue, $tasksStandbyRegistry) {
+                ->willReturnCallback(function (RunnerInterface $runner, PromiseInterface $promise) use (&$queue, $tasksStandbyRegistry) {
                     if (empty($queue[$runner->getIdentifier()])) {
-                        return null;
+                        $promise->fail(new \OutOfBoundsException());
+                    } else {
+                        $promise->success(array_shift($queue[$runner->getIdentifier()]));
                     }
 
-                    return array_shift($queue[$runner->getIdentifier()]);
+                    return $this->tasksStandbyRegistry;
                 });
         }
 
@@ -216,7 +227,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $runner->expects(self::once())->method('rememberYourCurrentTask')->with($task)->willReturnSelf();
         $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
 
-        $this->getTasksByRunnerMock()[$runner] = $task;
+        $this->getTasksByRunnerMock()->register($runner, $task);
 
         self::assertInstanceOf(
             RunnerManagerInterface::class,
@@ -233,7 +244,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $runner->expects(self::never())->method('execute');
         $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
 
-        $this->getTasksByRunnerMock()[$runner] = $task;
+        $this->getTasksByRunnerMock()->register($runner, $task);
 
         $runner->expects(self::any())
             ->method('canYouExecute')
@@ -280,7 +291,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
                 return $runner;
             });
 
-        $this->getTasksByRunnerMock()[$runner] = $task;
+        $this->getTasksByRunnerMock()->register($runner, $task);
 
         $this->getTasksStandbyRegistryMock()
             ->expects(self::once())
@@ -301,7 +312,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             )
         );
 
-        unset($this->getTasksByRunnerMock()[$runner]);
+        $this->getTasksByRunnerMock()->remove($runner);
 
         self::assertInstanceOf(
             RunnerManagerInterface::class,
@@ -321,7 +332,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $runner->expects(self::once())->method('execute')->willThrowException(new \Exception());
         $runner->expects(self::any())->method('getIdentifier')->willReturn('abc');
 
-        $this->getTasksByRunnerMock()[$runner] = $task;
+        $this->getTasksByRunnerMock()->register($runner, $task);
 
         $runner->expects(self::any())
             ->method('canYouExecute')
@@ -354,7 +365,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             )
         );
 
-        unset($this->getTasksByRunnerMock()[$runner]);
+        $this->getTasksByRunnerMock()->remove($runner);
 
         self::assertInstanceOf(
             RunnerManagerInterface::class,
@@ -388,7 +399,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
     {
         $this->getTasksByRunnerMock()
             ->expects(self::never())
-            ->method('offsetUnset');
+            ->method('remove');
 
         parent::testPushStatusReturn();
     }
@@ -399,7 +410,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $this->getTasksByRunnerMock()
             ->expects(self::once())
-            ->method('offsetUnset');
+            ->method('remove');
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
@@ -456,7 +467,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $this->getTasksByRunnerMock()
             ->expects(self::once())
-            ->method('offsetUnset');
+            ->method('remove');
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
@@ -513,7 +524,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $this->getTasksByRunnerMock()
             ->expects(self::once())
-            ->method('offsetUnset');
+            ->method('remove');
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
@@ -570,7 +581,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $this->getTasksByRunnerMock()
             ->expects(self::never())
-            ->method('offsetUnset');
+            ->method('remove');
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');
@@ -630,7 +641,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
 
         $this->getTasksByRunnerMock()
             ->expects(self::never())
-            ->method('offsetUnset');
+            ->method('remove');
 
         $runner = $this->createMock(RunnerInterface::class);
         $runner->expects(self::any())->method('getIdentifier')->willReturn('runner');

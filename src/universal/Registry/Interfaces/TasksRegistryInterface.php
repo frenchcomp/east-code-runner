@@ -22,7 +22,7 @@
 
 namespace Teknoo\East\CodeRunner\Registry\Interfaces;
 
-use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Interface TasksRegistryInterface.
@@ -36,8 +36,8 @@ interface TasksRegistryInterface
 {
     /**
      * @param string $taskUid
-     *
-     * @return TaskInterface
+     * @param PromiseInterface $promise
+     * @return TasksRegistryInterface
      */
-    public function get(string $taskUid): TaskInterface;
+    public function get(string $taskUid, PromiseInterface $promise): TasksRegistryInterface;
 }

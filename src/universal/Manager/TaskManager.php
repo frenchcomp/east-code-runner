@@ -33,6 +33,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunner\Task\Status;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class TaskManager.
@@ -148,9 +149,9 @@ class TaskManager implements TaskManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function executeMe(TaskInterface $task): TaskManagerInterface
+    public function executeMe(TaskInterface $task, PromiseInterface $promise): TaskManagerInterface
     {
-        $this->doRegisterAndExecuteTask($task);
+        $this->doRegisterAndExecuteTask($task, $promise);
 
         return $this;
     }
@@ -221,20 +222,27 @@ class TaskManager implements TaskManagerInterface
 
     /**
      * @param TaskInterface $task
+     * @param PromiseInterface $promise;
      *
      * @return TaskManager
      */
-    private function doRegisterAndExecuteTask(TaskInterface $task): TaskManager
+    private function doRegisterAndExecuteTask(TaskInterface $task, PromiseInterface $promise): TaskManager
     {
-        $task->registerStatus(new Status(Status::STATUS_REGISTERED));
-        $this->persistTask($task);
-        $this->generateUrl($task);
+        try {
+            $task->registerStatus(new Status(Status::STATUS_REGISTERED));
+            $this->persistTask($task);
+            $this->generateUrl($task);
 
-        foreach ($this->registries as $registry) {
-            $registry[$task] = $this;
+            foreach ($this->registries as $registry) {
+                $registry->register($task, $this);
+            }
+
+            $this->dispatchToRunnerManager($task);
+
+            $promise->success($promise);
+        } catch (\Throwable $e) {
+            $promise->fail($e);
         }
-
-        $this->dispatchToRunnerManager($task);
 
         return $this;
     }
@@ -248,7 +256,7 @@ class TaskManager implements TaskManagerInterface
     {
         $task->setDeletedAt($this->datesService->getDate());
         foreach ($this->registries as $registry) {
-            unset($registry[$task]);
+            $registry->remove($task);
         }
         $this->persistTask($task);
 

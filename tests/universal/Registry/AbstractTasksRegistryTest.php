@@ -24,6 +24,7 @@ namespace Teknoo\Tests\East\CodeRunner\Registry;
 
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class AbstractTasksRegistryTest.
@@ -36,21 +37,39 @@ abstract class AbstractTasksRegistryTest extends \PHPUnit_Framework_TestCase
 {
     abstract public function buildRegistry(): TasksRegistryInterface;
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testGetNotFound()
     {
-        $this->buildRegistry()->get('barFoo');
+        $promise = $this->createMock(PromiseInterface::class);
+        $promise->expects(self::once())
+            ->method('fail')
+            ->willReturnCallback(function ($exception) use ($promise) {
+                self::assertInstanceOf(\DomainException::class, $exception);
+
+                return $promise;
+            });
+
+        self::assertInstanceOf(
+            TasksRegistryInterface::class,
+            $this->buildRegistry()->get('barFoo', $promise)
+        );
     }
 
     public function testGet()
     {
         $registry = $this->buildRegistry();
 
+        $promise = $this->createMock(PromiseInterface::class);
+        $promise->expects(self::once())
+            ->method('success')
+            ->willReturnCallback(function ($task) use ($promise) {
+                self::assertInstanceOf(TaskInterface::class, $task);
+
+                return $promise;
+            });
+
         self::assertInstanceOf(
-            TaskInterface::class,
-            $registry->get('fooBar')
+            TasksRegistryInterface::class,
+            $registry->get('fooBar', $promise)
         );
     }
 }

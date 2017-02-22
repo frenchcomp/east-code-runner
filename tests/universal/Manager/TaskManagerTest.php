@@ -30,6 +30,7 @@ use Teknoo\East\CodeRunner\Manager\TaskManager;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterface;
 use Teknoo\East\CodeRunner\Service\DatesService;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Tests TaskManagerTest.
@@ -188,9 +189,16 @@ class TaskManagerTest extends AbstractTaskManagerTest
             ->with(new \PHPUnit_Framework_Constraint_Not(self::isEmpty()))
             ->willReturnSelf();
 
+        $promise = $this->createMock(PromiseInterface::class);
+        $promise->expects(self::once())
+            ->method('fail')
+            ->willReturnCallback(function ($e) {
+                throw $e;
+            });
+
         self::assertInstanceOf(
             TaskManagerInterface::class,
-            $manager->executeMe($task)
+            $manager->executeMe($task, $promise)
         );
     }
 }

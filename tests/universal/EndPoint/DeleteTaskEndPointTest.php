@@ -31,6 +31,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Registry\TasksManagerByTasksRegistry;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -99,8 +100,12 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistryMock()
             ->expects(self::any())
             ->method('get')
-            ->with(123)
-            ->willThrowException(new \DomainException());
+            ->willReturnCallback(function ($value, PromiseInterface $promise) {
+                self::assertEquals(123, $value);
+                $promise->fail(new \DomainException());
+
+                return $this->getTasksRegistryMock();
+            });
 
         $endpoint = $this->buildEndPoint();
 
@@ -129,8 +134,22 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistryMock()
             ->expects(self::any())
             ->method('get')
-            ->with(123)
-            ->willReturn($task);
+            ->willReturnCallback(function ($value, PromiseInterface $promise) use ($task) {
+                self::assertEquals(123, $value);
+                $promise->success($task);
+
+                return $this->getTasksRegistryMock();
+            });
+
+        $this->getTasksManagerByTasksRegistryMock()
+            ->expects(self::any())
+            ->method('get')
+            ->willReturnCallback(function ($identifier, PromiseInterface $promise) {
+                $promise->fail(new \DomainException());
+
+                return $this->getTasksManagerByTasksRegistryMock();
+            });
+
 
         $endpoint = $this->buildEndPoint();
 
@@ -159,8 +178,12 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $this->getTasksRegistryMock()
             ->expects(self::any())
             ->method('get')
-            ->with(123)
-            ->willReturn($task);
+            ->willReturnCallback(function ($value, PromiseInterface $promise) use ($task) {
+                self::assertEquals(123, $value);
+                $promise->success($task);
+
+                return $this->getTasksRegistryMock();
+            });
 
         $manager = $this->createMock(TaskManagerInterface::class);
         $manager->expects(self::once())
@@ -170,13 +193,12 @@ class DeleteTaskEndPointTest extends \PHPUnit_Framework_TestCase
 
         $this->getTasksManagerByTasksRegistryMock()
             ->expects(self::any())
-            ->method('offsetExists')
-            ->willReturn(true);
+            ->method('get')
+            ->willReturnCallback(function ($identifier, PromiseInterface $promise) use ($manager) {
+                $promise->success($manager);
 
-        $this->getTasksManagerByTasksRegistryMock()
-            ->expects(self::any())
-            ->method('offsetGet')
-            ->willReturn($manager);
+                return $this->getTasksManagerByTasksRegistryMock();
+            });
 
         $endpoint = $this->buildEndPoint();
 

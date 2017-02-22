@@ -29,6 +29,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterf
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
+use Teknoo\East\Foundation\Promise\Promise;
 use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
 
 /**
@@ -83,27 +84,41 @@ class DeleteTaskEndPoint
     ) {
         //Retrieve the task from the task registry<
         $task = null;
-        try {
-            $task = $this->tasksRegistry->get($taskId);
-        } catch (\DomainException $e) {
-            $client->responseFromController(
-                new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found']))
-            );
+        $this->tasksRegistry->get(
+            $taskId,
+            new Promise(
+                function ($result) use (&$task) {
+                    $task = $result;
+                },
+                function () use ($client) {
+                    $client->responseFromController(
+                        new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found']))
+                    );
+                }
+            )
+        );
 
+        if (!$task instanceof TaskInterface) {
             return $this;
         }
 
         //Retrieve the manager from the manager registry
         $manager = null;
-        if ($task instanceof TaskInterface && isset($this->tasksManagerByTasksRegistry[$task])) {
-            $manager = $this->tasksManagerByTasksRegistry[$task];
-        }
+        $this->tasksManagerByTasksRegistry->get(
+            $task,
+            new Promise(
+                function ($result) use (&$manager) {
+                    $manager = $result;
+                },
+                function () use ($client) {
+                    $client->responseFromController(
+                        new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found']))
+                    );
+                }
+            )
+        );
 
         if (!$manager instanceof TaskManagerInterface) {
-            $client->responseFromController(
-                new Response(404, [], json_encode(['success' => false, 'message' => 'Task not found']))
-            );
-
             return $this;
         }
 

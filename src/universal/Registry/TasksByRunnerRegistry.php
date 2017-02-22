@@ -30,11 +30,11 @@ use Teknoo\East\CodeRunner\Repository\TaskExecutionRepository;
 use Teknoo\East\CodeRunner\Runner\Interfaces\RunnerInterface;
 use Teknoo\East\CodeRunner\Service\DatesService;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class TasksByRunnerRegistry.
  * Default implementation of TasksByRunnerRegistryInterface to persist the task currently executed by a runner.
- * The registry is usable via an array access behavior, with runners as key, to return and manipulate tasks.
  * The registry use TaskExecution entity to persist and manage the relation.
  *
  * @copyright   Copyright (c) 2009-2017 Richard Déloge (richarddeloge@gmail.com)
@@ -76,21 +76,6 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function offsetExists($offset)
-    {
-        if (!$offset instanceof RunnerInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $runnerIdentifier = $offset->getIdentifier();
-        $taskExecution = $this->taskExecutionRepository->findByRunnerIdentifier($runnerIdentifier);
-
-        return $taskExecution instanceof TaskExecution && !$taskExecution->getDeletedAt() instanceof \DateTime;
-    }
-
-    /**
      * @param RunnerInterface $runner
      *
      * @return null|TaskExecution
@@ -110,19 +95,19 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetGet($offset)
+    public function get(RunnerInterface $runner, PromiseInterface $promise): TasksByRunnerRegistryInterface
     {
-        if (!$offset instanceof RunnerInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $taskExecution = $this->getTaskExecution($offset);
+        $taskExecution = $this->getTaskExecution($runner);
 
         if (!$taskExecution instanceof TaskExecution) {
-            return null;
+            $promise->fail(new \DomainException('Runner not currently active'));
+
+            return $this;
         }
 
-        return $taskExecution->getTask();
+        $promise->success($taskExecution->getTask());
+
+        return $this;
     }
 
     /**
@@ -156,33 +141,27 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function register(RunnerInterface $runner, TaskInterface $task): TasksByRunnerRegistryInterface
     {
-        if (!$offset instanceof RunnerInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $taskExecution = $this->getTaskExecution($offset);
+        $taskExecution = $this->getTaskExecution($runner);
 
         if ($taskExecution instanceof TaskExecution) {
-            $taskExecution->setTask($value);
+            $taskExecution->setTask($task);
         } else {
-            $taskExecution = $this->create($value, $offset);
+            $taskExecution = $this->create($task, $runner);
         }
 
         $this->save($taskExecution);
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function remove(RunnerInterface $runner): TasksByRunnerRegistryInterface
     {
-        if (!$offset instanceof RunnerInterface) {
-            throw new \InvalidArgumentException();
-        }
-
-        $taskExecution = $this->getTaskExecution($offset);
+        $taskExecution = $this->getTaskExecution($runner);
 
         if ($taskExecution instanceof TaskExecution) {
             $taskExecution->setDeletedAt($this->datesService->getDate());
@@ -190,7 +169,9 @@ class TasksByRunnerRegistry implements TasksByRunnerRegistryInterface
             $this->save($taskExecution);
         }
 
-        $this->taskExecutionRepository->clearExecution($offset->getIdentifier());
+        $this->taskExecutionRepository->clearExecution($runner->getIdentifier());
+
+        return $this;
     }
 
     /**

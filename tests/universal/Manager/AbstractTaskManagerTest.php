@@ -28,6 +28,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksManagerByTasksRegistryInterf
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\Foundation\Promise\PromiseInterface;
 
 /**
  * Class AbstractTaskManagerTest.
@@ -58,14 +59,31 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteMeBadTask()
     {
-        $this->buildManager()->executeMe(new \stdClass());
+        $this->buildManager()->executeMe(
+            new \stdClass(),
+            $this->createMock(PromiseInterface::class)
+        );
+    }
+
+    /**
+     * @expectedException \Throwable
+     */
+    public function testExecuteMeBadPromise()
+    {
+        $this->buildManager()->executeMe(
+            $this->createMock(TaskInterface::class),
+            new \stdClass()
+        );
     }
 
     public function testExecuteMeReturn()
     {
         self::assertInstanceOf(
             TaskManagerInterface::class,
-            $this->buildManager()->executeMe($this->createMock(TaskInterface::class))
+            $this->buildManager()->executeMe(
+                $this->createMock(TaskInterface::class),
+                $this->createMock(PromiseInterface::class)
+            )
         );
     }
 
@@ -81,7 +99,7 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
 
         self::assertInstanceOf(
             TaskManagerInterface::class,
-            $manager->executeMe($task)
+            $manager->executeMe($task, $this->createMock(PromiseInterface::class))
         );
     }
 
