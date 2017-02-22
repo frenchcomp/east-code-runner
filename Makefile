@@ -24,7 +24,7 @@ phploc:
 	vendor/bin/phploc src
 
 phpmd:
-	vendor/bin/phpmd --suffixes php src/ text codesize,design --exclude Extension.php,Provider.php,Task.php,RabbitMQReturnConsumerService.php
+	vendor/bin/phpmd --suffixes php src/ text codesize,design --exclude Extension.php,Provider.php,Task.php,Taskmanager.php,RabbitMQReturnConsumerService.php
     ###False positive :
         #Exclude Provider (PSR11),
         #Task and RabbitMQReturnConsumerService (phpmd consider interfaces as classes....)

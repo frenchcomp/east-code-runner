@@ -167,7 +167,6 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
                     }
                 )
             );
-
         } catch (DBALException $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
 

@@ -69,7 +69,7 @@ class Running implements StateInterface
 
             $this->tasksByRunner->get(
                 $runner,
-                new Promise(function(TaskInterface $task) use ($runner){
+                new Promise(function (TaskInterface $task) use ($runner) {
                     $runner->rememberYourCurrentTask($task);
                 })
             );
@@ -153,9 +153,10 @@ class Running implements StateInterface
                         if ($runner->supportsMultiplesTasks()) {
                             $this->tasksByRunner->get(
                                 $runner,
-                                new Promise(function(TaskInterface $currentTaskExecuted) use ($runner, $task) {
+                                new Promise(function (TaskInterface $currentTaskExecuted) use ($runner, $task) {
                                     if ($task->getUrl() == $currentTaskExecuted->getUrl()) {
-                                        //It's the task currently initializing by the runner, inform it to switch to next task
+                                        //It's the task currently initializing by the runner,
+                                        // inform it to switch to next task
                                         $this->clearRunner($runner, $task);
                                     }
                                 })
@@ -191,7 +192,7 @@ class Running implements StateInterface
             $this->tasksStandbyRegistry->enqueue($runner, $task);
             $this->tasksManagerByTasks->get(
                 $task,
-                new Promise(null, function() use ($task, $taskManager) {
+                new Promise(null, function () use ($task, $taskManager) {
                     //To prevent some issue if manager had not already registerd itself
                     $this->tasksManagerByTasks->register($task, $taskManager);
                 })
