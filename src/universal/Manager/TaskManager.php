@@ -239,7 +239,7 @@ class TaskManager implements TaskManagerInterface
 
             $this->dispatchToRunnerManager($task);
 
-            $promise->success($promise);
+            $promise->success($task);
         } catch (\Throwable $e) {
             $promise->fail($e);
         }

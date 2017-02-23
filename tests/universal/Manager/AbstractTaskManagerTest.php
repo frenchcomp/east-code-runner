@@ -97,9 +97,12 @@ abstract class AbstractTaskManagerTest extends \PHPUnit_Framework_TestCase
             ->with(new \PHPUnit_Framework_Constraint_Not(self::isEmpty()))
             ->willReturnSelf();
 
+        $promise = $this->createMock(PromiseInterface::class);
+        $promise->expects(self::once())->method('success')->with($task)->willReturnSelf();
+
         self::assertInstanceOf(
             TaskManagerInterface::class,
-            $manager->executeMe($task, $this->createMock(PromiseInterface::class))
+            $manager->executeMe($task, $promise)
         );
     }
 
