@@ -48,6 +48,8 @@ abstract class AbstractTasksRegistryTest extends \PHPUnit_Framework_TestCase
                 return $promise;
             });
 
+        $promise->expects(self::never())->method('success');
+
         self::assertInstanceOf(
             TasksRegistryInterface::class,
             $this->buildRegistry()->get('barFoo', $promise)
@@ -66,6 +68,8 @@ abstract class AbstractTasksRegistryTest extends \PHPUnit_Framework_TestCase
 
                 return $promise;
             });
+
+        $promise->expects(self::never())->method('fail');
 
         self::assertInstanceOf(
             TasksRegistryInterface::class,

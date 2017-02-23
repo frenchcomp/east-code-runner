@@ -62,6 +62,8 @@ class TasksRegistry implements TasksRegistryInterface
 
         if (!$task instanceof Task) {
             $promise->fail(new \DomainException('Error, the task was not found'));
+
+            return $this;
         }
 
         $promise->success($task);
