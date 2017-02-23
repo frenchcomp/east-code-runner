@@ -1,8 +1,8 @@
 #Teknoo Software - Code Runner - Change Log
 
-##[0.0.1-alpha19] - 2017-02-22
+##[0.0.1-alpha19] - 2017-02-23
 ###Added
-Implement East Foundation Promise
+- Implement East Foundation Promise
 
 ###Updated
 - Refactoring Endpoint to use them
