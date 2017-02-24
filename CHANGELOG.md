@@ -1,6 +1,13 @@
 #Teknoo Software - Code Runner - Change Log
 
 ##[0.0.1-alpha19] - 2017-02-23
+###Updated
+- Migrate RabbitMQReturnConsumerService to RabbitMQReturnConsumerWorker
+
+###Added
+- Tainted behavior on RabbitMQReturnConsumerWorker
+
+##[0.0.1-alpha19] - 2017-02-23
 ###Added
 - Implement East Foundation Promise
 

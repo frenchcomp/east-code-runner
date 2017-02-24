@@ -59,7 +59,7 @@ use Teknoo\East\CodeRunner\Repository\TaskStandbyRepository;
 use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\DatesService;
-use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
+use Teknoo\East\CodeRunner\Worker\RabbitMQReturnConsumerWorker;
 use Teknoo\East\CodeRunner\Worker\ComposerConfigurator;
 use Teknoo\East\CodeRunner\Worker\PHP7Runner;
 use Teknoo\East\CodeRunner\Worker\PHPCommander;
@@ -327,12 +327,12 @@ class CodeRunnerServiceProvider implements ServiceProvider
     /**
      * @param ContainerInterface $container
      *
-     * @return RabbitMQReturnConsumerService
+     * @return RabbitMQReturnConsumerWorker
      */
-    public static function createRabbitMQReturnConsumerService(
+    public static function createRabbitMQReturnConsumerWorker(
         ContainerInterface $container
-    ): RabbitMQReturnConsumerService {
-        return new RabbitMQReturnConsumerService(
+    ): RabbitMQReturnConsumerWorker {
+        return new RabbitMQReturnConsumerWorker(
             $container->get(TasksRegistryInterface::class),
             $container->get(RemotePHP7Runner::class),
             $container->get(RunnerManagerInterface::class),
@@ -421,7 +421,7 @@ class CodeRunnerServiceProvider implements ServiceProvider
 
             //RemotePHP7Runner
             RemotePHP7Runner::class => [static::class, 'createRemotePHP7Runner'],
-            RabbitMQReturnConsumerService::class => [static::class, 'createRabbitMQReturnConsumerService'],
+            RabbitMQReturnConsumerWorker::class => [static::class, 'createRabbitMQReturnConsumerWorker'],
             ComposerConfigurator::class => [static::class, 'createComposerConfigurator'],
             PHP7Runner::class => [static::class, 'createPHP7Runner'],
             PHPCommander::class => [static::class, 'createPHPCommander'],

@@ -51,7 +51,7 @@ use Teknoo\East\CodeRunner\Repository\TaskRepository;
 use Teknoo\East\CodeRunner\Repository\TaskStandbyRepository;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Service\DatesService;
-use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
+use Teknoo\East\CodeRunner\Worker\RabbitMQReturnConsumerWorker;
 use Teknoo\East\CodeRunner\Worker\ComposerConfigurator;
 use Teknoo\East\CodeRunner\Worker\PHP7Runner;
 use Teknoo\East\CodeRunner\Worker\PHPCommander;
@@ -505,7 +505,7 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreateRabbitMQReturnConsumerService()
+    public function testCreateRabbitMQReturnConsumerWorker()
     {
         $container = $this->createMock(ContainerInterface::class);
 
@@ -533,8 +533,8 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
             });
 
         self::assertInstanceOf(
-            RabbitMQReturnConsumerService::class,
-            $this->buildProvider()->createRabbitMQReturnConsumerService($container)
+            RabbitMQReturnConsumerWorker::class,
+            $this->buildProvider()->createRabbitMQReturnConsumerWorker($container)
         );
     }
 
@@ -644,7 +644,7 @@ class CodeRunnerServiceProviderTest extends \PHPUnit_Framework_TestCase
         self::assertTrue(isset($definitions[GetTaskEndPoint::class]));
         self::assertTrue(isset($definitions[RegisterTaskEndPoint::class]));
         self::assertTrue(isset($definitions[LoadNextTasksEndPoint::class]));
-        self::assertTrue(isset($definitions[RabbitMQReturnConsumerService::class]));
+        self::assertTrue(isset($definitions[RabbitMQReturnConsumerWorker::class]));
         self::assertTrue(isset($definitions[ComposerConfigurator::class]));
         self::assertTrue(isset($definitions[PHP7Runner::class]));
         self::assertTrue(isset($definitions[PHPCommander::class]));

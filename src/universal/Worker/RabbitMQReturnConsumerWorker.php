@@ -20,7 +20,7 @@
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 
-namespace Teknoo\East\CodeRunner\Service;
+namespace Teknoo\East\CodeRunner\Worker;
 
 use Doctrine\DBAL\DBALException;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -35,7 +35,7 @@ use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Promise\Promise;
 
 /**
- * Class RabbitMQReturnConsumerService.
+ * Class RabbitMQReturnConsumerWorker.
  * AMQP Consumer service, to listen the queue used by the RemotePHP7Runner's worker to return to this platform status
  * and tasks' results. Results and status use the same chanel, the service dispatches them to good Runner manager's
  * methods. Objects are serialized in JSON format and are automatically deserialized by the service.
@@ -44,7 +44,7 @@ use Teknoo\East\Foundation\Promise\Promise;
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-class RabbitMQReturnConsumerService implements ConsumerInterface
+class RabbitMQReturnConsumerWorker implements ConsumerInterface
 {
     /**
      * @var TasksRegistryInterface
@@ -65,6 +65,11 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var bool
+     */
+    private $taintedFailure = false;
 
     /**
      * RabbitMQResultConsumerService constructor.
@@ -147,6 +152,10 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
+        if (true === $this->isTainted()) {
+            return ConsumerInterface::MSG_REJECT_REQUEUE;
+        }
+
         try {
             list($taskUid, $object) = $this->extractObject($msg);
 
@@ -170,6 +179,8 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
         } catch (DBALException $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
 
+            $this->enableTaintedFlag();
+
             return ConsumerInterface::MSG_REJECT_REQUEUE;
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
@@ -178,5 +189,40 @@ class RabbitMQReturnConsumerService implements ConsumerInterface
         }
 
         return ConsumerInterface::MSG_ACK;
+    }
+
+    /**
+     * To check if the consumer is tainted or not
+     *
+     * @return bool
+     */
+    private function isTainted(): bool
+    {
+        return !empty($this->taintedFailure);
+    }
+
+    /**
+     * To taint this consumer to stop and exit
+     *
+     * @return RabbitMQReturnConsumerWorker
+     */
+    private function enableTaintedFlag(): RabbitMQReturnConsumerWorker
+    {
+        $this->taintedFailure = true;
+
+        return $this;
+    }
+
+    /**
+     * To dispatch the information about tainted consumer.
+     *
+     * @param callable $callback
+     * @return RabbitMQReturnConsumerWorker
+     */
+    public function tellMeIfYouAreTainted(callable $callback): RabbitMQReturnConsumerWorker
+    {
+        $callback($this->isTainted());
+
+        return $this;
     }
 }

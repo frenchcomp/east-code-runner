@@ -20,7 +20,7 @@
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
 
-namespace Teknoo\Tests\East\CodeRunner\Service;
+namespace Teknoo\Tests\East\CodeRunner\Worker;
 
 use Doctrine\DBAL\DBALException;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -30,7 +30,7 @@ use Teknoo\East\CodeRunner\Entity\Task\Task;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
-use Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService;
+use Teknoo\East\CodeRunner\Worker\RabbitMQReturnConsumerWorker;
 use Teknoo\East\CodeRunner\Task\Status;
 use Teknoo\East\CodeRunner\Task\TextResult;
 use Teknoo\East\Foundation\Promise\PromiseInterface;
@@ -40,9 +40,9 @@ use Teknoo\East\Foundation\Promise\PromiseInterface;
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  *
- * @covers \Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService
+ * @covers \Teknoo\East\CodeRunner\Worker\RabbitMQReturnConsumerWorker
  */
-class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
+class RabbitMQReturnConsumerWorkerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TasksRegistryInterface
@@ -113,11 +113,11 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return RabbitMQReturnConsumerService
+     * @return RabbitMQReturnConsumerWorker
      */
     public function buildService()
     {
-        return new RabbitMQReturnConsumerService(
+        return new RabbitMQReturnConsumerWorker(
             $this->getTasksRegistry(),
             $this->getRemotePHP7Runner(),
             $this->getRunnerManager(),
@@ -266,7 +266,19 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::never())->method('critical');
 
-        self::assertEquals(ConsumerInterface::MSG_ACK, $this->buildService()->execute($message));
+        $service = $this->buildService();
+        self::assertEquals(ConsumerInterface::MSG_ACK, $service->execute($message));
+
+        $fail = null;
+        self::assertInstanceOf(
+            RabbitMQReturnConsumerWorker::class,
+            $service->tellMeIfYouAreTainted(
+                function ($flagValue) use (&$fail) {
+                    $fail = $flagValue;
+                }
+            )
+        );
+        self::assertFalse($fail);
     }
 
     public function testExecuteStatusErrorDBal()
@@ -294,6 +306,48 @@ class RabbitMQReturnConsumerServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->getLogger()->expects(self::once())->method('critical');
 
-        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $this->buildService()->execute($message));
+        $service = $this->buildService();
+        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $service->execute($message));
+    }
+
+    public function testExecuteStatusErrorDBalTaintedBehavior()
+    {
+        $status = new Status('foo');
+        $message = new AMQPMessage();
+        $task = new Task();
+        $message->body = json_encode(['https://foo.bar'=>$status]);
+
+        $this->getTasksRegistry()
+            ->expects(self::once())
+            ->method('get')
+            ->willReturnCallback(function ($taskUrl, PromiseInterface $promise) use ($task) {
+                self::assertEquals('https://foo.bar', $taskUrl);
+                $promise->success($task);
+
+                return $this->getTasksRegistry();
+            });
+
+        $this->getRunnerManager()
+            ->expects(self::once())
+            ->method('pushStatus')
+            ->with($this->getRemotePHP7Runner(), $task, $status)
+            ->willThrowException(new DBALException());
+
+        $this->getLogger()->expects(self::once())->method('critical');
+
+        $service = $this->buildService();
+        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $service->execute($message));
+        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $service->execute($message));
+
+        $fail = null;
+        self::assertInstanceOf(
+            RabbitMQReturnConsumerWorker::class,
+            $service->tellMeIfYouAreTainted(
+                function ($flagValue) use (&$fail) {
+                    $fail = $flagValue;
+                }
+            )
+        );
+        self::assertTrue($fail);
     }
 }
