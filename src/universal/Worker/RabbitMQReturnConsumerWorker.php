@@ -32,6 +32,7 @@ use Teknoo\East\CodeRunner\Runner\RemotePHP7Runner\RemotePHP7Runner;
 use Teknoo\East\CodeRunner\Task\Interfaces\ResultInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\StatusInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunner\Worker\Interfaces\TaintableInterface;
 use Teknoo\East\Foundation\Promise\Promise;
 
 /**
@@ -44,7 +45,7 @@ use Teknoo\East\Foundation\Promise\Promise;
  * @license     http://teknoo.software/license/mit         MIT License
  * @author      Richard Déloge <richarddeloge@gmail.com>
  */
-class RabbitMQReturnConsumerWorker implements ConsumerInterface
+class RabbitMQReturnConsumerWorker implements ConsumerInterface, TaintableInterface
 {
     /**
      * @var TasksRegistryInterface
@@ -192,7 +193,7 @@ class RabbitMQReturnConsumerWorker implements ConsumerInterface
     }
 
     /**
-     * To check if the consumer is tainted or not
+     * To check if the consumer is tainted or not.
      *
      * @return bool
      */
@@ -202,11 +203,11 @@ class RabbitMQReturnConsumerWorker implements ConsumerInterface
     }
 
     /**
-     * To taint this consumer to stop and exit
+     * To taint this consumer to stop and exit.
      *
-     * @return RabbitMQReturnConsumerWorker
+     * @return TaintableInterface
      */
-    private function enableTaintedFlag(): RabbitMQReturnConsumerWorker
+    public function enableTaintedFlag(): TaintableInterface
     {
         $this->taintedFailure = true;
 
@@ -217,9 +218,10 @@ class RabbitMQReturnConsumerWorker implements ConsumerInterface
      * To dispatch the information about tainted consumer.
      *
      * @param callable $callback
-     * @return RabbitMQReturnConsumerWorker
+     *
+     * @return TaintableInterface
      */
-    public function tellMeIfYouAreTainted(callable $callback): RabbitMQReturnConsumerWorker
+    public function tellMeIfYouAreTainted(callable $callback): TaintableInterface
     {
         $callback($this->isTainted());
 

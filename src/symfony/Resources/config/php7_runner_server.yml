@@ -5,7 +5,9 @@ parameters:
   teknoo.east.bundle.coderunner.runner.remote_php7.name: 'RemotePHP7Runner'
   teknoo.east.bundle.coderunner.runner.remote_php7.version: '0.0.1'
 
-  teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.class: 'Teknoo\East\CodeRunner\Service\RabbitMQReturnConsumerService'
+  teknoo.east.bundle.coderunner.worker.rabbit_mq_return_consumer.class: 'Teknoo\East\CodeRunner\Worker\RabbitMQReturnConsumerWorker'
+
+  teknoo.east.bundle.coderunner.listener.amqp_listener.class: 'Teknoo\East\CodeRunnerBundle\Listener\AMQPListener'
 
 services:
   teknoo.east.bundle.coderunner.runner.remote_php7.abstract:
@@ -22,8 +24,8 @@ services:
     calls:
       - ['addCapability', ['@teknoo.east.bundle.coderunner.runner.capability.language.php7']]
 
-  teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.abstract:
-    class: '%teknoo.east.bundle.coderunner.service.rabbit_mq_return_consumer.class%'
+  teknoo.east.bundle.coderunner.worker.rabbit_mq_return_consumer.abstract:
+    class: '%teknoo.east.bundle.coderunner.worker.rabbit_mq_return_consumer.class%'
     private: false
     abstract: true
     arguments:
@@ -31,3 +33,10 @@ services:
       - '@teknoo.east.bundle.coderunner.runner.remote_php7'
       - '@teknoo.east.bundle.coderunner.manager.runners'
       - '@logger'
+
+  teknoo.east.bundle.coderunner.listener.amqp_listener:
+    class: '%teknoo.east.bundle.coderunner.listener.amqp_listener.class%'
+    arguments:
+      - 'die'
+    tags:
+      - { name: 'kernel.event_listener', event: 'after_processing', method: 'onAfterProcessingMessage' }
