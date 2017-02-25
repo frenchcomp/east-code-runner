@@ -28,7 +28,7 @@ use Teknoo\East\CodeRunner\Registry\Interfaces\TasksRegistryInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\Foundation\Promise\Promise;
-use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
+use Teknoo\East\FoundationBundle\EndPoint\EastEndPointTrait;
 
 /**
  * Class GetTaskEndPoint.
@@ -40,7 +40,7 @@ use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
  */
 class GetTaskEndPoint
 {
-    use EastControllerTrait;
+    use EastEndPointTrait;
 
     /**
      * @var TasksRegistryInterface

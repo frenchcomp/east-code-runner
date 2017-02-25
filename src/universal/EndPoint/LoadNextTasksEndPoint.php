@@ -26,7 +26,7 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\Foundation\Http\ClientInterface;
-use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
+use Teknoo\East\FoundationBundle\EndPoint\EastEndPointTrait;
 
 /**
  * Class LoadNextTasksEndPoint.
@@ -39,7 +39,7 @@ use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
  */
 class LoadNextTasksEndPoint
 {
-    use EastControllerTrait;
+    use EastEndPointTrait;
 
     /**
      * @var RunnerManagerInterface

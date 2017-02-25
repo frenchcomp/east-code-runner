@@ -31,7 +31,7 @@
         "doctrine/orm": "~2.2",
         "gedmo/doctrine-extensions": "~2.4",
         "teknoo/immutable": "^0.0.1",
-        "teknoo/east-foundation": "^0.0.4-alpha13",
+        "teknoo/east-foundation": "dev-master",
         "teknoo/states": "^3.0.0",
         "teknoo/states-bundle": "^3.0.0",
         "teknoo/states-life-cycle": "^2.0.0",

@@ -31,7 +31,7 @@ use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\Foundation\Promise\Promise;
-use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
+use Teknoo\East\FoundationBundle\EndPoint\EastEndPointTrait;
 
 /**
  * Class RegisterTaskEndPoint.
@@ -43,7 +43,7 @@ use Teknoo\East\FoundationBundle\Controller\EastControllerTrait;
  */
 class RegisterTaskEndPoint
 {
-    use EastControllerTrait;
+    use EastEndPointTrait;
 
     /**
      * @var TaskManagerInterface
