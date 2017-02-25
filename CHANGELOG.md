@@ -7,7 +7,7 @@
 ###Added
 - TaintableInterface
 - Tainted behavior on RabbitMQReturnConsumerWorker
-- Listener to stop a tainted worker
+- StopConsumerException behavior into RabbitMQReturnConsumerWorker
 
 ##[0.0.1-alpha19] - 2017-02-23
 ###Added

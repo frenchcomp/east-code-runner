@@ -24,6 +24,7 @@ namespace Teknoo\East\CodeRunner\Worker;
 
 use Doctrine\DBAL\DBALException;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
+use OldSound\RabbitMqBundle\RabbitMq\Exception\StopConsumerException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
@@ -182,7 +183,7 @@ class RabbitMQReturnConsumerWorker implements ConsumerInterface, TaintableInterf
 
             $this->enableTaintedFlag();
 
-            return ConsumerInterface::MSG_REJECT_REQUEUE;
+            throw new StopConsumerException($e->getMessage(), $e->getCode(), $e);
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage().PHP_EOL.$e->getTraceAsString());
 

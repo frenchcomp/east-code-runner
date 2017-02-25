@@ -24,6 +24,7 @@ namespace Teknoo\Tests\East\CodeRunner\Worker;
 
 use Doctrine\DBAL\DBALException;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
+use OldSound\RabbitMqBundle\RabbitMq\Exception\StopConsumerException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Teknoo\East\CodeRunner\Entity\Task\Task;
@@ -281,6 +282,9 @@ class RabbitMQReturnConsumerWorkerTest extends \PHPUnit_Framework_TestCase
         self::assertFalse($fail);
     }
 
+    /**
+     * @expectedException \OldSound\RabbitMqBundle\RabbitMq\Exception\StopConsumerException
+     */
     public function testExecuteStatusErrorDBal()
     {
         $status = new Status('foo');
@@ -307,7 +311,7 @@ class RabbitMQReturnConsumerWorkerTest extends \PHPUnit_Framework_TestCase
         $this->getLogger()->expects(self::once())->method('critical');
 
         $service = $this->buildService();
-        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $service->execute($message));
+        $service->execute($message);
     }
 
     public function testExecuteStatusErrorDBalTaintedBehavior()
@@ -336,8 +340,13 @@ class RabbitMQReturnConsumerWorkerTest extends \PHPUnit_Framework_TestCase
         $this->getLogger()->expects(self::once())->method('critical');
 
         $service = $this->buildService();
-        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $service->execute($message));
-        self::assertEquals(ConsumerInterface::MSG_REJECT_REQUEUE, $service->execute($message));
+        try {
+            $service->execute($message);
+        } catch (StopConsumerException $e) {
+            /** do nothing */
+        }
+
+        $service->execute($message);
 
         $fail = null;
         self::assertInstanceOf(

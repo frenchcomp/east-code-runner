@@ -7,8 +7,6 @@ parameters:
 
   teknoo.east.bundle.coderunner.worker.rabbit_mq_return_consumer.class: 'Teknoo\East\CodeRunner\Worker\RabbitMQReturnConsumerWorker'
 
-  teknoo.east.bundle.coderunner.listener.amqp_listener.class: 'Teknoo\East\CodeRunnerBundle\Listener\AMQPListener'
-
 services:
   teknoo.east.bundle.coderunner.runner.remote_php7.abstract:
     class: '%teknoo.east.bundle.coderunner.runner.remote_php7.class%'
@@ -33,10 +31,3 @@ services:
       - '@teknoo.east.bundle.coderunner.runner.remote_php7'
       - '@teknoo.east.bundle.coderunner.manager.runners'
       - '@logger'
-
-  teknoo.east.bundle.coderunner.listener.amqp_listener:
-    class: '%teknoo.east.bundle.coderunner.listener.amqp_listener.class%'
-    arguments:
-      - 'die'
-    tags:
-      - { name: 'kernel.event_listener', event: 'after_processing', method: 'onAfterProcessingMessage' }
