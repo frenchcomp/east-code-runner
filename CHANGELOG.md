@@ -1,6 +1,6 @@
 #Teknoo Software - Code Runner - Change Log
 
-##[0.0.1-alpha20] - 2017-02-25
+##[0.0.1-beta1] - 2017-02-26
 ###Updated
 - Migrate RabbitMQReturnConsumerService to RabbitMQReturnConsumerWorker
 
