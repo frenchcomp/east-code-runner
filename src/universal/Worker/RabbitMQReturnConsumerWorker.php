@@ -150,7 +150,7 @@ class RabbitMQReturnConsumerWorker implements ConsumerInterface, TaintableInterf
      *
      * @param AMQPMessage $msg
      *
-     * @return bool
+     * @return int
      */
     public function execute(AMQPMessage $msg)
     {

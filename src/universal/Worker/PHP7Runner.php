@@ -112,7 +112,7 @@ class PHP7Runner implements ConsumerInterface, RunnerInterface
     /**
      * @param AMQPMessage $msg
      *
-     * @return bool
+     * @return int
      */
     public function execute(AMQPMessage $msg)
     {
