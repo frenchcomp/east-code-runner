@@ -150,6 +150,8 @@ class Running implements StateInterface
                 $task,
                 new Promise(
                     function (TaskManagerInterface $taskManager) use ($runner, $task, $status) {
+                        $taskManager->taskStatusIsUpdated($task, $status);
+
                         if ($runner->supportsMultiplesTasks()) {
                             $this->tasksByRunner->get(
                                 $runner,

@@ -1,5 +1,9 @@
 #Teknoo Software - Code Runner - Change Log
 
+##[0.0.1-beta2] - 2017-04-30
+###Fixed
+- In RunnerManager, restore call to taskStatusIsUpdated in pushStatus, missed in the method refactorisation with Promise
+
 ##[0.0.1-beta1] - 2017-02-26
 ###Updated
 - Migrate RabbitMQReturnConsumerService to RabbitMQReturnConsumerWorker

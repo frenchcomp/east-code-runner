@@ -443,10 +443,13 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
             )
         );
 
+        $taskManager = $this->createMock(TaskManagerInterface::class);
+        $taskManager->expects(self::once())->method('taskStatusIsUpdated')->with($task, $status);
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->executeForMeThisTask(
-                $this->createMock(TaskManagerInterface::class),
+                $taskManager,
                 $task
             )
         );
@@ -493,6 +496,9 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $task = $this->createMock(TaskInterface::class);
         $task->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
 
+        $taskManager = $this->createMock(TaskManagerInterface::class);
+        $taskManager->expects(self::once())->method('taskStatusIsUpdated')->with($task, $status);
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -503,7 +509,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->executeForMeThisTask(
-                $this->createMock(TaskManagerInterface::class),
+                $taskManager,
                 $task
             )
         );
@@ -550,6 +556,9 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $task = $this->createMock(TaskInterface::class);
         $task->expects(self::any())->method('getUrl')->willReturn('http://foo.bar');
 
+        $taskManager = $this->createMock(TaskManagerInterface::class);
+        $taskManager->expects(self::once())->method('taskStatusIsUpdated')->with($task, $status);
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -560,7 +569,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->executeForMeThisTask(
-                $this->createMock(TaskManagerInterface::class),
+                $taskManager,
                 $task
             )
         );
@@ -610,6 +619,9 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $anotherTask = $this->createMock(TaskInterface::class);
         $anotherTask->expects(self::any())->method('getUrl')->willReturn('http://foo2.bar');
 
+        $taskManager = $this->createMock(TaskManagerInterface::class);
+        $taskManager->expects(self::once())->method('taskStatusIsUpdated')->with($task, $status);
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -620,7 +632,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->executeForMeThisTask(
-                $this->createMock(TaskManagerInterface::class),
+                $taskManager,
                 $newTask
             )
         );
@@ -670,6 +682,9 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         $anotherTask = $this->createMock(TaskInterface::class);
         $anotherTask->expects(self::any())->method('getUrl')->willReturn('http://foo2.bar');
 
+        $taskManager = $this->createMock(TaskManagerInterface::class);
+        $taskManager->expects(self::once())->method('taskStatusIsUpdated')->with($task, $status);
+
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->registerMe(
@@ -680,7 +695,7 @@ class RunnerManagerTest extends AbstractRunnerManagerTest
         self::assertInstanceOf(
             RunnerManagerInterface::class,
             $manager->executeForMeThisTask(
-                $this->createMock(TaskManagerInterface::class),
+                $taskManager,
                 $newTask
             )
         );
