@@ -153,6 +153,35 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testTaskBadJson()
+    {
+        $client = $this->createMock(ClientInterface::class);
+        $client->expects(self::once())
+            ->method('responseFromController')
+            ->with($this->callback(function (ResponseInterface $response) {
+                return 501 == $response->getStatusCode();
+            }))
+            ->willReturnSelf();
+
+        $endpoint = $this->buildEndPoint();
+
+        $body = $this->createMock(StreamInterface::class);
+        $code = "[]";
+        $body->expects(self::any())->method('__toString')->willReturn($code);
+        $body->expects(self::any())->method('getContents')->willReturn($code);
+
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects(self::any())->method('getBody')->willReturn($body);
+
+        self::assertInstanceOf(
+            RegisterTaskEndPoint::class,
+            $endpoint(
+                $request,
+                $client
+            )
+        );
+    }
+
     public function testOk()
     {
         $client = $this->createMock(ClientInterface::class);

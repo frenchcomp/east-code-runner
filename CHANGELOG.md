@@ -1,5 +1,9 @@
 #Teknoo Software - Code Runner - Change Log
 
+##[0.0.1-beta4] - 2017-05-21
+###Updated
+- RegisterTask Endpoint : prevent bad input
+
 ##[0.0.1-beta3] - 2017-05-21
 ###Updated
 - RegisterTask Endpoint needs a PHPCode json serialized representation as input.

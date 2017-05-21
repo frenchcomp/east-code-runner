@@ -91,6 +91,10 @@ class RegisterTaskEndPoint
 
         $task = new Task();
         try {
+            if (!\is_array($codeJson)) {
+                throw new \RuntimeException('Error, body content is not a valid json');
+            }
+
             $code = PHPCode::jsonDeserialize($codeJson);
             $task->setCode($code);
         } catch (\Throwable $e) {
