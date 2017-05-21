@@ -1,5 +1,9 @@
 #Teknoo Software - Code Runner - Change Log
 
+##[0.0.1-beta3] - 2017-05-21
+###Updated
+- RegisterTask Endpoint needs a PHPCode json serialized representation as input.
+
 ##[0.0.1-beta2] - 2017-04-30
 ###Fixed
 - In RunnerManager, restore call to taskStatusIsUpdated in pushStatus, missed in the method refactorisation with Promise

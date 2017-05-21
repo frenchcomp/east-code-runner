@@ -24,10 +24,12 @@ namespace Teknoo\Tests\East\CodeRunner\EndPoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
+use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
 use Teknoo\East\Foundation\Promise\PromiseInterface;
 
@@ -105,12 +107,48 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
 
         $endpoint = $this->buildEndPoint();
 
+        $body = $this->createMock(StreamInterface::class);
+        $code = \json_encode(new PHPCode('<?php echo "123";', []));
+        $body->expects(self::any())->method('__toString')->willReturn($code);
+        $body->expects(self::any())->method('getContents')->willReturn($code);
+
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects(self::any())->method('getBody')->willReturn($body);
+
         self::assertInstanceOf(
             RegisterTaskEndPoint::class,
             $endpoint(
-                $this->createMock(ServerRequestInterface::class),
-                $client,
-                123
+                $request,
+                $client
+            )
+        );
+    }
+
+    public function testTaskBadInput()
+    {
+        $client = $this->createMock(ClientInterface::class);
+        $client->expects(self::once())
+            ->method('responseFromController')
+            ->with($this->callback(function (ResponseInterface $response) {
+                return 501 == $response->getStatusCode();
+            }))
+            ->willReturnSelf();
+
+        $endpoint = $this->buildEndPoint();
+
+        $body = $this->createMock(StreamInterface::class);
+        $code = "123";
+        $body->expects(self::any())->method('__toString')->willReturn($code);
+        $body->expects(self::any())->method('getContents')->willReturn($code);
+
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects(self::any())->method('getBody')->willReturn($body);
+
+        self::assertInstanceOf(
+            RegisterTaskEndPoint::class,
+            $endpoint(
+                $request,
+                $client
             )
         );
     }
@@ -140,12 +178,19 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
 
         $endpoint = $this->buildEndPoint();
 
+        $body = $this->createMock(StreamInterface::class);
+        $code = \json_encode(new PHPCode('<?php echo "123";', []));
+        $body->expects(self::any())->method('__toString')->willReturn($code);
+        $body->expects(self::any())->method('getContents')->willReturn($code);
+
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects(self::any())->method('getBody')->willReturn($body);
+
         self::assertInstanceOf(
             RegisterTaskEndPoint::class,
             $endpoint(
-                $this->createMock(ServerRequestInterface::class),
-                $client,
-                123
+                $request,
+                $client
             )
         );
     }

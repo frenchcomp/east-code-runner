@@ -82,14 +82,24 @@ class RegisterTaskEndPoint
      *
      * @param ServerRequestInterface $serverRequest
      * @param ClientInterface        $client
-     * @param string                 $code
      *
      * @return self
      */
-    public function __invoke(ServerRequestInterface $serverRequest, ClientInterface $client, string $code)
+    public function __invoke(ServerRequestInterface $serverRequest, ClientInterface $client)
     {
+        $codeJson = \json_decode((string) $serverRequest->getBody(), true);
+
         $task = new Task();
-        $task->setCode(new PHPCode($code, [new Capability('php', '>=7')]));
+        try {
+            $code = PHPCode::jsonDeserialize($codeJson);
+            $task->setCode($code);
+        } catch (\Throwable $e) {
+            $client->responseFromController(
+                new Response(501, [], json_encode(['success' => false, 'message' => $e->getMessage()]))
+            );
+
+            return $this;
+        }
 
         $this->tasksManager->registerRunnerManager($this->runnerManager);
         $this->tasksManager->executeMe(
