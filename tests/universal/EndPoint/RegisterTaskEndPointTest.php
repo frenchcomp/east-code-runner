@@ -28,6 +28,7 @@ use Psr\Http\Message\StreamInterface;
 use Teknoo\East\CodeRunner\EndPoint\RegisterTaskEndPoint;
 use Teknoo\East\CodeRunner\Manager\Interfaces\RunnerManagerInterface;
 use Teknoo\East\CodeRunner\Manager\Interfaces\TaskManagerInterface;
+use Teknoo\East\CodeRunner\Runner\Capability;
 use Teknoo\East\CodeRunner\Task\Interfaces\TaskInterface;
 use Teknoo\East\CodeRunner\Task\PHPCode;
 use Teknoo\East\Foundation\Http\ClientInterface;
@@ -208,7 +209,7 @@ class RegisterTaskEndPointTest extends \PHPUnit_Framework_TestCase
         $endpoint = $this->buildEndPoint();
 
         $body = $this->createMock(StreamInterface::class);
-        $code = \json_encode(new PHPCode('<?php echo "123";', []));
+        $code = \json_encode(new PHPCode('<?php echo "123";', [new Capability('php', '>=7')]));
         $body->expects(self::any())->method('__toString')->willReturn($code);
         $body->expects(self::any())->method('getContents')->willReturn($code);
 
